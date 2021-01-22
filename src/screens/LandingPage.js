@@ -1,11 +1,12 @@
 import React from "react";
+import { View } from "react-native"
 import { Text } from "native-base";
 
 const LandingPage = () => {
   return (
-    <div>
+    <View>
       <Text>LandingPage</Text>
-    </div>
+    </View>
   );
 };
 
