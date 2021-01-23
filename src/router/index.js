@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { LoginPage, SignUp, LandingPage, Fields, Matches, Players } from "../screens";
+import { LoginPage, SignUp, SignUpOwner, LandingPage, Fields, Matches, Players } from "../screens";
 import { FontAwesome5 } from "@expo/vector-icons";
 import BottomTabNavigator from "../components/BottomTabNavigator";
 
@@ -24,6 +24,7 @@ const Router = () => {
     <Stack.Navigator>
       <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
+      <Stack.Screen name="SignUpOwner" component={SignUpOwner} options={{ headerShown: false }}/>
       <Stack.Screen
         name="MainApp"
         component={MainApp}

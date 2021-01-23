@@ -16,7 +16,7 @@ const LoginPage = ({ navigation }) => {
       </Header>
       <Form style={styles.form}>
         <Item style={styles.item}>
-          <Input placeholder="username" onValueChange={(value) => setUsername(value)} />
+          <Input placeholder="Username" onValueChange={(value) => setUsername(value)} />
         </Item>
         <Item style={styles.item}>
           <Input placeholder="Password" secureTextEntry={true} onValueChange={(value) => setPassword(value)}/>

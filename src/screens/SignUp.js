@@ -11,8 +11,12 @@ const SignUp = ({ navigation }) => {
     navigation.navigate(page);
   };
   const validate = () => {
-    if (role === '') {
-      
+    if (role === 'player') {
+      console.log(role)
+      move("LoginPage")
+    } else if (role === 'owner') {
+      console.log(role)
+      move("SignUpOwner")
     }
   }
 
