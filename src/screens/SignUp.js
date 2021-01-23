@@ -2,12 +2,19 @@ import React, {useState} from "react";
 import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Picker } from "native-base";
 import { ScrollView } from 'react-native'
 
-const LoginPage = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [role, setRole] = useState("")
   const move = (page) => {
     navigation.navigate(page);
   };
+  const validate = () => {
+    if (role === '') {
+      
+    }
+  }
 
   return (
     <Container>
@@ -16,17 +23,34 @@ const LoginPage = ({ navigation }) => {
       </Header>
       <Form style={styles.form}>
         <Item style={styles.item}>
-          <Input placeholder="username" onValueChange={(value) => setUsername(value)} />
+          <Input placeholder="Username" onValueChange={(value) => setUsername(value)} />
         </Item>
         <Item style={styles.item}>
           <Input placeholder="Password" secureTextEntry={true} onValueChange={(value) => setPassword(value)}/>
         </Item>
+        <Item style={styles.item}>
+          <Input placeholder="Email" onValueChange={(value) => setEmail(value)} />
+        </Item>
+        <Item style={styles.item} picker>
+          <Picker
+            mode="dropdown"
+            placeholder="Role"
+            placeholderStyle={{ color: "#bfc6ea" }}
+            placeholderIconColor="#007aff"
+            selectedValue={role}
+            onValueChange={(value) => setRole(value)}
+          >
+            <Picker.Item label="Select Role" value="" />
+            <Picker.Item label="Player" value="player" />
+            <Picker.Item label="Owner" value="owner" />
+          </Picker>
+        </Item>
         <Item style={styles.itemBtn}>
-          <Button bordered dark style={styles.button} onPress={() => move("MainApp")}>
-            <Text>Sign In</Text>
+          <Button bordered dark style={styles.button} onPress={() => validate()}>
+            <Text>Submit</Text>
           </Button>
-          <Button bordered dark style={styles.button} onPress={() => move("SignUp")}>
-            <Text>Sign Up</Text>
+          <Button bordered dark style={styles.button} onPress={() => move("LoginPage")}>
+            <Text>Cancel</Text>
           </Button>
         </Item>
       </Form>
@@ -66,4 +90,5 @@ const styles = {
     backgroundColor: '#ff9900'
   }
 }
-export default LoginPage;
+
+export default SignUp;

@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { LoginPage, LandingPage, Fields, Matches, Players } from "../screens";
+import { LoginPage, SignUp, LandingPage, Fields, Matches, Players } from "../screens";
 import { FontAwesome5 } from "@expo/vector-icons";
 import BottomTabNavigator from "../components/BottomTabNavigator";
 
@@ -22,7 +22,8 @@ const MainApp = () => {
 const Router = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="LoginPage" component={LoginPage} />
+      <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
+      <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
       <Stack.Screen
         name="MainApp"
         component={MainApp}
