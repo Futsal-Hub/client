@@ -1,26 +1,45 @@
 import React from "react";
-import { Button, Container, Content, Form, Text, Item, Input } from "native-base";
+import {
+  Container,
+  Header,
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
+  Button,
+  Text,
+} from "native-base";
 
-const LoginPage = () => {
+const LoginPage = ({ navigation }) => {
+  const toLandingPage = () => {
+    navigation.navigate("MainApp");
+  };
   return (
     <Container>
+      <Header />
       <Content>
         <Form>
-          <Text>LoginPage</Text>
-          <Item>
-            <Input placeholder="fajar"/>
+          <Item floatingLabel>
+            <Label>Username</Label>
+            <Input />
+          </Item>
+          <Item floatingLabel last>
+            <Label>Password</Label>
+            <Input />
           </Item>
           <Item>
-            <Input placeholder="gblg" />
+            <Button bordered dark onPress={() => toLandingPage()}>
+              <Text>Submit</Text>
+            </Button>
+            <Button bordered dark>
+              <Text>Cancel</Text>
+            </Button>
           </Item>
-          <Item last>
-            <Input placeholder="fajar gblg" />
-          </Item>
-          <Button primary><Text>Submit</Text></Button>
         </Form>
       </Content>
     </Container>
   );
 };
 
-export default LoginPage
+export default LoginPage;
