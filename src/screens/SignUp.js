@@ -1,22 +1,33 @@
 import React, {useState} from "react";
 import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Picker } from "native-base";
-import { ScrollView } from 'react-native'
+import { signUp } from '../store/actions'
 
 const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
+  const [isValid, setValid] = useState("")
+
   const move = (page) => {
     navigation.navigate(page);
   };
+
   const validate = () => {
-    if (role === 'player') {
-      console.log(role)
+    if (!username || !password || !email || !role) {
+      setValid("Please Fill All Form !")
+      setTimeout(() => {
+        setValid("")
+      }, 3000);
+    } else {
+      const payload = {
+        username,
+        password,
+        email,
+        role
+      }
+      signUp(payload)
       move("LoginPage")
-    } else if (role === 'owner') {
-      console.log(role)
-      move("SignUpOwner")
     }
   }
 
@@ -25,15 +36,18 @@ const SignUp = ({ navigation }) => {
       <Header style={styles.header}>
         <Text>Buat Logo Dll</Text>
       </Header>
+      {
+        isValid ? <Text style={{color: 'red'}}>{isValid}</Text> : <Text></Text>
+      }
       <Form style={styles.form}>
         <Item style={styles.item}>
-          <Input placeholder="Username" onValueChange={(value) => setUsername(value)} />
+          <Input placeholder="Username" value={username} onChangeText={(value) => setUsername(value)} required/>
         </Item>
         <Item style={styles.item}>
-          <Input placeholder="Password" secureTextEntry={true} onValueChange={(value) => setPassword(value)}/>
+          <Input placeholder="Password" value={password} secureTextEntry={true} onChangeText={(value) => setPassword(value)} required/>
         </Item>
         <Item style={styles.item}>
-          <Input placeholder="Email" onValueChange={(value) => setEmail(value)} />
+          <Input placeholder="Email" value={email} onChangeText={(value) => setEmail(value)} required/>
         </Item>
         <Item style={styles.item} picker>
           <Picker

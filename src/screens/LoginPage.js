@@ -1,28 +1,53 @@
 import React, {useState} from "react";
 import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Picker } from "native-base";
-import { ScrollView } from 'react-native'
+import { login } from '../store/actions'
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [isValid, setValid] = useState("")
+
   const move = (page) => {
     navigation.navigate(page);
+    setUsername("")
+    setPassword("")
   };
+
+  const validate = () => {
+    if (!username || !password) {
+      setValid("Please Fill All Form !")
+      setTimeout(() => {
+        setValid("")
+      }, 3000);
+    } else {
+      const payload = {
+        username,
+        password
+      }
+      login(payload)
+      setUsername("")
+      setPassword("")
+      move("MainApp")
+    }
+  }
 
   return (
     <Container>
       <Header style={styles.header}>
         <Text>Buat Logo Dll</Text>
       </Header>
+      {
+        isValid ? <Text style={{color: 'red', marginLeft: 'auto', marginRight: 'auto'}}>{isValid}</Text> : <Text></Text>
+      }
       <Form style={styles.form}>
         <Item style={styles.item}>
-          <Input placeholder="Username" onValueChange={(value) => setUsername(value)} />
+          <Input placeholder="Username" value={username} onChangeText={(value) => setUsername(value)} />
         </Item>
         <Item style={styles.item}>
-          <Input placeholder="Password" secureTextEntry={true} onValueChange={(value) => setPassword(value)}/>
+          <Input placeholder="Password" value={password} secureTextEntry={true} onChangeText={(value) => setPassword(value)}/>
         </Item>
         <Item style={styles.itemBtn}>
-          <Button bordered dark style={styles.button} onPress={() => move("MainApp")}>
+          <Button bordered dark style={styles.button} onPress={() => validate()}>
             <Text>Sign In</Text>
           </Button>
           <Button bordered dark style={styles.button} onPress={() => move("SignUp")}>
