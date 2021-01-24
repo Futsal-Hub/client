@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     marginLeft: 9,
+    top: 15
   },
   hello: {
     fontSize: 13,
