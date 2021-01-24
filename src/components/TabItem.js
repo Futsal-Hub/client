@@ -9,6 +9,8 @@ import {
   IconPlayersActive,
   IconFields,
   IconFieldsActive,
+  IconListRequest,
+  IconListRequestActive,
 } from "../assets/icons";
 
 const TabItem = ({ label, isFocused, onLongPress, onPress }) => {
@@ -24,6 +26,9 @@ const TabItem = ({ label, isFocused, onLongPress, onPress }) => {
     }
     if (label === "Matches") {
       return isFocused ? <IconMatchesActive /> : <IconMatches />;
+    }
+    if (label === "Request") {
+      return isFocused ? <IconListRequestActive /> : <IconListRequest />;
     }
   };
   useEffect(() => {
