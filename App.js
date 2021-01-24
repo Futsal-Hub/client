@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import store from "./src/store";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
