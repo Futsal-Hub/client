@@ -28,7 +28,7 @@ const OwnerApp = () => {
     <Tab.Navigator tabBar={(props) => <BottomTabNavigator {...props} />}>
       <Tab.Screen name="Home" component={LandingPageOwner} />
       <Tab.Screen name="Fields" component={AddField} />
-      <Tab.Screen name="ListRequest" component={ListRequest} />
+      <Tab.Screen name="Request" component={ListRequest} />
     </Tab.Navigator>
   )
 }

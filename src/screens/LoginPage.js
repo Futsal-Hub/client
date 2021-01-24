@@ -49,8 +49,6 @@ const LoginPage = ({ navigation }) => {
         .then(result => {
           const role = result.data.user.role
           role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
-          setUsername("");
-          setPassword("");
           setAccessToken(JSON.stringify(result.data.access_token))
         })
         .catch(err => console.log(err))
