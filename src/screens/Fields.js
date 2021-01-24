@@ -21,7 +21,7 @@ const Fields = () => {
         <Card>
           <CardItem style={{margin: 10}}>
             <Left>
-              <Thumbnail source={require("../assets/images/fieldsDummy.jpg")} />
+              <Thumbnail square large source={require("../assets/images/fieldsDummy.jpg")} />
               <Body>
                 <Text>Title Field</Text>
                 <Text>Informasi tambahan e.g harga, location dll</Text>
@@ -36,7 +36,7 @@ const Fields = () => {
           </CardItem>
           <CardItem style={{margin: 10}}>
             <Left>
-              <Thumbnail source={require("../assets/images/fieldsDummy.jpg")} />
+              <Thumbnail square large source={require("../assets/images/fieldsDummy.jpg")} />
               <Body>
                 <Text>Title Field</Text>
                 <Text>Informasi tambahan e.g harga, location dll</Text>

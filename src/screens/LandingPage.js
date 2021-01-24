@@ -31,10 +31,10 @@ const LandingPage = () => {
 
   return (
     <Container>
+      <Content>
       <Header style={{ alignItems: "center", padding: 5, marginLeft: -220 }}>
         <HeaderInformation />
       </Header>
-      <Content>
         <View>
           <Text style={styles.paragraph}>{text}</Text>
         </View>

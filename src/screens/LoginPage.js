@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import {
   Container,
   Header,
@@ -12,10 +12,12 @@ import {
   Text,
   Picker,
 } from "native-base";
+
+import { Image } from "react-native";
 import { login } from "../store/actions";
 
 const LoginPage = ({ navigation }) => {
-  const role = useSelector(state => state.role)
+  const role = useSelector((state) => state.role);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
@@ -47,7 +49,7 @@ const LoginPage = ({ navigation }) => {
   return (
     <Container>
       <Header style={styles.header}>
-        <Text>Buat Logo Dll</Text>
+        <Image source={require("../assets/images/logo.jpg")} style={styles.logo} />
       </Header>
       {isValid ? (
         <Text style={{ color: "red", marginLeft: "auto", marginRight: "auto" }}>
@@ -126,5 +128,11 @@ const styles = {
     borderRadius: 30,
     backgroundColor: "#ff9900",
   },
+  logo: {
+    alignItems: "center",
+    height: 250,
+    width: 400,
+    padding: 20
+  }
 };
 export default LoginPage;
