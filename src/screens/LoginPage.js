@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from 'react-redux'
 import {
   Container,
   Header,
@@ -14,6 +15,7 @@ import {
 import { login } from "../store/actions";
 
 const LoginPage = ({ navigation }) => {
+  const role = useSelector(state => state.role)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
@@ -36,7 +38,7 @@ const LoginPage = ({ navigation }) => {
         password,
       };
       login(payload);
-      move("MainApp");
+      role === "owner" ? move("OwnerApp") : move("MainApp");
       setUsername("");
       setPassword("");
     }

@@ -1,7 +1,9 @@
 import React from "react";
+import { useSelector } from 'react-redux'
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { LoginPage, SignUp, LandingPage, Fields, Matches, Players } from "../screens";
+import { LoginPage, SignUp, LandingPage, Fields, Matches, Players, Request } from "../screens";
+import { LandingPageOwner, AddField, ListRequest } from "../screens/Owner"
 import { FontAwesome5 } from "@expo/vector-icons";
 import BottomTabNavigator from "../components/BottomTabNavigator";
 
@@ -15,23 +17,29 @@ const MainApp = () => {
       <Tab.Screen name="Fields" component={Fields} />
       <Tab.Screen name="Players" component={Players} />
       <Tab.Screen name="Matches" component={Matches} />
+      <Tab.Screen name="Request" component={Request} />
     </Tab.Navigator>
   );
 };
 
+const OwnerApp = () => {
+  return (
+    <Tab.Navigator tabBar={(props) => <BottomTabNavigator {...props} />}>
+      <Tab.Screen name="Home" component={LandingPageOwner} />
+      <Tab.Screen name="Fields" component={AddField} />
+      <Tab.Screen name="ListRequest" component={ListRequest} />
+    </Tab.Navigator>
+  )
+}
+
 const Router = () => {
+  const role = useSelector(state => state.role)
   return (
     <Stack.Navigator>
       <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
-      <Stack.Screen
-        name="MainApp"
-        component={MainApp}
-        options={{ headerShown: false }}
-      />
-      {/* <Stack.Screen name="Fields" component={MainApp} />
-      <Stack.Screen name="Matches" component={MainApp} />
-      <Stack.Screen name="Players" component={MainApp} /> */}
+      <Stack.Screen name="OwnerApp" component={OwnerApp} options={{ headerShown: false }}/>
+      <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };
