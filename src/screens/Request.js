@@ -1,12 +1,74 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from "react";
+import {
+  Body,
+  CardItem,
+  Container,
+  Content,
+  Right,
+  Text,
+  Thumbnail,
+  Card,
+  Left,
+  Button,
+  Icon,
+} from "native-base";
 
 const Request = () => {
   return (
-    <View>
-      <Text>Ini Request Page</Text>
-    </View>
-  )
-}
+    <Container>
+      <Content>
+        <Text>List Request</Text>
+        <Card>
+          <CardItem style={{ margin: 10 }}>
+            <Left>
+              <Thumbnail
+                // square
+                large
+                source={require("../assets/images/matchesNearMe.png")}
+              />
+              <Body>
+                <Text>Info Langan</Text>
+                <Text>e.g jumlah, location dll</Text>
+              </Body>
+            </Left>
+            <Right>
+              <Button transparent>
+                <Text>Accept</Text>
+                <Icon active name="check-square" type="FontAwesome" />
+              </Button>
+               <Button transparent>
+                <Text>Deny</Text>
+                <Icon active name="window-close" type="FontAwesome" />
+              </Button>
+            </Right>
+          </CardItem>
+          <CardItem style={{ margin: 10 }}>
+            <Left>
+              <Thumbnail
+                // square
+                large
+                source={require("../assets/images/matchesNearMe.png")}
+              />
+              <Body>
+                <Text>Title Field</Text>
+                <Text>e.g harga, location dll</Text>
+              </Body>
+            </Left>
+            <Right >
+              <Button transparent style={{flexDirection: "row"}}>
+                <Text>Accept</Text>
+                <Icon active name="check-square" type="FontAwesome" />
+              </Button>
+               <Button transparent>
+                <Text>Deny</Text>
+                <Icon active name="window-close" type="FontAwesome" />
+              </Button>
+            </Right>
+          </CardItem>
+        </Card>
+      </Content>
+    </Container>
+  );
+};
 
-export default Request
+export default Request;

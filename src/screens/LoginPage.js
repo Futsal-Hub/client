@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { setAccessToken } from '../utility/token'
+import { setAccessToken } from "../utility/token";
 import axios from "axios";
 
 import {
@@ -14,10 +14,14 @@ import {
   Button,
   Text,
   Picker,
+  Left,
 } from "native-base";
-import { useDispatch } from 'react-redux'
-import { Image } from "react-native";
+import { useDispatch } from "react-redux";
+import { Image, Dimensions } from "react-native";
 import { login } from "../store/actions";
+
+const { height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -44,21 +48,24 @@ const LoginPage = ({ navigation }) => {
       axios({
         method: "POST",
         url: "http://10.0.2.2:3000/login",
-        data: payload
+        data: payload,
       })
         .then(result => {
           const role = result.data.user.role
           role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
           setAccessToken(JSON.stringify(result.data.access_token))
         })
-        .catch(err => console.log(err))
+        .catch((err) => console.log(err));
     }
   };
 
   return (
     <Container>
       <Header style={styles.header}>
-        <Image source={require("../assets/images/logo.jpg")} style={styles.logo} />
+        <Image
+          source={require("../assets/images/logo.jpg")}
+          style={styles.logo}
+        />
       </Header>
       {isValid ? (
         <Text style={{ color: "red", marginLeft: "auto", marginRight: "auto" }}>
@@ -139,9 +146,10 @@ const styles = {
   },
   logo: {
     alignItems: "center",
-    height: 250,
-    width: 400,
-    padding: 20
-  }
+    height: height - 450,
+    width: width - 50,
+    top: 10,
+    left: 20,
+  },
 };
 export default LoginPage;

@@ -18,13 +18,14 @@ const Players = () => {
   return (
     <Container>
       <Content>
+      <Text>Player Near Me</Text>
         <Card>
           <CardItem style={{ margin: 10 }}>
             <Left>
               <Thumbnail
-                square
-                large
-                source={require("../assets/images/character1.jpg")}
+                // square
+                // large
+                source={require("../assets/images/players.png")}
               />
               <Body>
                 <Text>Joko 1</Text>
@@ -41,9 +42,9 @@ const Players = () => {
           <CardItem style={{ margin: 10 }}>
             <Left>
               <Thumbnail
-                square
-                large
-                source={require("../assets/images/character2.jpg")}
+                // square
+                // large
+                source={require("../assets/images/players.png")}
               />
               <Body>
                 <Text>Joko 2</Text>
