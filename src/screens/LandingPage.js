@@ -5,9 +5,10 @@ import * as Location from "expo-location";
 import Swipper from "react-native-swiper";
 import HeaderInformation from "../components/HeaderInformation";
 import { removeToken } from '../utility/token'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const LandingPage = ({ navigation }) => {
+  const user = useSelector(state => state.user)
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const dispatch = useDispatch()
