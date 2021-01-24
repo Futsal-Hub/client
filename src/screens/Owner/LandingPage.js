@@ -1,18 +1,31 @@
 import React, {useState} from 'react'
+import { useDispatch } from 'react-redux'
 import { View, Text, Modal } from 'react-native'
 import { Button } from 'native-base'
+import { removeToken } from '../../utility/token'
 
-const LandingPage = () => {
+const LandingPage = ({ navigation }) => {
   const [modalVisibility, setModalVisibility] = useState(false)
-
+  const dispatch = useDispatch()
+  
   const showModal = () => {
     setModalVisibility(true)
+  }
+
+  const logout = () => {
+    removeToken()
+    dispatch({
+      type: "set-role",
+      payload: ""
+    })
+    navigation.navigate("LoginPage")
   }
 
   return (
     <View>
       <Text>Ini Add Field</Text>
       <Button onPress={() => setModalVisibility(true)}><Text>Show Modal</Text></Button>
+      <Button onPress={() => logout()}><Text>Logout</Text></Button>
       <Modal
         transparent={true}
         animationType={"slide"}

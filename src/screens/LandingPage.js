@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, Image } from "react-native";
-import { Header, Content, Card, CardItem, Container, View } from "native-base";
+import { Button, Header, Content, Card, CardItem, Container, View } from "native-base";
 import * as Location from "expo-location";
 import Swipper from "react-native-swiper";
 import HeaderInformation from "../components/HeaderInformation";
+import { removeToken } from '../utility/token'
+import { useDispatch } from 'react-redux'
 
-const LandingPage = () => {
+const LandingPage = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     (async () => {
@@ -22,6 +25,15 @@ const LandingPage = () => {
     })();
   }, []);
 
+  const logout = () => {
+    removeToken()
+    dispatch({
+      type: "set-role",
+      payload: ""
+    })
+    navigation.navigate("LoginPage")
+  }
+
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
@@ -34,6 +46,7 @@ const LandingPage = () => {
       <Content>
       <Header style={{ alignItems: "center", padding: 5, marginLeft: -220 }}>
         <HeaderInformation />
+        <Button onPress={() => logout()}><Text>Logout</Text></Button>
       </Header>
         <View>
           <Text style={styles.paragraph}>{text}</Text>

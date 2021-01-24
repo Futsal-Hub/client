@@ -9,7 +9,16 @@ export const setAccessToken = async (token) => {
 
 export const getAccessToken = async () => {
   try {
-    await AsyncStorage.getItem("access_token")
+    const data = await AsyncStorage.getItem("access_token")
+    return data != null ? JSON.parse(data) : null
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const removeToken = async () => {
+  try {
+    await AsyncStorage.removeItem("access_token")
   } catch (err) {
     console.log(err)
   }

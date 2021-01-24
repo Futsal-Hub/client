@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { setAccessToken } from '../utility/token'
+import axios from "axios";
+
 import {
   Container,
   Header,
@@ -17,11 +20,9 @@ import { Image } from "react-native";
 import { login } from "../store/actions";
 
 const LoginPage = ({ navigation }) => {
-  const role = useSelector((state) => state.role);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
-  const dispatch = useDispatch()
 
   const move = (page) => {
     navigation.navigate(page);
@@ -40,10 +41,19 @@ const LoginPage = ({ navigation }) => {
         email: username,
         password,
       };
-      login(payload);
-      role === "owner" ? move("OwnerApp") : move("MainApp");
-      setUsername("");
-      setPassword("");
+      axios({
+        method: "POST",
+        url: "http://10.0.2.2:3000/login",
+        data: payload
+      })
+        .then(result => {
+          const role = result.data.user.role
+          role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
+          setUsername("");
+          setPassword("");
+          setAccessToken(JSON.stringify(result.data.access_token))
+        })
+        .catch(err => console.log(err))
     }
   };
 
