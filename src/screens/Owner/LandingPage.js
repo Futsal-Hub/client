@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { View, Text, Modal } from 'react-native'
 import { Button } from 'native-base'
 

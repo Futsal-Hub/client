@@ -6,6 +6,7 @@ import { LoginPage, SignUp, LandingPage, Fields, Matches, Players, Request } fro
 import { LandingPageOwner, AddField, ListRequest } from "../screens/Owner"
 import { FontAwesome5 } from "@expo/vector-icons";
 import BottomTabNavigator from "../components/BottomTabNavigator";
+import { getAccessToken } from "../utility/token"
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,12 +35,25 @@ const OwnerApp = () => {
 
 const Router = () => {
   const role = useSelector(state => state.role)
+  const isSignedIn = getAccessToken()
   return (
     <Stack.Navigator>
-      <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
-      <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
-      <Stack.Screen name="OwnerApp" component={OwnerApp} options={{ headerShown: false }}/>
-      <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }}/>
+      {
+        isSignedIn ? (
+          <>
+            <Stack.Screen name="OwnerApp" component={OwnerApp} options={{ headerShown: false }}/>
+            <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }}/>
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
+            <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
+            <Stack.Screen name="OwnerApp" component={OwnerApp} options={{ headerShown: false }}/>
+            <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }}/>
+          </>
+        )
+      }
+      
     </Stack.Navigator>
   );
 };
