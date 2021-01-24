@@ -3,6 +3,7 @@ import { View, Text } from 'react-native'
 import { Button } from 'native-base'
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
+import { socket } from '../../config/socket';
 
 const AddField = () => {
   const [image, setImage] = useState(null);

@@ -2,12 +2,15 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 const initialState = {
-  role: ""
+  role: "",
+  bookings:[]
 }
 
 function reducer(state = initialState, action) {
   switch(action.type) {
     case "set-role":
+      return {...state, role: action.payload}
+    case "set-booking":
       return {...state, role: action.payload}
     default:
       return state
