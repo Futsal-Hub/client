@@ -12,7 +12,7 @@ import {
   Text,
   Picker,
 } from "native-base";
-
+import { useDispatch } from 'react-redux'
 import { Image } from "react-native";
 import { login } from "../store/actions";
 
@@ -21,6 +21,7 @@ const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
+  const dispatch = useDispatch()
 
   const move = (page) => {
     navigation.navigate(page);
@@ -36,7 +37,7 @@ const LoginPage = ({ navigation }) => {
       }, 3000);
     } else {
       const payload = {
-        username,
+        email: username,
         password,
       };
       login(payload);

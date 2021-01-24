@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 const initialState = {
-  role: "player"
+  role: ""
 }
 
 function reducer(state = initialState, action) {
