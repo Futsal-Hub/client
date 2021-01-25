@@ -6,9 +6,20 @@ import AppLoading from "expo-app-loading";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import Router from "./src/router";
+import { socket } from "./src/config/socket"
+import {getBookingByOwner, getBookingByPlayer} from "./src/store/actions"
 
 export default function App() {
   const [isReady, setIsReady] = useState(true);
+  // const dispatch = useDispatch()
+  // socket.on("fetch booking", () => {
+  //   dispatch(getBookingByPlayer(playerId))
+  //   dispatch(getBookingByOwner(ownerId))
+  // })
+
+  useEffect(() => {
+    socket.emit("update","fetching");
+  })
 
   async function fontloader() {
     await Font.loadAsync({

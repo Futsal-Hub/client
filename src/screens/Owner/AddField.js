@@ -3,6 +3,7 @@ import { View, KeyboardAvoidingView, Image } from 'react-native'
 import { Button, Container, Content, Header, Form, Item, Input, Text, Picker } from 'native-base'
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
+import { socket } from '../../config/socket';
 import axios from 'axios'
 
 const AddField = () => {
