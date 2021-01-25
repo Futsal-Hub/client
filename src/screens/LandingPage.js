@@ -24,7 +24,7 @@ const LandingPage = ({ navigation }) => {
   return (
     <Container>
       <Content>
-      <Header style={{ alignItems: "center", padding: 5, marginLeft: -220 }}>
+      <Header style={{ alignItems: "center", padding: 5, marginLeft: -160 }}>
         <HeaderInformation />
         <Button onPress={() => logout()}><Text>Logout</Text></Button>
       </Header>

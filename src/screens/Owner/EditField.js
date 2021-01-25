@@ -11,11 +11,11 @@ import {
   Text,
   Picker,
 } from "native-base";
-import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourtId } from "../../store/actions/court";
 import { getAccessToken } from "../../utility/token";
+import * as ImagePicker from "expo-image-picker";
+import { Camera } from "expo-camera";
 import axios from "axios";
 
 const EditField = ({ route, navigation }) => {
