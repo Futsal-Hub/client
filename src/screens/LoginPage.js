@@ -70,7 +70,7 @@ const LoginPage = ({ navigation }) => {
       };
       axios({
         method: "POST",
-        url: "http://10.0.2.2:3000/login",
+        url: "http://localhost:3000/login",
         data: payload,
       })
         .then(result => {

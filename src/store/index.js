@@ -8,7 +8,8 @@ const initialState = {
   courts: [],
   court: null,
   users: [],
-  players: []
+  players: [],
+  receivedRequestPlayer:[]
 }
 
 function reducer(state = initialState, action) {
@@ -27,6 +28,8 @@ function reducer(state = initialState, action) {
       return {...state, users: action.payload}
     case "set-players":
       return {...state, players: action.payload}
+    case "set-receivedRequestPlayer":
+      return {...state, receivedRequestPlayer: action.payload}
     default:
       return state;
   }
