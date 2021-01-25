@@ -6,7 +6,8 @@ const initialState = {
   bookings:[],
   user: null,
   users: [],
-  players: []
+  players: [],
+  courts: []
 }
 
 function reducer(state = initialState, action) {
@@ -21,6 +22,8 @@ function reducer(state = initialState, action) {
       return {...state, users: action.payload}
     case "set-players":
       return {...state, players: action.payload}
+    case "set-courts":
+      return {...state, courts: action.payload}
     default:
       return state
   }
