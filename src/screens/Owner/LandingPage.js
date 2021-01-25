@@ -21,8 +21,8 @@ const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
   const courts = useSelector((state) => state.courts);
   const user = useSelector((state) => state.user)
-  console.log(courts);
-  console.log(user)
+  // console.log(courts);
+  // console.log(user)
 
   useEffect(() => {
     getAccessToken()
@@ -30,7 +30,7 @@ const LandingPage = ({ navigation }) => {
         dispatch(getCourt(res));
       })
       .catch(err => console.log(err))
-  }, [dispatch]);
+  }, [dispatch, courts]);
 
   const logout = () => {
     removeToken()

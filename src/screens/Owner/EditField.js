@@ -18,7 +18,7 @@ import { getCourtId } from "../../store/actions/court";
 import { getAccessToken } from "../../utility/token";
 import axios from "axios";
 
-const EditField = ({ route }) => {
+const EditField = ({ route, navigation }) => {
   const id = route.params.id;
   const dispatch = useDispatch();
   const court = useSelector((state) => state.court);
@@ -37,10 +37,13 @@ const EditField = ({ route }) => {
 
   useEffect(() => {
     getAccessToken()
-      .then(res => {
+      .then((res) => {
         dispatch(getCourtId(id, res));
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err));
+  }, [dispatch]);
+
+  useEffect(() => {
     if (court) {
       setImage(court.photos);
       setName(court.name);
@@ -50,7 +53,7 @@ const EditField = ({ route }) => {
       setSchedule2(court.schedule.close);
       setAddress(court.address);
     }
-  }, [dispatch, court]);
+  }, [court]);
 
   const cam = useRef().current;
 
@@ -100,7 +103,8 @@ const EditField = ({ route }) => {
         data: payload,
       })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
+          navigation.navigate("OwnerApp");
         })
         .catch((err) => console.log(err));
     });
