@@ -23,8 +23,8 @@ import { useDispatch } from "react-redux";
 import { Image, Dimensions } from "react-native";
 import { login } from "../store/actions";
 
-const { height } = Dimensions.get("window");
-const { width } = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
+const { width } = Dimensions.get("screen");
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -174,8 +174,8 @@ const styles = {
   },
   logo: {
     alignItems: "center",
-    height: height - 400,
-    width: width - 50,
+    height: height - 450,
+    width: width,
     top: 10,
     left: 20,
   },

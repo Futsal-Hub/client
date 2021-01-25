@@ -16,6 +16,7 @@ export const getAccessToken = async () => {
   }
 }
 
+
 export const removeToken = async () => {
   try {
     await AsyncStorage.removeItem("access_token")

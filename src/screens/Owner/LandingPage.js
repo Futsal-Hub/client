@@ -1,63 +1,105 @@
-import React, {useState} from 'react'
-import { useDispatch } from 'react-redux'
-import { View, Text, Modal } from 'react-native'
-import { Button } from 'native-base'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getCourt } from "../../store/actions/court";
+import {
+  Body,
+  CardItem,
+  Container,
+  Content,
+  Right,
+  Text,
+  Thumbnail,
+  Card,
+  Left,
+  Button,
+  Icon,
+} from "native-base";
 import { removeToken } from '../../utility/token'
 import { removeUserLogin } from '../utility/userLogin'
 
+
 const LandingPage = ({ navigation }) => {
-  const [modalVisibility, setModalVisibility] = useState(false)
-  const dispatch = useDispatch()
-  
-  const showModal = () => {
-    setModalVisibility(true)
-  }
+  const dispatch = useDispatch();
+  const courts = useSelector((state) => state.courts);
+  console.log(courts);
+
+  useEffect(() => {
+    dispatch(getCourt());
+  }, [dispatch]);
 
   const logout = () => {
     removeToken()
     removeUserLogin()
+
     dispatch({
       type: "set-role",
-      payload: ""
-    })
-    navigation.navigate("LoginPage")
-  }
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
+
+  const move = (page, id) => {
+    navigation.navigate(page, id);
+  };
 
   return (
-    <View>
-      <Text>Ini Add Field</Text>
-      <Button onPress={() => setModalVisibility(true)}><Text>Show Modal</Text></Button>
-      <Button onPress={() => logout()}><Text>Logout</Text></Button>
-      <Modal
-        transparent={true}
-        animationType={"slide"}
-        visible={modalVisibility}
-        onRequestClose={() => { showModal(!modalVisibility) }} >
-        <View style={{ flex:1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.ModalInsideView}>
-          <Button onPress={() => {
-                setModalVisibility(!modalVisibility);
-              }}><Text>X</Text></Button>
-          <Text style={{color:'white',fontSize:14,fontWeight:'700'}}>Hello </Text>
-          </View>
-        </View>
-      </Modal>
-    </View>
-  )
-}
+    <Container>
+      <Content>
+        <Text>List Field</Text>
+        <Button onPress={() => logout()}>
+          <Text>Logout</Text>
+        </Button>
+        {courts.map((item) => {
+          return (
+            <Card key={item._id}>
+              <CardItem style={{ margin: 10 }}>
+                <Left>
+                  {/* <Thumbnail
+                    // square
+                    large
+                    source={item.photos}
+                  /> */}
+                  {/* <Text>{item.photos}</Text> */}
+                  <Body>
+                    <Text>{item.name}</Text>
+                    <Text>{item.type}</Text>
+                    <Text>{item.address}</Text>
+                  </Body>
+                </Left>
+                <Right>
+                  <Button
+                    transparent
+                    style={{ flexDirection: "row" }}
+                    onPress={() => move("EditField", { id: item._id })}
+                  >
+                    <Text>Edit</Text>
+                    <Icon active name="check-square" type="FontAwesome" />
+                  </Button>
+                  <Button transparent>
+                    <Text>Delete</Text>
+                    <Icon active name="window-close" type="FontAwesome" />
+                  </Button>
+                </Right>
+              </CardItem>
+            </Card>
+          );
+        })}
+      </Content>
+    </Container>
+  );
+};
 
-const styles = {        
-  ModalInsideView:{
-    justifyContent: 'center',
-    alignItems: 'center', 
-    backgroundColor : "#00BCD4", 
-    height: 245 ,
-    width: '90%',
-    borderRadius:10,
+const styles = {
+  ModalInsideView: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00BCD4",
+    height: 245,
+    width: "90%",
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#fff'
-   
-  }
-}
+    borderColor: "#fff",
+  },
+};
 
-export default LandingPage
+export default LandingPage;
