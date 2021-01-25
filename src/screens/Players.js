@@ -5,6 +5,7 @@ import { View } from "react-native";
 import { getUserLogin } from "../utility/userLogin";
 import { getDistance, getPreciseDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
+import { getAccessToken } from "../utility/token";
 import {
   Body,
   CardItem,
@@ -26,11 +27,13 @@ const Players = () => {
   const [userLogin, setUserLogin] = useState("");
 
   useEffect(() => {
-    dispatch(fetchUser());
+    getAccessToken().then((res) => {
+      dispatch(fetchUser(res));
+    });
     getUserLogin().then((res) => {
       setUserLogin(res);
     });
-  }, []);
+  }, [dispatch]);
 
   const players = users.map((player) => {
     if (player.role === "player") {

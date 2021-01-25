@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { LoginPage, SignUp, LandingPage, Fields, Matches, Players, Request } from "../screens";
+import { LoginPage, SignUp, LandingPage, Fields, Matches, Players, Request, DetailField } from "../screens";
 import { LandingPageOwner, AddField, ListRequest, EditField } from "../screens/Owner"
 import { FontAwesome5 } from "@expo/vector-icons";
 import BottomTabNavigator from "../components/BottomTabNavigator";
@@ -49,6 +49,7 @@ const Router = () => {
             <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
             <Stack.Screen name="EditField" component={EditField} options={{ headerShown: false }}/>
+            <Stack.Screen name="DetailField" component={DetailField} options={{ headerShown: false }}/>
           </>
         ) : (
           <>

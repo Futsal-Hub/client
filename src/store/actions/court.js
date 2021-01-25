@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../config/axiosInstances";
 
 export function getCourt(jwt) {
   return async (dispatch, getState) => {
@@ -8,7 +8,7 @@ export function getCourt(jwt) {
         headers: {
           "access_token" : jwt
         },
-        url: "http://10.0.2.2:3000/court",
+        url: "/court",
       });
       dispatch({
         type: "set-court",
@@ -25,7 +25,7 @@ export function getCourtId(id, jwt) {
       try {
         const response = await axios({
           method:"GET",
-          url:"http://10.0.2.2:3000/court/" + id,
+          url:"/court/" + id,
           headers: {
             "access_token": jwt
           }

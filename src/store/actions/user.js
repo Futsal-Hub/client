@@ -1,28 +1,22 @@
-import axios from "axios";
-import { getUserLogin, get } from "../../utility/userLogin";
-import { getAccessToken } from "../../utility/token";
+import axios from "../../config/axiosInstances";
+import { getUserLogin } from "../../utility/userLogin";
 
-export const fetchUser = () => {
+export const fetchUser = (jwt) => {
   return (dispatch, getState) => {
-    getAccessToken()
-      .then((res) => {
-        return axios({
-          method: "GET",
-          url: "http://10.0.2.2:3000/users",
-          headers: {
-            access_token: res,
-          },
-        });
-      })
+    axios({
+      method: "GET",
+      url: "/users",
+      headers: {
+        access_token: jwt,
+      },
+    })
       .then((response) => {
         dispatch({
           type: "set-users",
           payload: response.data,
         });
       })
-      .catch((err) => {
-        console.log(err, "<<< err fetching user");
-      });
+      .catch((err) => console.log(err));
   };
 };
 
