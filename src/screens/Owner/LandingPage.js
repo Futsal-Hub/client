@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCourt } from "../../store/actions/court";
-import { getAccessToken } from "../../utility/token";
 import {
   Body,
   CardItem,
@@ -15,26 +13,33 @@ import {
   Button,
   Icon,
 } from "native-base";
-import { removeToken } from '../../utility/token'
+import { deleteCourt, getCourt } from "../../store/actions/court";
+import { getAccessToken } from "../../utility/token";
+import { removeToken } from "../../utility/token";
 
 const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
   const courts = useSelector((state) => state.courts);
-  const user = useSelector((state) => state.user)
-  // console.log(courts);
-  // console.log(user)
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     getAccessToken()
-      .then(res => {
+      .then((res) => {
         dispatch(getCourt(res));
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err));
   }, [dispatch, courts]);
 
-  const logout = () => {
-    removeToken()
+  const delOnPress = (id) => {
+    getAccessToken()
+      .then((res) => {
+        dispatch(deleteCourt(id, res));
+      })
+      .catch((err) => console.log(err));
+  };
 
+  const logout = () => {
+    removeToken();
     dispatch({
       type: "set-role",
       payload: "",
@@ -43,7 +48,7 @@ const LandingPage = ({ navigation }) => {
   };
 
   const move = (page, id) => {
-    console.log("masuk")
+    console.log("masuk");
     navigation.navigate(page, id);
   };
 
@@ -80,7 +85,7 @@ const LandingPage = ({ navigation }) => {
                     <Text>Edit</Text>
                     <Icon active name="check-square" type="FontAwesome" />
                   </Button>
-                  <Button transparent>
+                  <Button transparent onPress={() => delOnPress(item._id)}>
                     <Text>Delete</Text>
                     <Icon active name="window-close" type="FontAwesome" />
                   </Button>

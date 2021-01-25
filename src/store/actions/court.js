@@ -6,7 +6,7 @@ export function getCourt(jwt) {
       const response = await axios({
         method: "GET",
         headers: {
-          "access_token" : jwt
+          access_token: jwt,
         },
         url: "/court",
       });
@@ -21,21 +21,38 @@ export function getCourt(jwt) {
 }
 
 export function getCourtId(id, jwt) {
-    return async(dispatch, getState) => {
-      try {
-        const response = await axios({
-          method:"GET",
-          url:"/court/" + id,
-          headers: {
-            "access_token": jwt
-          }
-        })
-        dispatch({
-          type: "set-courtbyid",
-          payload: response.data
-        })
-      } catch (error) {
-        console.log(error)
-      }
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: "/court/" + id,
+        headers: {
+          access_token: jwt,
+        },
+      });
+      dispatch({
+        type: "set-courtbyid",
+        payload: response.data,
+      });
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
+}
+
+export function deleteCourt(id, jwt) {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios({
+        method: "DELETE",
+        url: "/court/" + id,
+        headers: {
+          access_token: jwt,
+        },
+      });
+      console.log(response.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
