@@ -1,5 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
+import { useSelector, useDispatch } from 'react-redux'
+import { getCourt } from '../store/actions/court'
+import { getUserLogin } from '../utility/userLogin'
+import { getAccessToken } from '../utility/token'
+import { getDistance } from 'geolib';
+
 import {
   Body,
   CardItem,
@@ -15,41 +21,52 @@ import {
 } from "native-base";
 
 const Fields = () => {
+  const courts = useSelector(state => state.courts)
+  const dispatch = useDispatch()
+  const [userLogin, setUserLogin ] = useState('')
+
+  useEffect(() => {
+    getUserLogin().then(res1 => { 
+      setUserLogin(res1)
+      return getAccessToken()
+    })
+    .then(res2 => {
+      dispatch(getCourt(res2)) })      
+  }, [dispatch, setUserLogin])
+
+  const listCourts = courts.map(court => {
+      court.distance = getDistance(
+        { latitude: userLogin.position.lat , longitude: userLogin.position.lng },
+        { latitude: court.position.lat, longitude: court.position.lng })  
+        return court
+  })
+
   return (
     <Container>
       <Content>
-        <Card>
-          <CardItem style={{margin: 10}}>
-            <Left>
-              <Thumbnail square large source={require("../assets/images/fieldsDummy.jpg")} />
-              <Body>
-                <Text>Title Field</Text>
-                <Text>Informasi tambahan e.g harga, location dll</Text>
-              </Body>
-            </Left>
-            <Right>
-              <Button transparent>
-                {/* <Icon active name="sign-in-alt" /> */}
-                <Text>Booking</Text>
-              </Button>
-            </Right>
-          </CardItem>
-          <CardItem style={{margin: 10}}>
-            <Left>
-              <Thumbnail square large source={require("../assets/images/fieldsDummy.jpg")} />
-              <Body>
-                <Text>Title Field</Text>
-                <Text>Informasi tambahan e.g harga, location dll</Text>
-              </Body>
-            </Left>
-            <Right>
-              <Button transparent>
-                {/* <Icon active name="sign-in-alt" /> */}
-                <Text>Booking</Text>
-              </Button>
-            </Right>
-          </CardItem>
-        </Card>
+        {
+          listCourts.map(court => {
+            return(
+              <Card key={court._id}>
+              <CardItem style={{margin: 10}}>
+                <Left>
+                  <Thumbnail square large source={require("../assets/images/fieldsDummy.jpg")} />
+                  <Body>
+                    <Text>{court.name}</Text>
+                    <Text>{court.distance / 1000} KM</Text>
+                  </Body>
+                </Left>
+                <Right>
+                  <Button transparent>
+                    {/* <Icon active name="sign-in-alt" /> */}
+                    <Text>Booking</Text>
+                  </Button>
+                </Right>
+              </CardItem>
+            </Card>    
+            )
+          })
+        }
       </Content>
     </Container>
   );
