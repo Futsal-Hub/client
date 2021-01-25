@@ -1,25 +1,31 @@
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 
 const initialState = {
   role: "",
-  bookings:[],
+  bookings: [],
   user: null,
-}
+  courts: [],
+  court: null,
+};
 
 function reducer(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case "set-user":
-      return {...state, user: action.payload}
+      return { ...state, user: action.payload };
     case "set-role":
-      return {...state, role: action.payload}
+      return { ...state, role: action.payload };
     case "set-booking":
-      return {...state, role: action.payload}
+      return { ...state, role: action.payload };
+    case "set-court":
+      return { ...state, courts: action.payload };
+    case "set-courtbyid":
+      return { ...state, court: action.payload };
     default:
-      return state
+      return state;
   }
 }
 
-const store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer, applyMiddleware(thunk));
 
-export default store
+export default store;

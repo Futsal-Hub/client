@@ -13,18 +13,38 @@ import {
 } from "native-base";
 import * as ImagePicker from "expo-image-picker";
 import { Camera } from "expo-camera";
-import { socket } from "../../config/socket";
+import { useDispatch, useSelector } from "react-redux";
+import { getCourtId } from "../../store/actions/court";
+import { getAccessToken } from "../../utility/token";
 import axios from "axios";
 
-const AddField = () => {
+const EditField = ({ route }) => {
+  const id = route.params.id;
+  console.log(id);
+  const dispatch = useDispatch();
+  const court = useSelector((state) => state.court);
+
+  useEffect(() => {
+    dispatch(getCourtId(id));
+    if (court) {
+      setImage(court.photos);
+      setName(court.name);
+      setPrice(court.price);
+      setTipe(court.type);
+      setSchedule1(court.schedule.open);
+      setSchedule2(court.schedule.close);
+      setAddress(court.address);
+    }
+  }, [dispatch]);
+
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [modalVisibility, setModalVisibility] = useState(false);
 
   const [image, setImage] = useState(null);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(null);
   const [price, setPrice] = useState(null);
-  const [tipe, setTipe] = useState("");
+  const [tipe, setTipe] = useState(null);
   const [schedule1, setSchedule1] = useState(null);
   const [schedule2, setSchedule2] = useState(null);
   const [address, setAddress] = useState(null);
@@ -51,33 +71,6 @@ const AddField = () => {
   }, []);
 
   const onSubmit = () => {
-    const uploadUri = image;
-    let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
-    const formData = new FormData();
-    formData.append("image", filename);
-    // console.log(filename, "<<<<<<<<<");
-    // console.log(formData, "<<<");
-    // axios({
-    //   url: "https://api.imgur.com/3/image",
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: "Client-ID c445621e307ea2b"
-    //   },
-    //   data: formData
-    // })
-    // fetch("https://api.imgur.com/3/image", {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     Authorization: "Client-ID c445621e307ea2b"
-    //   },
-    //   body: formData
-    // })
-    // .then(data => data.json())
-    // .then(res => {
-    //   console.log(res)
-    // })
-    // .catch(err => console.log(err))
     const payload = {
       name,
       price,
@@ -94,16 +87,20 @@ const AddField = () => {
       owner: "Arif",
       photos: image,
     };
-    // console.log(payload)
-       axios({
-      url: "http://10.0.2.2:3000/court",
-      method: "POST",
-      data: payload
-    })
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch(err => console.log(err))
+    getAccessToken().then((res) => {
+      axios({
+        url: "http://10.0.2.2:3000/court/" + id,
+        method: "PUT",
+        headers: {
+          access_token: res,
+        },
+        data: payload,
+      })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => console.log(err));
+    });
   };
 
   //buat camera
@@ -159,13 +156,14 @@ const AddField = () => {
           <Text>Ini Pala</Text>
         </Header>
 
-        <Text>Ini Add Field</Text>
+        <Text>Ini Edit Field</Text>
         <Form>
           <Item>
             <Input
               required
               placeholder="name"
               onChangeText={(value) => setName(value)}
+              value={name}
             />
           </Item>
           <Item>
@@ -187,6 +185,7 @@ const AddField = () => {
               placeholder="price"
               keyboardType={"number-pad"}
               onChangeText={(value) => setPrice(value)}
+              value={price}
             />
           </Item>
           <Item style={styles.item} picker>
@@ -197,6 +196,7 @@ const AddField = () => {
               placeholderIconColor="#007aff"
               selectedValue={tipe}
               onValueChange={(value) => setTipe(value)}
+              value={type}
             >
               <Picker.Item label="Select Type" value="" />
               <Picker.Item label="Vinyl" value="Vinyl" />
@@ -213,12 +213,14 @@ const AddField = () => {
               placeholder="Open Hour"
               onChangeText={(value) => setSchedule1(value)}
               keyboardType={"number-pad"}
+              value={schedule1}
             />
             <Input
               required
               placeholder="Close Hour"
               onChangeText={(value) => setSchedule2(value)}
               keyboardType={"number-pad"}
+              value={schedule2}
             />
           </Item>
           <Item>
@@ -226,6 +228,7 @@ const AddField = () => {
               required
               placeholder="address"
               onChangeText={(value) => setAddress(value)}
+              value={address}
             />
           </Item>
           <Button
@@ -234,7 +237,7 @@ const AddField = () => {
             style={styles.button}
             onPress={() => onSubmit()}
           >
-            <Text>Add Field</Text>
+            <Text>Edit Field</Text>
           </Button>
         </Form>
         {/* <Camera ref={cam} style={{ flex: 1}} type={type}>
@@ -284,4 +287,4 @@ const styles = {
   },
 };
 
-export default AddField;
+export default EditField;
