@@ -15,6 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Camera } from "expo-camera";
 import { socket } from "../../config/socket";
 import axios from "axios";
+import { getAccessToken } from "../../utility/token";
 
 const AddField = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -28,7 +29,7 @@ const AddField = () => {
   const [schedule1, setSchedule1] = useState(null);
   const [schedule2, setSchedule2] = useState(null);
   const [address, setAddress] = useState(null);
-
+  
   const cam = useRef().current;
 
   useEffect(() => {
@@ -51,33 +52,6 @@ const AddField = () => {
   }, []);
 
   const onSubmit = () => {
-    const uploadUri = image;
-    let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
-    const formData = new FormData();
-    formData.append("image", filename);
-    // console.log(filename, "<<<<<<<<<");
-    // console.log(formData, "<<<");
-    // axios({
-    //   url: "https://api.imgur.com/3/image",
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: "Client-ID c445621e307ea2b"
-    //   },
-    //   data: formData
-    // })
-    // fetch("https://api.imgur.com/3/image", {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     Authorization: "Client-ID c445621e307ea2b"
-    //   },
-    //   body: formData
-    // })
-    // .then(data => data.json())
-    // .then(res => {
-    //   console.log(res)
-    // })
-    // .catch(err => console.log(err))
     const payload = {
       name,
       price,
@@ -94,16 +68,29 @@ const AddField = () => {
       owner: "Arif",
       photos: image,
     };
-    // console.log(payload)
-       axios({
-      url: "http://10.0.2.2:3000/court",
-      method: "POST",
-      data: payload
-    })
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch(err => console.log(err))
+    
+    getAccessToken()
+      .then(res => {
+        axios({
+        url: "http://10.0.2.2:3000/court",
+        method: "POST",
+        headers: {
+          "access_token": res
+        },
+        data: payload
+      })
+      .then(res => {
+        console.log(res.data, "hasil addfield")
+      })
+      .catch(err => console.log(err))
+      })
+    setImage(null)
+    setName("")
+    setPrice(0)
+    setTipe("")
+    setSchedule1(null)
+    setSchedule2(null)
+    setAddress("")
   };
 
   //buat camera
@@ -165,6 +152,7 @@ const AddField = () => {
             <Input
               required
               placeholder="name"
+              value={name}
               onChangeText={(value) => setName(value)}
             />
           </Item>
@@ -185,6 +173,7 @@ const AddField = () => {
             <Input
               required
               placeholder="price"
+              value={price}
               keyboardType={"number-pad"}
               onChangeText={(value) => setPrice(value)}
             />
@@ -211,11 +200,13 @@ const AddField = () => {
             <Input
               required
               placeholder="Open Hour"
+              value={schedule1}
               onChangeText={(value) => setSchedule1(value)}
               keyboardType={"number-pad"}
             />
             <Input
               required
+              value={schedule2}
               placeholder="Close Hour"
               onChangeText={(value) => setSchedule2(value)}
               keyboardType={"number-pad"}
@@ -224,6 +215,7 @@ const AddField = () => {
           <Item>
             <Input
               required
+              value={address}
               placeholder="address"
               onChangeText={(value) => setAddress(value)}
             />

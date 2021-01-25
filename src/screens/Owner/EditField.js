@@ -20,22 +20,8 @@ import axios from "axios";
 
 const EditField = ({ route }) => {
   const id = route.params.id;
-  console.log(id);
   const dispatch = useDispatch();
   const court = useSelector((state) => state.court);
-
-  useEffect(() => {
-    dispatch(getCourtId(id));
-    if (court) {
-      setImage(court.photos);
-      setName(court.name);
-      setPrice(court.price);
-      setTipe(court.type);
-      setSchedule1(court.schedule.open);
-      setSchedule2(court.schedule.close);
-      setAddress(court.address);
-    }
-  }, [dispatch]);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -48,6 +34,23 @@ const EditField = ({ route }) => {
   const [schedule1, setSchedule1] = useState(null);
   const [schedule2, setSchedule2] = useState(null);
   const [address, setAddress] = useState(null);
+
+  useEffect(() => {
+    getAccessToken()
+      .then(res => {
+        dispatch(getCourtId(id, res));
+      })
+      .catch(err => console.log(err))
+    if (court) {
+      setImage(court.photos);
+      setName(court.name);
+      setPrice(court.price);
+      setTipe(court.type);
+      setSchedule1(court.schedule.open);
+      setSchedule2(court.schedule.close);
+      setAddress(court.address);
+    }
+  }, [dispatch, court]);
 
   const cam = useRef().current;
 

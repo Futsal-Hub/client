@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourt } from "../../store/actions/court";
+import { getAccessToken } from "../../utility/token";
 import {
   Body,
   CardItem,
@@ -15,21 +16,24 @@ import {
   Icon,
 } from "native-base";
 import { removeToken } from '../../utility/token'
-import { removeUserLogin } from '../utility/userLogin'
-
 
 const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
   const courts = useSelector((state) => state.courts);
+  const user = useSelector((state) => state.user)
   console.log(courts);
+  console.log(user)
 
   useEffect(() => {
-    dispatch(getCourt());
+    getAccessToken()
+      .then(res => {
+        dispatch(getCourt(res));
+      })
+      .catch(err => console.log(err))
   }, [dispatch]);
 
   const logout = () => {
     removeToken()
-    removeUserLogin()
 
     dispatch({
       type: "set-role",
@@ -39,6 +43,7 @@ const LandingPage = ({ navigation }) => {
   };
 
   const move = (page, id) => {
+    console.log("masuk")
     navigation.navigate(page, id);
   };
 

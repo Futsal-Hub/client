@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getUserLogin } from '../utility/userLogin'
+import { getUserLogin } from '../../utility/userLogin'
 
 export const fetchUser = () => {
     return (dispatch, getState) => {

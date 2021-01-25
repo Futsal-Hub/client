@@ -75,13 +75,13 @@ const LoginPage = ({ navigation }) => {
       })
         .then(result => {
           const role = result.data.user.role
-          role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
           setAccessToken(JSON.stringify(result.data.access_token))
           setUserLogin(JSON.stringify(result.data.user));
           dispatch({
             type: "set-user",
             payload: result.data.user
           })
+          role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
         })
         .catch((err) => console.log(err));
     }
