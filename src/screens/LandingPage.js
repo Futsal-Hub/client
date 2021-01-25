@@ -1,45 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, Image } from "react-native";
 import { Button, Header, Content, Card, CardItem, Container, View } from "native-base";
-import * as Location from "expo-location";
 import Swipper from "react-native-swiper";
 import HeaderInformation from "../components/HeaderInformation";
 import { removeToken } from '../utility/token'
+import { removeUserLogin } from '../utility/userLogin'
 import { useDispatch, useSelector } from 'react-redux'
 
 const LandingPage = ({ navigation }) => {
   const user = useSelector(state => state.user)
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
 
   const logout = () => {
     removeToken()
+    removeUserLogin()
     dispatch({
       type: "set-role",
       payload: ""
     })
     navigation.navigate("LoginPage")
-  }
-
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
   }
 
   return (

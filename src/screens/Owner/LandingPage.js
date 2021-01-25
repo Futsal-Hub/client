@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { View, Text, Modal } from 'react-native'
 import { Button } from 'native-base'
 import { removeToken } from '../../utility/token'
+import { removeUserLogin } from '../utility/userLogin'
 
 const LandingPage = ({ navigation }) => {
   const [modalVisibility, setModalVisibility] = useState(false)
@@ -14,6 +15,7 @@ const LandingPage = ({ navigation }) => {
 
   const logout = () => {
     removeToken()
+    removeUserLogin()
     dispatch({
       type: "set-role",
       payload: ""

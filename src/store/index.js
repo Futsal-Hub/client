@@ -5,6 +5,8 @@ const initialState = {
   role: "",
   bookings:[],
   user: null,
+  users: [],
+  players: []
 }
 
 function reducer(state = initialState, action) {
@@ -15,6 +17,10 @@ function reducer(state = initialState, action) {
       return {...state, role: action.payload}
     case "set-booking":
       return {...state, role: action.payload}
+    case "set-users":
+      return {...state, users: action.payload}
+    case "set-players":
+      return {...state, players: action.payload}
     default:
       return state
   }
