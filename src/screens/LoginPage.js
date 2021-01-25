@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { setAccessToken } from "../utility/token";
 import { setUserLogin } from "../utility/userLogin";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 import axios from "../config/axiosInstances";
 
 import {
@@ -29,7 +29,7 @@ const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -64,23 +64,27 @@ const LoginPage = ({ navigation }) => {
         password,
         position: {
           lat: location.coords.latitude,
-          lng: location.coords.longitude
-        }
+          lng: location.coords.longitude,
+        },
       };
       axios({
         method: "POST",
         url: "/login",
         data: payload,
       })
-        .then(result => {
-          const role = result.data.user.role
-          setAccessToken(JSON.stringify(result.data.access_token))
+        .then((result) => {
+          const role = result.data.user.role;
+          setAccessToken(JSON.stringify(result.data.access_token));
           setUserLogin(JSON.stringify(result.data.user));
           dispatch({
             type: "set-user",
-            payload: result.data.user
-          })
-          role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
+            payload: result.data.user,
+          });
+          role === "owner"
+            ? move("OwnerApp")
+            : role === "player"
+            ? move("MainApp")
+            : console.log(role);
         })
         .catch((err) => console.log(err));
     }

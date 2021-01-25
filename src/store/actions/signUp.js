@@ -4,11 +4,10 @@ export default function signUp(payload) {
   axios({
     method: "POST",
     url: "/register",
-    data: payload
+    data: payload,
   })
-    .then(result => {
-      console.log(result.data)
-      
+    .then((result) => {
+      console.log(result.data);
     })
-    .catch(err => console.log(err))
+    .catch((err) => console.log(err));
 }
