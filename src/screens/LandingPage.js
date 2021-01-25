@@ -28,9 +28,6 @@ const LandingPage = ({ navigation }) => {
         <HeaderInformation />
         <Button onPress={() => logout()}><Text>Logout</Text></Button>
       </Header>
-        <View>
-          <Text style={styles.paragraph}>{text}</Text>
-        </View>
         <View style={styles.sliderContainer}>
           <Swipper autoplay height={200}>
             <View style={styles.slide}>
