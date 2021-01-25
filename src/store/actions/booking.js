@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../config/axiosInstances";
 import { socket } from "../../config/socket";
 
 export function createBooking(payload) {
@@ -6,7 +6,7 @@ export function createBooking(payload) {
     try {
       const response = await axios({
         method:"POST",
-        url:"http://10.0.2.2:3000/booking",
+        url:"/booking",
         data: payload
       })
       socket.emit("finish addBooking")
@@ -22,7 +22,7 @@ export function getBookingByOwner(ownerId) {
     try {
       const response = await axios({
         method:"GET",
-        url:"http://10.0.2.2:3000/booking/owner/" + ownerId,
+        url:"/booking/owner/" + ownerId,
       })
       dispatch({
         type: "set-booking",
@@ -40,7 +40,7 @@ export function getBookingByPlayer(playerId) {
     try {
       const response = await axios({
         method:"GET",
-        url:"http://10.0.2.2:3000/booking/player/" + playerId,
+        url:"/booking/player/" + playerId,
       })
       dispatch({
         type: "set-booking",

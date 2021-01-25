@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import { setAccessToken } from "../utility/token";
 import { setUserLogin } from "../utility/userLogin";
 import * as Location from 'expo-location';
-
-import axios from "axios";
+import axios from "../config/axiosInstances";
 
 import {
   Container,
@@ -70,7 +69,7 @@ const LoginPage = ({ navigation }) => {
       };
       axios({
         method: "POST",
-        url: "http://10.0.2.2:3000/login",
+        url: "/login",
         data: payload,
       })
         .then(result => {

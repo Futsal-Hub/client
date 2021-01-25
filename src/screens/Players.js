@@ -4,6 +4,7 @@ import { fetchUser, fetchPlayer } from '../store/actions/user'
 import { View } from "react-native";
 import { getUserLogin } from '../utility/userLogin'
 import { getDistance, getPreciseDistance } from 'geolib';
+import { getAccessToken } from '../utility/token'
 import {
   Body,
   CardItem,
@@ -25,7 +26,10 @@ const Players = () => {
   const [userLogin, setUserLogin ] = useState('')
 
   useEffect(() => {
-    dispatch(fetchUser())
+    getAccessToken()
+      .then(res => {
+        dispatch(fetchUser(res))
+      })
     getUserLogin().then(res => { setUserLogin(res) })
   }, [dispatch])
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, KeyboardAvoidingView, Image } from "react-native";
+import { useSelector } from 'react-redux'
 import {
   Button,
   Container,
@@ -14,13 +15,14 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Camera } from "expo-camera";
 import { socket } from "../../config/socket";
-import axios from "axios";
+import axios from "../../config/axiosInstances";
 import { getAccessToken } from "../../utility/token";
 
 const AddField = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [modalVisibility, setModalVisibility] = useState(false);
+  const owner = useSelector(state => state.user)
 
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
@@ -52,6 +54,49 @@ const AddField = ({ navigation }) => {
   }, []);
 
   const onSubmit = () => {
+    // const tanggal = {
+    //   open: schedule1,
+    //   close: schedule2
+    // }
+    // const position = {
+    //   lat: "-6.385589",
+    //   lng: "106.830711"
+    // }
+    // let formData = new FormData()
+    // formData.append('name', name)
+    // formData.append('price', price)
+    // formData.append('type', tipe)
+    // formData.append('position', position)
+    // formData.append('schedule', tanggal)
+    // formData.append('address', address)
+    // formData.append('owner', owner)
+    // formData.append('photos', {
+    //   uri: image,
+    //   name: image.split('/').pop(),
+    //   type: 'image/jpg',
+    // })
+    // // formData.append('photos', image)
+
+    // console.log(formData)
+
+    // getAccessToken().then((res) => {
+    //   axios({
+    //     url: "/court",
+    //     method: "POST",
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "multipart/form-data",
+    //       "access_token": res
+    //     },
+    //     data: formData,
+    //   })
+    //     .then((res) => {
+    //       console.log(res.data, "hasil addfield");
+    //     })
+    //     .catch((err) => console.log(err));
+    // });
+
+    //====================================================
     const payload = {
       name,
       price,
@@ -65,13 +110,13 @@ const AddField = ({ navigation }) => {
         close: schedule2,
       },
       address,
-      owner: "Arif",
+      owner: owner,
       photos: image,
     };
 
     getAccessToken().then((res) => {
       axios({
-        url: "http://10.0.2.2:3000/court",
+        url: "/court",
         method: "POST",
         headers: {
           access_token: res,
@@ -93,27 +138,27 @@ const AddField = ({ navigation }) => {
   };
 
   //buat camera
-  const takePicture = async () => {
-    if (cam.current) {
-      const option = { quality: 1, base64: true, skipProcessing: false };
-      let photo = await cam.current.takePictureAsync(options);
+  // const takePicture = async () => {
+  //   if (cam.current) {
+  //     const option = { quality: 1, base64: true, skipProcessing: false };
+  //     let photo = await cam.current.takePictureAsync(options);
 
-      console.log(cam.current.getSupportedRatiosAsync());
-      const source = photo.uri;
+  //     console.log(cam.current.getSupportedRatiosAsync());
+  //     const source = photo.uri;
 
-      if (source) {
-        cam.current.resumePreview();
-        console.log("picture source", source);
-      }
-    }
-  };
+  //     if (source) {
+  //       cam.current.resumePreview();
+  //       console.log("picture source", source);
+  //     }
+  //   }
+  // };
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <View />;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
   // sampe sini
 
   //buat ngambil file

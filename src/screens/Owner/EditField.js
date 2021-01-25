@@ -16,7 +16,7 @@ import { getCourtId } from "../../store/actions/court";
 import { getAccessToken } from "../../utility/token";
 import * as ImagePicker from "expo-image-picker";
 import { Camera } from "expo-camera";
-import axios from "axios";
+import axios from "../../config/axiosInstances"
 
 const EditField = ({ route, navigation }) => {
   const id = route.params.id;
@@ -95,7 +95,7 @@ const EditField = ({ route, navigation }) => {
     };
     getAccessToken().then((res) => {
       axios({
-        url: "http://10.0.2.2:3000/court/" + id,
+        url: "/court/" + id,
         method: "PUT",
         headers: {
           access_token: res,

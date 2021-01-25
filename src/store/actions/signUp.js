@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from "../../config/axiosInstances";
 
 export default function signUp(payload) {
   axios({
     method: "POST",
-    url: "http://10.0.2.2:3000/register",
+    url: "/register",
     data: payload
   })
     .then(result => {

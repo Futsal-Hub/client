@@ -1,11 +1,14 @@
-import axios from "axios";
+import axios from "../../config/axiosInstances";
 import { getUserLogin } from '../../utility/userLogin'
 
-export const fetchUser = () => {
+export const fetchUser = (jwt) => {
     return (dispatch, getState) => {
           axios({
             method: "GET",
-            url: "http://10.0.2.2:3000/users"
+            url: "/users",
+            headers: {
+              "access_token": jwt
+            }
           })
             .then(response => {
               dispatch({
