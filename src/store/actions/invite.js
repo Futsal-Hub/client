@@ -15,15 +15,15 @@ export default function invitePlayer(destination) {
     try {
       const access_token = await getAccessToken();
       const userLoggedIn = await getUserLogin();
-      console.log(userLoggedIn, "<< user logged in inviet");
-      // const response = await axios({
-      //   method: "POST",
-      //   url: "http://localhost:3000/request",
-      //   headers: {
-      //     access_token: access_token,
-      //   },
-      //   data: payload,
-      // });
+      payload.origin = userLoggedIn;
+      const response = await axios({
+        method: "POST",
+        url: "http://10.0.2.2:3000/request",
+        headers: {
+          access_token: access_token,
+        },
+        data: payload,
+      });
     } catch (error) {
       console.log(error);
     }

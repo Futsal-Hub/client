@@ -6,7 +6,7 @@ export function getReceivedRequest() {
       const access_token = await getAccessToken();
       const response = await axios({
         method: "GET",
-        url: "http://localhost:3000/request/received/600eccdc7a84153ac3d83a10",
+        url: `http://10.0.2.2:3000/request/received/600eccdc7a84153ac3d83a10`,
         headers: {
           access_token: access_token,
         },
@@ -27,7 +27,7 @@ export function updateRequest(id, newStatus) {
       const access_token = await getAccessToken();
       const response = await axios({
         method: "PATCH",
-        url: `http://localhost:3000/request/${id}`,
+        url: `http://10.0.2.2:3000/request/${id}`,
         headers: {
           access_token: access_token,
         },
