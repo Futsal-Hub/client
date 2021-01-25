@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { setAccessToken } from "../utility/token";
+import { setUserLogin } from "../utility/userLogin";
+import * as Location from 'expo-location';
+
 import axios from "axios";
 
 import {
@@ -28,6 +31,21 @@ const LoginPage = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
   const dispatch = useDispatch()
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
 
   const move = (page) => {
     navigation.navigate(page);
@@ -45,6 +63,10 @@ const LoginPage = ({ navigation }) => {
       const payload = {
         email: username,
         password,
+        position: {
+          lat: location.coords.latitude,
+          lng: location.coords.longitude
+        }
       };
       axios({
         method: "POST",
@@ -55,6 +77,7 @@ const LoginPage = ({ navigation }) => {
           const role = result.data.user.role
           role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
           setAccessToken(JSON.stringify(result.data.access_token))
+          setUserLogin(JSON.stringify(result.data.user));
           dispatch({
             type: "set-user",
             payload: result.data.user

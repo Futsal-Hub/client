@@ -14,7 +14,9 @@ import {
   Button,
   Icon,
 } from "native-base";
-import { removeToken } from "../../utility/token";
+import { removeToken } from '../../utility/token'
+import { removeUserLogin } from '../utility/userLogin'
+
 
 const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,7 +28,9 @@ const LandingPage = ({ navigation }) => {
   }, [dispatch]);
 
   const logout = () => {
-    removeToken();
+    removeToken()
+    removeUserLogin()
+
     dispatch({
       type: "set-role",
       payload: "",
