@@ -17,7 +17,7 @@ import { socket } from "../../config/socket";
 import axios from "axios";
 import { getAccessToken } from "../../utility/token";
 
-const AddField = () => {
+const AddField = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [modalVisibility, setModalVisibility] = useState(false);
@@ -29,7 +29,7 @@ const AddField = () => {
   const [schedule1, setSchedule1] = useState(null);
   const [schedule2, setSchedule2] = useState(null);
   const [address, setAddress] = useState(null);
-  
+
   const cam = useRef().current;
 
   useEffect(() => {
@@ -57,8 +57,8 @@ const AddField = () => {
       price,
       type: tipe,
       position: {
-        lon: 1233484848,
-        lat: 21312323773,
+        lat: 6.4025,
+        lng: 106.7942,
       },
       schedule: {
         open: schedule1,
@@ -68,29 +68,28 @@ const AddField = () => {
       owner: "Arif",
       photos: image,
     };
-    
-    getAccessToken()
-      .then(res => {
-        axios({
+
+    getAccessToken().then((res) => {
+      axios({
         url: "http://10.0.2.2:3000/court",
         method: "POST",
         headers: {
-          "access_token": res
+          access_token: res,
         },
-        data: payload
+        data: payload,
       })
-      .then(res => {
-        console.log(res.data, "hasil addfield")
-      })
-      .catch(err => console.log(err))
-      })
-    setImage(null)
-    setName("")
-    setPrice(0)
-    setTipe("")
-    setSchedule1(null)
-    setSchedule2(null)
-    setAddress("")
+        .then((res) => {
+          console.log(res.data, "hasil addfield");
+        })
+        .catch((err) => console.log(err));
+    });
+    setImage(null);
+    setName("");
+    setPrice(0);
+    setTipe("");
+    setSchedule1(null);
+    setSchedule2(null);
+    setAddress("");
   };
 
   //buat camera

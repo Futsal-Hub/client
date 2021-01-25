@@ -41,6 +41,10 @@ const Fields = () => {
         return court
   })
 
+  const move = (page, id) => {
+    navigation.navigate(page, id);
+  };
+
   return (
     <Container>
       <Content>
@@ -57,9 +61,8 @@ const Fields = () => {
                   </Body>
                 </Left>
                 <Right>
-                  <Button transparent>
-                    {/* <Icon active name="sign-in-alt" /> */}
-                    <Text>Booking</Text>
+                  <Button transparent onPress={() => move("DetailField", { id: court._id })}>
+                    <Text>View Detail</Text>
                   </Button>
                 </Right>
               </CardItem>

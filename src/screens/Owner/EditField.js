@@ -82,8 +82,8 @@ const EditField = ({ route, navigation }) => {
       price,
       type: tipe,
       position: {
-        lon: 1233484848,
-        lat: 21312323773,
+        lat: 6.4025,
+        lng: 106.7942,
       },
       schedule: {
         open: schedule1,
