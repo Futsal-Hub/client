@@ -3,11 +3,14 @@ import thunk from 'redux-thunk'
 
 const initialState = {
   role: "",
-  bookings:[]
+  bookings:[],
+  user: null,
 }
 
 function reducer(state = initialState, action) {
   switch(action.type) {
+    case "set-user":
+      return {...state, user: action.payload}
     case "set-role":
       return {...state, role: action.payload}
     case "set-booking":

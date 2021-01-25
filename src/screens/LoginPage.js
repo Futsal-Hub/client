@@ -27,6 +27,7 @@ const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
+  const dispatch = useDispatch()
 
   const move = (page) => {
     navigation.navigate(page);
@@ -50,16 +51,14 @@ const LoginPage = ({ navigation }) => {
         url: "http://10.0.2.2:3000/login",
         data: payload,
       })
-        .then((result) => {
-          const role = result.data.user.role;
-          role === "owner"
-            ? move("OwnerApp")
-            : role === "player"
-            ? move("MainApp")
-            : console.log(role);
-          setUsername("");
-          setPassword("");
-          setAccessToken(JSON.stringify(result.data.access_token));
+        .then(result => {
+          const role = result.data.user.role
+          role === "owner" ? move("OwnerApp") : role === "player" ? move("MainApp") : console.log(role)
+          setAccessToken(JSON.stringify(result.data.access_token))
+          dispatch({
+            type: "set-user",
+            payload: result.data.user
+          })
         })
         .catch((err) => console.log(err));
     }
@@ -152,7 +151,7 @@ const styles = {
   },
   logo: {
     alignItems: "center",
-    height: height - 450,
+    height: height - 400,
     width: width - 50,
     top: 10,
     left: 20,
