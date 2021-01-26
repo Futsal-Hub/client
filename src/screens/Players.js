@@ -73,7 +73,10 @@ const Players = () => {
                   </Body>
                 </Left>
                 <Right>
-                  <Button onPress={() => console.log("clicked")} transparent>
+                  <Button
+                    onPress={() => dispatch(invitePlayer(player))}
+                    transparent
+                  >
                     {/* <Icon active name="sign-in-alt" /> */}
                     <Text>Invite</Text>
                   </Button>

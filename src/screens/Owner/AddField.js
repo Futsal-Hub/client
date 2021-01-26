@@ -108,6 +108,7 @@ const AddField = ({ navigation }) => {
       schedule: {
         open: schedule1,
         close: schedule2,
+        booked: []
       },
       address,
       owner: owner,
