@@ -55,3 +55,22 @@ export function getBookingByPlayer(playerId) {
   }
 }
 
+export function updateBookingFromOwner(id, jwt, payload, ownerId) {
+  return async(dispatch, getState) => {
+    try {
+      const response = await axios({
+        method: "PUT",
+        url: "/booking/" + id,
+        headers: {
+          access_token: jwt
+        },
+        data: payload
+      })
+      console.log(response, "ini dari actions booking.js update")
+      dispatch(getBookingByOwner(jwt, ownerId))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
