@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { setAccessToken } from "../utility/token";
-import { setUserLogin } from "../utility/userLogin";
 import * as Location from "expo-location";
 import axios from "../config/axiosInstances";
 

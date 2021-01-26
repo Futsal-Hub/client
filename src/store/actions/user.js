@@ -1,5 +1,4 @@
 import axios from "../../config/axiosInstances";
-import { getUserLogin } from "../../utility/userLogin";
 
 export const fetchUser = (jwt) => {
   return (dispatch, getState) => {
@@ -19,8 +18,3 @@ export const fetchUser = (jwt) => {
       .catch((err) => console.log(err));
   };
 };
-
-// export const fetchPlayer = () => {
-//   return (dispatch, getState) => {
-//   }
-// }

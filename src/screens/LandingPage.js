@@ -10,7 +10,6 @@ import {
   View,
 } from "native-base";
 import { removeToken } from "../utility/token";
-import { removeUserLogin } from "../utility/userLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { FlatList } from "react-native-gesture-handler";
 import { getCourt } from "../store/actions/court";
