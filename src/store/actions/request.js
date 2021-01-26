@@ -1,6 +1,7 @@
 import axios from "../../config/axiosInstances";
 import { getAccessToken } from "../../utility/token";
 import { getUserLogin } from "../../utility/userLogin";
+
 export function getReceivedRequest() {
   return async (dispatch, getState) => {
     try {
@@ -13,7 +14,7 @@ export function getReceivedRequest() {
           access_token: access_token,
         },
       });
-      response.data = response.data.filter((item) => item.status === "pending");
+      // response.data = response.data.filter((item) => item.status === "pending");
       dispatch({
         type: "set-receivedRequestPlayer",
         payload: response.data,

@@ -20,7 +20,7 @@ import {
 import axios from "../config/axiosInstances";
 
 const DetailField = ({route, navigation}) => {
-  const { court } = route.params;
+  const { court } = route.params.params;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState(null)
   const [time, setTime] = useState(null)

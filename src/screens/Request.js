@@ -28,32 +28,9 @@ const Request = () => {
       <Content>
         <Text>List Request</Text>
         <Card>
-          <CardItem style={{ margin: 10 }}>
-            <Left>
-              <Thumbnail
-                // square
-                large
-                source={require("../assets/images/matchesNearMe.png")}
-              />
-              <Body>
-                <Text>Info Langan</Text>
-                <Text>e.g jumlah, location dll</Text>
-              </Body>
-            </Left>
-            <Right>
-              <Button transparent>
-                <Text>Accept</Text>
-                <Icon active name="check-square" type="FontAwesome" />
-              </Button>
-              <Button transparent>
-                <Text>Deny</Text>
-                <Icon active name="window-close" type="FontAwesome" />
-              </Button>
-            </Right>
-          </CardItem>
           {receivedRequest.map((item) => {
             return (
-              <CardItem style={{ margin: 10 }}>
+              <CardItem key={item._id} style={{ margin: 10 }}>
                 <Left>
                   <Thumbnail
                     // square
