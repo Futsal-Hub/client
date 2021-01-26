@@ -38,12 +38,12 @@ const Fields = ({ navigation }) => {
 
   const listCourts = courts.map((court) => {
     court.distance = getDistance(
-      { latitude: userLogin.position.lat, longitude: userLogin.position.lng },
+      { latitude: 10000, longitude: 10000 },
       { latitude: court.position.lat, longitude: court.position.lng }
     );
     return court;
   });
-  console.log(listCourts);
+
   const move = (page, id) => {
     navigation.navigate(page, id);
   };
