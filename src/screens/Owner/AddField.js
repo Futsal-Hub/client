@@ -1,6 +1,10 @@
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
+
 import React, { useState, useEffect, useRef } from "react";
 import { View, KeyboardAvoidingView, Image } from "react-native";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import {
   Button,
   Container,
@@ -22,7 +26,7 @@ const AddField = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [modalVisibility, setModalVisibility] = useState(false);
-  const owner = useSelector(state => state.user)
+  const owner = useSelector((state) => state.user);
 
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
@@ -54,30 +58,30 @@ const AddField = ({ navigation }) => {
   }, []);
 
   const onSubmit = () => {
-    // const tanggal = {
-    //   open: schedule1,
-    //   close: schedule2
-    // }
-    // const position = {
-    //   lat: "-6.385589",
-    //   lng: "106.830711"
-    // }
-    // let formData = new FormData()
-    // formData.append('name', name)
-    // formData.append('price', price)
-    // formData.append('type', tipe)
-    // formData.append('position', position)
-    // formData.append('schedule', tanggal)
-    // formData.append('address', address)
-    // formData.append('owner', owner)
-    // formData.append('photos', {
-    //   uri: image,
-    //   name: image.split('/').pop(),
-    //   type: 'image/jpg',
-    // })
-    // // formData.append('photos', image)
+    const tanggal = {
+      open: schedule1,
+      close: schedule2,
+    };
+    const position = {
+      lat: 0,
+      lng: 0,
+    };
+    let formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("type", tipe);
+    formData.append("position", position);
+    formData.append("schedule", tanggal);
+    formData.append("address", address);
+    formData.append("owner", owner);
+    formData.append("photos", {
+      uri: image,
+      name: image.split("/").pop(),
+      type: "image/jpg",
+    });
+    // formData.append('photos', image)
 
-    // console.log(formData)
+    console.log(formData);
 
     // getAccessToken().then((res) => {
     //   axios({
@@ -97,23 +101,23 @@ const AddField = ({ navigation }) => {
     // });
 
     //====================================================
-    const payload = {
-      name,
-      price,
-      type: tipe,
-      position: {
-        lat: 6.4025,
-        lng: 106.7942,
-      },
-      schedule: {
-        open: schedule1,
-        close: schedule2,
-        booked: []
-      },
-      address,
-      owner: owner,
-      photos: image,
-    };
+    // const payload = {
+    //   name,
+    //   price,
+    //   type: tipe,
+    //   position: {
+    //     lat: 6.4025,
+    //     lng: 106.7942,
+    //   },
+    //   schedule: {
+    //     open: schedule1,
+    //     close: schedule2,
+    //     booked: []
+    //   },
+    //   address,
+    //   owner: owner,
+    //   photos: image,
+    // };
 
     getAccessToken().then((res) => {
       axios({
@@ -122,10 +126,11 @@ const AddField = ({ navigation }) => {
         headers: {
           access_token: res,
         },
-        data: payload,
+        data: formData,
       })
         .then((res) => {
           console.log(res.data, "hasil addfield");
+          navigation.goBack();
         })
         .catch((err) => console.log(err));
     });

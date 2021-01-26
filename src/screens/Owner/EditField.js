@@ -16,16 +16,16 @@ import { getCourtId } from "../../store/actions/court";
 import { getAccessToken } from "../../utility/token";
 import * as ImagePicker from "expo-image-picker";
 import { Camera } from "expo-camera";
-import axios from "../../config/axiosInstances"
+import axios from "../../config/axiosInstances";
 
 const EditField = ({ route, navigation }) => {
-  const id = route.params.id;
+  const { id } = route.params.params;
   const dispatch = useDispatch();
   const court = useSelector((state) => state.court);
 
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [modalVisibility, setModalVisibility] = useState(false);
+  // const [hasPermission, setHasPermission] = useState(null);
+  // const [type, setType] = useState(Camera.Constants.Type.back);
+  // const [modalVisibility, setModalVisibility] = useState(false);
 
   const [image, setImage] = useState(null);
   const [name, setName] = useState(null);
@@ -55,7 +55,7 @@ const EditField = ({ route, navigation }) => {
     }
   }, [court]);
 
-  const cam = useRef().current;
+  // const cam = useRef().current;
 
   useEffect(() => {
     //buat ngambil file
@@ -70,10 +70,10 @@ const EditField = ({ route, navigation }) => {
       }
     })();
     //buat camera
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
+    // (async () => {
+    //   const { status } = await Camera.requestPermissionsAsync();
+    //   setHasPermission(status === "granted");
+    // })();
   }, []);
 
   const onSubmit = () => {
@@ -111,27 +111,27 @@ const EditField = ({ route, navigation }) => {
   };
 
   //buat camera
-  const takePicture = async () => {
-    if (cam.current) {
-      const option = { quality: 1, base64: true, skipProcessing: false };
-      let photo = await cam.current.takePictureAsync(options);
+  // const takePicture = async () => {
+  //   if (cam.current) {
+  //     const option = { quality: 1, base64: true, skipProcessing: false };
+  //     let photo = await cam.current.takePictureAsync(options);
 
-      console.log(cam.current.getSupportedRatiosAsync());
-      const source = photo.uri;
+  //     console.log(cam.current.getSupportedRatiosAsync());
+  //     const source = photo.uri;
 
-      if (source) {
-        cam.current.resumePreview();
-        console.log("picture source", source);
-      }
-    }
-  };
+  //     if (source) {
+  //       cam.current.resumePreview();
+  //       console.log("picture source", source);
+  //     }
+  //   }
+  // };
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <View />;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
   // sampe sini
 
   //buat ngambil file
@@ -203,7 +203,7 @@ const EditField = ({ route, navigation }) => {
               placeholderIconColor="#007aff"
               selectedValue={tipe}
               onValueChange={(value) => setTipe(value)}
-              value={type}
+              value={tipe}
             >
               <Picker.Item label="Select Type" value="" />
               <Picker.Item label="Vinyl" value="Vinyl" />

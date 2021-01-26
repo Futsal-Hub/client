@@ -64,12 +64,11 @@ const LandingPage = ({ navigation }) => {
             <Card key={item._id}>
               <CardItem style={{ margin: 10 }}>
                 <Left>
-                  {/* <Thumbnail
-                    // square
+                  <Thumbnail
+                    square
                     large
-                    source={item.photos}
-                  /> */}
-                  {/* <Text>{item.photos}</Text> */}
+                    source={{uri: item.photos}}
+                  />
                   <Body>
                     <Text>{item.name}</Text>
                     <Text>{item.type}</Text>
@@ -80,7 +79,12 @@ const LandingPage = ({ navigation }) => {
                   <Button
                     transparent
                     style={{ flexDirection: "row" }}
-                    onPress={() => move("EditField", { id: item._id })}
+                    onPress={() =>
+                      move("EditField", {
+                        screens: "OwnerApp",
+                        params: { id: item._id },
+                      })
+                    }
                   >
                     <Text>Edit</Text>
                     <Icon active name="check-square" type="FontAwesome" />
