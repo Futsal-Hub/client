@@ -1,67 +1,101 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
-import { Button, Header, Content, Card, CardItem, Container, View } from "native-base";
-import Swipper from "react-native-swiper";
-import HeaderInformation from "../components/HeaderInformation";
-import { removeToken } from '../utility/token'
-import { removeUserLogin } from '../utility/userLogin'
-import { useDispatch, useSelector } from 'react-redux'
+import {
+  Button,
+  Header,
+  Content,
+  Card,
+  CardItem,
+  Container,
+  View,
+} from "native-base";
+import { removeToken } from "../utility/token";
+import { removeUserLogin } from "../utility/userLogin";
+import { useDispatch, useSelector } from "react-redux";
+import { FlatList } from "react-native-gesture-handler";
+import { getCourt } from "../store/actions/court";
+import { getAccessToken } from "../utility/token";
+import { Feather } from "@expo/vector-icons";
 
 const LandingPage = ({ navigation }) => {
-  const user = useSelector(state => state.user)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const courts = useSelector((state) => state.courts);
+
+  useEffect(() => {
+    getAccessToken()
+      .then((res) => {
+        dispatch(getCourt(res));
+      })
+      .catch((err) => console.log(err));
+  }, [dispatch, courts]);
 
   const logout = () => {
-    removeToken()
-    removeUserLogin()
+    removeToken();
+    removeUserLogin();
     dispatch({
       type: "set-role",
-      payload: ""
-    })
-    navigation.navigate("LoginPage")
-  }
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
 
   return (
     <Container>
       <Content>
-      <Header style={{ alignItems: "center", padding: 5, marginLeft: -160 }}>
-        <HeaderInformation />
-        <TouchableOpacity onPress={() => logout()}><Text>Logout</Text></TouchableOpacity>
-      </Header>
-        <View style={styles.sliderContainer}>
-          <Swipper autoplay height={200}>
-            <View style={styles.slide}>
-              <Image
-                source={require("../assets/images/fieldsDummy.jpg")}
-                style={styles.sliderImage}
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                source={require("../assets/images/fieldsDummy1.jpg")}
-                style={styles.sliderImage}
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                source={require("../assets/images/fieldsDummy2.jpg")}
-                style={styles.sliderImage}
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                source={require("../assets/images/fieldsDummy3.jpg")}
-                style={styles.sliderImage}
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                source={require("../assets/images/fieldsDummy4.jpg")}
-                style={styles.sliderImage}
-              />
-            </View>
-          </Swipper>
-        </View>
+        <Header style={{ flexDirection: "row", padding: 15, marginLeft: 320 }}>
+          <TouchableOpacity onPress={() => logout()}>
+          <Feather
+                  name="log-out"
+                  size={16}
+                  color="white"
+                />
+          </TouchableOpacity>
+        </Header>
+      </Content>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginVertical: 10,
+          marginHorizontal: 20,
+        }}
+      >
+        <Text style={{fontSize: 22, fontWeight: "bold"}}>Top Fields</Text>
+        <TouchableOpacity>
+          <Text style={{fontSize: 14, fontWeight: "bold", top: 10}} >View All</Text>
+        </TouchableOpacity>
+      </View>
+      <Content>
+        <FlatList
+          horizontal={true}
+          data={courts}
+          renderItem={({ item }) => {
+            return (
+              <Content style={{ paddingLeft: 20 }}>
+                <TouchableOpacity>
+                  <Image
+                    source={{ uri: item.photos }}
+                    style={{
+                      width: 175,
+                      marginRight: 10,
+                      height: 220,
+                      borderRadius: 10,
+                    }}
+                    keyExtractor={item._id}
+                  />
+                </TouchableOpacity>
+                <View style={styles.imageOverlay}></View>
+                <Feather
+                  name="map-pin"
+                  size={16}
+                  color="white"
+                  style={styles.imageLocation}
+                />
+                <Text style={styles.imageText}>{item.name}</Text>
+              </Content>
+            );
+          }}
+        />
       </Content>
     </Container>
   );
@@ -74,30 +108,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
-  paragraph: {
-    fontSize: 18,
-    textAlign: "center",
+  imageOverlay: {
+    width: 175,
+    height: 240,
+    marginRight: 8,
+    borderRadius: 10,
+    position: "absolute",
+    backgroundColor: "#000",
+    opacity: 0.2,
   },
-  sliderContainer: {
-    height: 200,
-    width: "90%",
-    marginTop: 100,
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 8,
+  imageLocation: {
+    position: "absolute",
+    marginTop: 4,
+    left: 10,
+    bottom: 10,
   },
-  wrapper: {},
-  slide: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "transparent",
-    borderRadius: 8,
-  },
-  sliderImage: {
-    height: "100%",
-    width: "100%",
-    alignSelf: "center",
-    borderRadius: 8,
+  imageText: {
+    position: "absolute",
+    color: "white",
+    marginTop: 4,
+    fontSize: 14,
+    left: 30,
+    bottom: 10,
   },
 });
 

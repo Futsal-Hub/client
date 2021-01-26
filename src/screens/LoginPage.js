@@ -19,11 +19,8 @@ import {
   Left,
 } from "native-base";
 import { useDispatch } from "react-redux";
-import { Image, Dimensions } from "react-native";
+import { Image, Dimensions, KeyboardAvoidingView } from "react-native";
 import { login } from "../store/actions";
-
-const { height } = Dimensions.get("screen");
-const { width } = Dimensions.get("screen");
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -44,7 +41,7 @@ const LoginPage = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
-  }, []);
+  }, [location]);
 
   const move = (page) => {
     navigation.navigate(page);
@@ -94,7 +91,7 @@ const LoginPage = ({ navigation }) => {
     <Container>
       <Header style={styles.header}>
         <Image
-          source={require("../assets/images/logo.jpg")}
+          source={require("../assets/images/logo.png")}
           style={styles.logo}
         />
       </Header>
@@ -105,44 +102,48 @@ const LoginPage = ({ navigation }) => {
       ) : (
         <Text></Text>
       )}
-      <Form style={styles.form}>
-        <Item style={styles.item}>
-          <Input
-            placeholder="Username"
-            value={username}
-            onChangeText={(value) => setUsername(value)}
-          />
-        </Item>
-        <Item style={styles.item}>
-          <Input
-            placeholder="Password"
-            value={password}
-            secureTextEntry={true}
-            onChangeText={(value) => setPassword(value)}
-          />
-        </Item>
-        <Item style={styles.itemBtn}>
-          <Button
-            bordered
-            dark
-            style={styles.button}
-            onPress={() => validate()}
-          >
-            <Text>Sign In</Text>
-          </Button>
-          <Button
-            bordered
-            dark
-            style={styles.button}
-            onPress={() => move("SignUp")}
-          >
-            <Text>Sign Up</Text>
-          </Button>
-        </Item>
-      </Form>
+      <Content>
+        <Form style={styles.form}>
+          <Item style={styles.item}>
+            <Input
+              placeholder="Email"
+              value={username}
+              onChangeText={(value) => setUsername(value)}
+            />
+          </Item>
+          <Item style={styles.item}>
+            <Input
+              placeholder="Password"
+              value={password}
+              secureTextEntry={true}
+              onChangeText={(value) => setPassword(value)}
+            />
+          </Item>
+          <Item style={styles.itemBtn}>
+            <Button
+              bordered
+              dark
+              style={styles.button}
+              onPress={() => validate()}
+            >
+              <Text>Sign In</Text>
+            </Button>
+            <Button
+              bordered
+              dark
+              style={styles.button}
+              onPress={() => move("SignUp")}
+            >
+              <Text>Sign Up</Text>
+            </Button>
+          </Item>
+        </Form>
+      </Content>
     </Container>
   );
 };
+
+const { width } = Dimensions.get("window");
 
 const styles = {
   header: {
@@ -177,10 +178,10 @@ const styles = {
   },
   logo: {
     alignItems: "center",
-    height: height - 450,
-    width: width,
+    width: width - 50,
+    height: 200,
     top: 10,
-    left: 20,
+    left: 5,
   },
 };
 export default LoginPage;
