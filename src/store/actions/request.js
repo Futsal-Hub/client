@@ -14,7 +14,11 @@ export function getReceivedRequest() {
           access_token: access_token,
         },
       });
+<<<<<<< HEAD
+
+=======
       // response.data = response.data.filter((item) => item.status === "pending");
+>>>>>>> development
       dispatch({
         type: "set-receivedRequestPlayer",
         payload: response.data,
@@ -41,6 +45,7 @@ export function updateRequest(id, newStatus) {
           status: newStatus,
         },
       });
+      console.log(response, "<<< reponse update");
     } catch (error) {
       console.log(error);
     }

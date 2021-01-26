@@ -63,23 +63,41 @@ const AddField = ({ navigation }) => {
       close: schedule2,
     };
     const position = {
+<<<<<<< HEAD
+      lat: "-6.385589",
+      lng: "106.830711",
+=======
       lat: 0,
       lng: 0,
+>>>>>>> development
     };
     let formData = new FormData();
     formData.append("name", name);
     formData.append("price", price);
     formData.append("type", tipe);
+<<<<<<< HEAD
+    formData.append("position", JSON.stringify(position));
+    formData.append("schedule", JSON.stringify(tanggal));
+    formData.append("address", address);
+    formData.append("owner", JSON.stringify(owner));
+=======
     formData.append("position", position);
     formData.append("schedule", tanggal);
     formData.append("address", address);
     formData.append("owner", owner);
+>>>>>>> development
     formData.append("photos", {
       uri: image,
       name: image.split("/").pop(),
       type: "image/jpg",
     });
+<<<<<<< HEAD
+
+    console.log(formData, "<<< formdata");
+    // // formData.append('photos', image)
+=======
     // formData.append('photos', image)
+>>>>>>> development
 
     console.log(formData);
 
@@ -125,6 +143,7 @@ const AddField = ({ navigation }) => {
         method: "POST",
         headers: {
           access_token: res,
+          "Content-Type": "multipart/form-data",
         },
         data: formData,
       })
@@ -134,13 +153,13 @@ const AddField = ({ navigation }) => {
         })
         .catch((err) => console.log(err));
     });
-    setImage(null);
-    setName("");
-    setPrice(0);
-    setTipe("");
-    setSchedule1(null);
-    setSchedule2(null);
-    setAddress("");
+    // setImage(null);
+    // setName("");
+    // setPrice(0);
+    // setTipe("");
+    // setSchedule1(null);
+    // setSchedule2(null);
+    // setAddress("");
   };
 
   //buat camera
