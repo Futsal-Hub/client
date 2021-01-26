@@ -61,7 +61,8 @@ const DetailField = ({route, navigation}) => {
         date,
         time,
         duration
-      }
+      },
+      status: 'pending'
     }
     getAccessToken()
       .then(res => {
