@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUser, fetchPlayer } from "../store/actions/user";
-import { View } from "react-native";
-import { getUserLogin } from "../utility/userLogin";
-import { getDistance, getPreciseDistance } from "geolib";
+import { fetchUser } from "../store/actions/user";
+import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getAccessToken } from "../utility/token";
 import {
@@ -22,16 +20,12 @@ import {
 
 const Players = () => {
   const users = useSelector((state) => state.users);
-  // const players = useSelector(state => state.players)
   const dispatch = useDispatch();
-  const [userLogin, setUserLogin] = useState("");
+  const userLogin = useSelector((state) => state.user)
 
   useEffect(() => {
     getAccessToken().then((res) => {
       dispatch(fetchUser(res));
-    });
-    getUserLogin().then((res) => {
-      setUserLogin(res);
     });
   }, [dispatch]);
 

@@ -1,4 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getAccessToken } from "../utility/token";
+import { getDistance } from "geolib";
+import { invitePlayer } from "../store/actions";
+import { getBooking } from "../store/actions";
 import {
   Body,
   CardItem,
@@ -14,50 +19,58 @@ import {
 } from "native-base";
 
 const Matches = () => {
+  const bookings = useSelector((state) => state.allBookings);
+  const userLogin = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    getAccessToken().then((res1) => {
+      dispatch(getBooking(res1))
+    });
+  }, []);
+
+  const listMatches = bookings.map(match => {
+      match.court.distance = getDistance(
+        { latitude: userLogin.position.lat, longitude: userLogin.position.lng },
+        { latitude: match.court.position.lat, longitude: match.court.position.lng }
+      );      
+    return match;
+  });
+
+  const activeMatches = listMatches.filter(activeMatch => { return activeMatch.status === 'accepted' })
+
   return (
     <Container>
       <Content>
         <Text>Matches Near Me</Text>
-        <Card>
-          <CardItem style={{ margin: 10 }}>
-            <Left>
-              <Thumbnail
-                // square
-                large
-                source={require("../assets/images/matchesNearMe.png")}
-              />
-              <Body>
-                <Text>Info Langan</Text>
-                <Text>e.g jumlah, location dll</Text>
-              </Body>
-            </Left>
-            <Right>
-              <Button transparent>
-                {/* <Icon active name="sign-in-alt" type="FontAwesome" /> */}
-                <Text>Join</Text>
-              </Button>
-            </Right>
-          </CardItem>
-          <CardItem style={{ margin: 10 }}>
-            <Left>
-              <Thumbnail
-                // square
-                large
-                source={require("../assets/images/matchesNearMe.png")}
-              />
-              <Body>
-                <Text>Title Field</Text>
-                <Text>e.g harga, location dll</Text>
-              </Body>
-            </Left>
-            <Right>
-              <Button transparent>
-                {/* <Icon active name="sign-in-alt" type="FontAwesome" /> */}
-                <Text>Join</Text>
-              </Button>
-            </Right>
-          </CardItem>
-        </Card>
+        {
+          activeMatches.map(listMatch => {
+            return (
+              <Card key={listMatch._id}>
+              <CardItem style={{ margin: 10 }}>
+                <Left>
+                  <Thumbnail
+                    // square
+                    large
+                    source={require("../assets/images/matchesNearMe.png")}
+                  />
+                  <Body>
+                    <Text>{listMatch.court.name}</Text>
+                    <Text>{listMatch.court.address}</Text>
+                    <Text>{listMatch.court.distance / 1000} KM</Text>
+                  </Body>
+                </Left>
+                <Right>
+                  <Button  transparent onPress={() => dispatch(invitePlayer(listMatch.host))}>
+                    {/* <Icon active name="sign-in-alt" type="FontAwesome" /> */}
+                    <Text>Join</Text>
+                  </Button>
+                </Right>
+              </CardItem>
+            </Card>    
+            )
+          })
+        }
       </Content>
     </Container>
   );

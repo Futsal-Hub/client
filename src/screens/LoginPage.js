@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { setAccessToken } from "../utility/token";
 import { setUserLogin } from "../utility/userLogin";
 import * as Location from "expo-location";
@@ -20,7 +19,6 @@ import {
 } from "native-base";
 import { useDispatch } from "react-redux";
 import { Image, Dimensions, KeyboardAvoidingView } from "react-native";
-import { login } from "../store/actions";
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -30,32 +28,29 @@ const LoginPage = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, [location]);
-
   const move = (page) => {
     navigation.navigate(page);
     setUsername("");
     setPassword("");
   };
 
-  const validate = () => {
+  const validate = async () => {
     if (!username || !password) {
       setValid("Please Fill All Form !");
       setTimeout(() => {
         setValid("");
       }, 3000);
     } else {
+      let { status } = await Location.requestPermissionsAsync();
+      if (!status) {
+        throw `location is unavailable`
+      }
+      else if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
       const payload = {
         email: username,
         password,
@@ -72,7 +67,6 @@ const LoginPage = ({ navigation }) => {
         .then((result) => {
           const role = result.data.user.role;
           setAccessToken(JSON.stringify(result.data.access_token));
-          setUserLogin(JSON.stringify(result.data.user));
           dispatch({
             type: "set-user",
             payload: result.data.user,
