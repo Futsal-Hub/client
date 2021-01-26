@@ -1,12 +1,14 @@
-import axios from "axios";
+import axios from "../../config/axiosInstances";
 import { getAccessToken } from "../../utility/token";
+import { getUserLogin } from "../../utility/userLogin";
 export function getReceivedRequest() {
   return async (dispatch, getState) => {
     try {
+      const userLoggedIn = await getUserLogin();
       const access_token = await getAccessToken();
       const response = await axios({
         method: "GET",
-        url: `http://10.0.2.2:3000/request/received/600eccdc7a84153ac3d83a10`,
+        url: `/request/received/${userLoggedIn._id}`,
         headers: {
           access_token: access_token,
         },
@@ -15,6 +17,8 @@ export function getReceivedRequest() {
         type: "set-receivedRequestPlayer",
         payload: response.data,
       });
+
+      console.log(response.data, "<<< response fetch received");
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +31,7 @@ export function updateRequest(id, newStatus) {
       const access_token = await getAccessToken();
       const response = await axios({
         method: "PATCH",
-        url: `http://10.0.2.2:3000/request/${id}`,
+        url: `/request/${id}`,
         headers: {
           access_token: access_token,
         },

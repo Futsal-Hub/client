@@ -61,7 +61,7 @@ const Request = () => {
                     source={require("../assets/images/matchesNearMe.png")}
                   />
                   <Body>
-                    <Text>{item.origin.name}</Text>
+                    <Text>{item.origin.username}</Text>
                   </Body>
                 </Left>
                 <Right>
