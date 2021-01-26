@@ -74,3 +74,22 @@ export function updateBookingFromOwner(id, jwt, payload, ownerId) {
   }
 }
 
+export function getBooking(jwt) {
+  return async(dispatch, getState) => {
+    try {
+      const response = await axios({
+        method:"GET",
+        url:`/booking`,
+        headers: {
+          access_token: jwt,
+        },
+      })
+      dispatch({
+        type: "set-booking-all",
+        payload: response.data
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}

@@ -9,7 +9,8 @@ const initialState = {
   court: null,
   users: [],
   players: [],
-  receivedRequestPlayer:[]
+  receivedRequestPlayer:[],
+  allBookings: []
 }
 
 function reducer(state = initialState, action) {
@@ -20,6 +21,8 @@ function reducer(state = initialState, action) {
       return { ...state, role: action.payload };
     case "set-booking":
       return { ...state, bookings: action.payload };
+    case "set-booking-all":
+      return { ...state, allBookings: action.payload };
     case "set-court":
       return { ...state, courts: action.payload };
     case "set-courtbyid":

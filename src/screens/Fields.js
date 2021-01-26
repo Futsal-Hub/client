@@ -22,23 +22,16 @@ import {
 
 const Fields = ({ navigation }) => {
   const courts = useSelector((state) => state.courts);
+  const userLogin = useSelector((state) => state.user)
   const dispatch = useDispatch();
-  const [userLogin, setUserLogin] = useState("");
 
   useEffect(() => {
-    getUserLogin()
-      .then((res1) => {
-        setUserLogin(res1);
-        return getAccessToken();
-      })
-      .then((res2) => {
-        dispatch(getCourt(res2));
-      });
-  }, [dispatch, setUserLogin]);
+    getAccessToken().then((res2) => { dispatch(getCourt(res2)) });
+}, [dispatch]);
 
   const listCourts = courts.map((court) => {
     court.distance = getDistance(
-      { latitude: 10000, longitude: 10000 },
+      { latitude: userLogin.position.lat, longitude: userLogin.position.lng },
       { latitude: court.position.lat, longitude: court.position.lng }
     );
     return court;
