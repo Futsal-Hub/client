@@ -69,7 +69,7 @@ const Fields = ({ navigation }) => {
                 <Right>
                   <Button
                     transparent
-                    onPress={() => move("DetailField", { id: court._id })}
+                    onPress={() => move("DetailField", { court })}
                   >
                     <Text>View Detail</Text>
                   </Button>

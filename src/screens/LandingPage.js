@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, Image } from "react-native";
+import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { Button, Header, Content, Card, CardItem, Container, View } from "native-base";
 import Swipper from "react-native-swiper";
 import HeaderInformation from "../components/HeaderInformation";
@@ -26,7 +26,7 @@ const LandingPage = ({ navigation }) => {
       <Content>
       <Header style={{ alignItems: "center", padding: 5, marginLeft: -160 }}>
         <HeaderInformation />
-        <Button onPress={() => logout()}><Text>Logout</Text></Button>
+        <TouchableOpacity onPress={() => logout()}><Text>Logout</Text></TouchableOpacity>
       </Header>
         <View style={styles.sliderContainer}>
           <Swipper autoplay height={200}>
