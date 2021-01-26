@@ -20,6 +20,26 @@ export function getCourt(jwt) {
   };
 }
 
+export function getCourtByOwner(jwt, id) {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios({
+        method: "GET",
+        headers: {
+          access_token: jwt
+        },
+        url: "/court/owner/"+id
+      })
+      dispatch({
+        type: "set-court",
+        payload: response.data
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
 export function getCourtId(id, jwt) {
   return async (dispatch, getState) => {
     try {

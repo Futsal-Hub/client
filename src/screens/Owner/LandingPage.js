@@ -13,7 +13,7 @@ import {
   Button,
   Icon,
 } from "native-base";
-import { deleteCourt, getCourt } from "../../store/actions/court";
+import { deleteCourt, getCourtByOwner } from "../../store/actions/court";
 import { getAccessToken } from "../../utility/token";
 import { removeToken } from "../../utility/token";
 
@@ -21,14 +21,14 @@ const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
   const courts = useSelector((state) => state.courts);
   const user = useSelector((state) => state.user);
-
+ 
   useEffect(() => {
     getAccessToken()
       .then((res) => {
-        dispatch(getCourt(res));
+        dispatch(getCourtByOwner(res, user._id));
       })
       .catch((err) => console.log(err));
-  }, [dispatch, courts]);
+  }, [dispatch]);
 
   const delOnPress = (id) => {
     getAccessToken()

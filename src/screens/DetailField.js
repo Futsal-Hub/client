@@ -70,7 +70,7 @@ const DetailField = ({route, navigation}) => {
           url: "/booking",
           method: "POST",
           headers: {
-            "access_token": res
+            access_token: res
           },
           data: payload
         })

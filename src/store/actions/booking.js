@@ -17,11 +17,14 @@ export function createBooking(payload) {
 }
 
 
-export function getBookingByOwner(ownerId) {
+export function getBookingByOwner(jwt, ownerId) {
   return async(dispatch, getState) => {
     try {
       const response = await axios({
         method:"GET",
+        headers: {
+          access_token: jwt
+        },
         url:"/booking/owner/" + ownerId,
       })
       dispatch({
