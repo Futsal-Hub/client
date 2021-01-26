@@ -40,7 +40,7 @@ const TabItem = ({ label, isFocused, onLongPress, onPress }) => {
       onLongPress={onLongPress}
       style={isFocused ? styles.containerFocused : styles.container}
     >
-      {Icon()}
+      <Icon />
       {/* {isFocused && <Text style={styles.text}>{label.toUpperCase()}</Text>} */}
     </TouchableOpacity>
   );
