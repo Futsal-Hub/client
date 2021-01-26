@@ -17,7 +17,7 @@ import {
   Left,
   Row,
 } from "native-base";
-import axios from "axios";
+import axios from "../config/axiosInstances";
 
 const DetailField = ({route, navigation}) => {
   const { court } = route.params;
@@ -69,7 +69,7 @@ const DetailField = ({route, navigation}) => {
         axios({
           url: "/booking",
           method: "POST",
-          header: {
+          headers: {
             "access_token": res
           },
           data: payload
