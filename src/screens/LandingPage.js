@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
 import { getReceivedRequest } from "../store/actions";
-
 import {
   Button,
   Header,
@@ -20,10 +19,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { FlatList } from "react-native-gesture-handler";
 import { getCourt } from "../store/actions/court";
 import { getAccessToken } from "../utility/token";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user)
   const courts = useSelector((state) => state.courts);
   const requests = useSelector((state) => state.receivedRequestPlayer);
   let receivedRequest = [...requests];
@@ -76,13 +76,15 @@ const LandingPage = ({ navigation }) => {
             <Feather name="log-out" size={25} color="white" />
           </TouchableOpacity>
         </Header>
-        <Separator bordered>
-          <H3 style={{marginLeft: "auto", marginRight: "auto"}}>Upcoming Match</H3>
-        </Separator>
+          <Text style={{fontSize: 25, marginLeft: 10, marginTop: 10, marginBottom: 10, color: '#474b4d'}}>Hi, {user.username}!</Text>
         {
           (receivedRequest.length !== 0) ? 
-        <Card>
-          <CardItem>
+          <Card style={{marginLeft: 10, marginRight: 10, backgroundColor: 'teal'}}>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <Ionicons style={{marginLeft: "auto"}} name="football" size={24} color='#474b4d' />
+            <H3 style={{ marginRight: "auto"}}>Upcoming Match</H3>
+          </View>
+          <CardItem style={{backgroundColor: "aquamarine"}}>
             <Left>
               <Body>
                 <H3>
@@ -94,23 +96,30 @@ const LandingPage = ({ navigation }) => {
               </Body>
             </Left>
             <Right>
-              <Text>
-                  {receivedRequest[0].game.date.date}
-              </Text>
-              <Text>
-                  {receivedRequest[0].game.date.time}
-              </Text>
-              <Text>
-                  {receivedRequest[0].game.date.duration} hours
-              </Text>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <AntDesign name="calendar" size={20} color="#474b4d" style={{marginRight: 5}} />
+                <Text>
+                    {receivedRequest[0].game.date.date}
+                </Text>
+              </View>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <AntDesign name="clockcircleo" size={20} color="#474b4d" style={{marginRight: 10}} />
+                <Text>
+                    {receivedRequest[0].game.date.time}
+                </Text>
+              </View>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <MaterialCommunityIcons name="timer-sand" size={20} color="#474b4d" style={{marginRight: 18}} />
+                <Text>
+                    {receivedRequest[0].game.date.duration} hours
+                </Text>
+              </View>
             </Right>
           </CardItem>
       </Card>
       : 
       <H3 style={{marginLeft: "auto", color: '#474b4d', marginRight: "auto"}}>You Haven't Join Any Match Yet</H3>
       }
-      <Button block style={{ backgroundColor:"#d18902" }}>
-    </Button>
       </Content>
       <View
         style={{
@@ -133,7 +142,7 @@ const LandingPage = ({ navigation }) => {
           data={courts}
           renderItem={({ item }) => {
             return (
-              <Content style={{ paddingLeft: 20 }}>
+              <Content key={item._id} style={{ paddingLeft: 20 }}>
                 <TouchableOpacity>
                   <Image
                     source={{ uri: item.photos }}
