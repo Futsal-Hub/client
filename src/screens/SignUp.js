@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { setAccessToken } from "../utility/token";
-import * as Location from "expo-location";
-import axios from "../config/axiosInstances";
-
+import { KeyboardAvoidingView, Image, Dimensions } from "react-native";
 import {
   Container,
   Header,
@@ -14,69 +11,35 @@ import {
   Button,
   Text,
   Picker,
-  Left,
 } from "native-base";
-import { useDispatch } from "react-redux";
-import { Image, Dimensions, KeyboardAvoidingView } from "react-native";
+import { signUp } from "../store/actions";
 
-const LoginPage = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [isValid, setValid] = useState("");
-  const dispatch = useDispatch();
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
 
   const move = (page) => {
     navigation.navigate(page);
-    setUsername("");
-    setPassword("");
   };
 
-  const validate = async () => {
-    if (!username || !password) {
+  const validate = () => {
+    if (!username || !password || !email || !role) {
       setValid("Please Fill All Form !");
       setTimeout(() => {
         setValid("");
       }, 3000);
     } else {
-      let { status } = await Location.requestPermissionsAsync();
-      if (!status) {
-        throw `location is unavailable`
-      }
-      else if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
       const payload = {
-        email: username,
+        username,
         password,
-        position: {
-          lat: location.coords.latitude,
-          lng: location.coords.longitude,
-        },
+        email,
+        role,
       };
-      axios({
-        method: "POST",
-        url: "/login",
-        data: payload,
-      })
-        .then((result) => {
-          const role = result.data.user.role;
-          setAccessToken(JSON.stringify(result.data.access_token));
-          dispatch({
-            type: "set-user",
-            payload: result.data.user,
-          });
-          role === "owner"
-            ? move("OwnerApp")
-            : role === "player"
-            ? move("MainApp")
-            : console.log(role);
-        })
-        .catch((err) => console.log(err));
+      signUp(payload);
+      move("LoginPage");
     }
   };
 
@@ -89,9 +52,7 @@ const LoginPage = ({ navigation }) => {
         />
       </Header>
       {isValid ? (
-        <Text style={{ color: "red", marginLeft: "auto", marginRight: "auto" }}>
-          {isValid}
-        </Text>
+        <Text style={{ color: "red" }}>{isValid}</Text>
       ) : (
         <Text></Text>
       )}
@@ -99,9 +60,10 @@ const LoginPage = ({ navigation }) => {
         <Form style={styles.form}>
           <Item style={styles.item}>
             <Input
-              placeholder="Email"
+              placeholder="Username"
               value={username}
               onChangeText={(value) => setUsername(value)}
+              required
             />
           </Item>
           <Item style={styles.item}>
@@ -110,7 +72,30 @@ const LoginPage = ({ navigation }) => {
               value={password}
               secureTextEntry={true}
               onChangeText={(value) => setPassword(value)}
+              required
             />
+          </Item>
+          <Item style={styles.item}>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChangeText={(value) => setEmail(value)}
+              required
+            />
+          </Item>
+          <Item style={styles.item} picker>
+            <Picker
+              mode="dropdown"
+              placeholder="Role"
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+              selectedValue={role}
+              onValueChange={(value) => setRole(value)}
+            >
+              <Picker.Item label="Select Role" value="" />
+              <Picker.Item label="Player" value="player" />
+              <Picker.Item label="Owner" value="owner" />
+            </Picker>
           </Item>
           <Item style={styles.itemBtn}>
             <Button
@@ -119,15 +104,15 @@ const LoginPage = ({ navigation }) => {
               style={styles.button}
               onPress={() => validate()}
             >
-              <Text>Sign In</Text>
+              <Text>Submit</Text>
             </Button>
             <Button
               bordered
               dark
               style={styles.button}
-              onPress={() => move("SignUp")}
+              onPress={() => move("LoginPage")}
             >
-              <Text>Sign Up</Text>
+              <Text>Cancel</Text>
             </Button>
           </Item>
         </Form>
@@ -177,4 +162,5 @@ const styles = {
     left: 5,
   },
 };
-export default LoginPage;
+
+export default SignUp;
