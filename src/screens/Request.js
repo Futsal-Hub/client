@@ -15,6 +15,7 @@ import {
   Button,
   Icon,
 } from "native-base";
+import { socket } from "../config/socket";
 
 const Request = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ const Request = () => {
   React.useEffect(() => {
     dispatch(getReceivedRequest());
   }, []);
+  socket.on("fetch request", () => {
+    dispatch(getReceivedRequest());
+  });
 
   return (
     <Container>
@@ -58,7 +62,9 @@ const Request = () => {
                   </Button>
                   <Button
                     onPress={() =>
-                      dispatch(updateRequest(item._id, "Rejected", item.game._id))
+                      dispatch(
+                        updateRequest(item._id, "Rejected", item.game._id)
+                      )
                     }
                     transparent
                   >

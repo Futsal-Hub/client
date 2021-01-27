@@ -21,6 +21,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import axios from "../config/axiosInstances";
 import { getBookingByPlayer } from "../store/actions/booking";
+import { socket } from "../config/socket";
 
 const DetailField = ({ route, navigation }) => {
   const { item: court } = route.params.params;
@@ -87,6 +88,7 @@ const DetailField = ({ route, navigation }) => {
           .then((res) => {
             dispatch(getBookingByPlayer(player._id, access_token));
             console.log(res.data);
+            socket.emit("doneFetching");
           })
           .catch((err) => console.log(err));
       })
@@ -111,9 +113,12 @@ const DetailField = ({ route, navigation }) => {
             <Feather name="map-pin" size={18} color="white" /> {""}
             {court.name}
           </Text>
-          <Text style={styles.tagline}>{'\uFE69'}{" "}{court.price}</Text>
+          <Text style={styles.tagline}>
+            {"\uFE69"} {court.price}
+          </Text>
           <Text style={styles.type}>{court.type}</Text>
-          <Text style={styles.openHours}>{court.schedule.open} to {court.schedule.close} WIB
+          <Text style={styles.openHours}>
+            {court.schedule.open} to {court.schedule.close} WIB
           </Text>
           <Text style={styles.address}>Location: {court.address}</Text>
         </View>
@@ -179,7 +184,7 @@ const DetailField = ({ route, navigation }) => {
               alignSelf: "center",
             }}
           >
-            <Button onPress={() => sendBooking()} style={styles.buttonBook} >
+            <Button onPress={() => sendBooking()} style={styles.buttonBook}>
               <Text>Booking</Text>
             </Button>
             <Button
