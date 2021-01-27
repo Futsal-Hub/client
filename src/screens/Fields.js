@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Animated,
   StatusBar,
-  Touchable,
+  TouchableOpacity,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourt } from "../store/actions/court";
@@ -26,8 +26,9 @@ import {
   Button,
   Icon,
 } from "native-base";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
+import { removeToken } from "../utility/token";
 
 const { width, height } = Dimensions.get("window");
 const SPACING = 10;
@@ -45,6 +46,15 @@ const Fields = ({ navigation }) => {
     });
   }, [dispatch]);
 
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
+
   const listCourts = courts.map((court) => {
     court.distance = getDistance(
       { latitude: userLogin.position.lat, longitude: userLogin.position.lng },
@@ -58,81 +68,95 @@ const Fields = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Content>
-        <Header style={{ flexDirection: "row", padding: 15, marginLeft: 320 }}>
-          <TouchableOpacity onPress={() => logout()}>
-            <Feather name="log-out" size={20} color="white" />
+        <Header
+          style={{
+            flexDirection: "row",
+            padding: 15,
+            backgroundColor: "#EF7911",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 20, marginLeft: "auto" }}>
+            Fields
+          </Text>
+          <TouchableOpacity
+            style={{ marginLeft: "auto" }}
+            onPress={() => logout()}
+          >
+            <Feather name="log-out" size={25} color="white" />
           </TouchableOpacity>
         </Header>
-      </Content>
-      <Animated.FlatList
-        showsHorizontalScrollIndicator={false}
-        data={listCourts}
-        keyExtractor={(item) => item._id}
-        horizontal
-        contentContainerStyle={{
-          alignItems: "center",
-        }}
-        snapToInterval={ITEM_SIZE}
-        decelerationRate={0}
-        bounces={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: true }
-        )}
-        scrollEventThrottle={16}
-        renderItem={({ item, index }) => {
-          const inputRange = [
-            (index - 1) * ITEM_SIZE,
-            index * ITEM_SIZE,
-            (index + 1) * ITEM_SIZE,
-          ];
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [0, -50, 0],
-          });
-          return (
-            <View style={{ width: ITEM_SIZE, top: height - 550 }}>
-              <Animated.View
-                style={{
-                  marginHorizontal: SPACING,
-                  padding: SPACING * 2,
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: 34,
-                  transform: [{ translateY }],
-                }}
-              >
-                <Image
-                  source={{ uri: item.photos }}
-                  style={styles.posterImage}
-                />
-                <Text style={styles.paragraph}>{item.name}</Text>
-                <Text style={styles.paragraph}>{item.distance / 1000} KM</Text>
-                <TouchableOpacity
-                  style={styles.buttonDetail}
-                  onPress={() =>
-                    move("DetailField", {
-                      screens: "MainApp",
-                      params: { item },
-                    })
-                  }
+        <Animated.FlatList
+          showsHorizontalScrollIndicator={false}
+          data={listCourts}
+          keyExtractor={(item) => item._id}
+          horizontal
+          contentContainerStyle={{
+            alignItems: "center",
+          }}
+          snapToInterval={ITEM_SIZE}
+          decelerationRate={0}
+          bounces={false}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: true }
+          )}
+          scrollEventThrottle={16}
+          renderItem={({ item, index }) => {
+            const inputRange = [
+              (index - 1) * ITEM_SIZE,
+              index * ITEM_SIZE,
+              (index + 1) * ITEM_SIZE,
+            ];
+            const translateY = scrollX.interpolate({
+              inputRange,
+              outputRange: [0, -50, 0],
+            });
+            return (
+              <View style={{ width: ITEM_SIZE, top: height - 550 }}>
+                <Animated.View
+                  style={{
+                    marginHorizontal: SPACING,
+                    padding: SPACING * 2,
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 34,
+                    transform: [{ translateY }],
+                  }}
                 >
-                  <Text style={styles.buttonText}>View Detail</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
-          );
-        }}
-      />
-    </View>
+                  <Image
+                    source={{ uri: item.photos }}
+                    style={styles.posterImage}
+                  />
+                  <Text style={styles.paragraph}>{item.name}</Text>
+                  <Text style={styles.paragraph}>
+                    {item.distance / 1000} KM
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.buttonDetail}
+                    onPress={() =>
+                      move("DetailField", {
+                        screens: "MainApp",
+                        params: { item },
+                      })
+                    }
+                  >
+                    <Text style={styles.buttonText}>View Detail</Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+            );
+          }}
+        />
+      </Content>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
   },
   paragraph: {
     fontSize: 18,

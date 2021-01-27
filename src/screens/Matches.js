@@ -4,7 +4,7 @@ import { getAccessToken } from "../utility/token";
 import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getBooking } from "../store/actions";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import {
   Body,
   CardItem,
@@ -16,8 +16,10 @@ import {
   Card,
   Left,
   Button,
-  Icon,
+  Header,
 } from "native-base";
+import { Feather } from "@expo/vector-icons";
+import { removeToken } from "../utility/token";
 
 const Matches = () => {
   const bookings = useSelector((state) => state.allBookings);
@@ -61,10 +63,35 @@ const Matches = () => {
     return activeMatch.status === "accepted";
   });
 
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
+
   return (
     <Container>
+      <Header
+        style={{
+          flexDirection: "row",
+          padding: 15,
+          backgroundColor: "#EF7911",
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 20, marginLeft: "auto" }}>
+          Nearby Matches
+        </Text>
+        <TouchableOpacity
+          style={{ marginLeft: "auto" }}
+          onPress={() => logout()}
+        >
+          <Feather name="log-out" size={25} color="white" />
+        </TouchableOpacity>
+      </Header>
       <Content>
-        <Text>Matches Near Me</Text>
         {activeMatches.map((listMatch) => {
           return (
             <Card key={listMatch._id}>
