@@ -30,7 +30,6 @@ const LandingPage = ({ navigation }) => {
 
   const logout = () => {
     removeToken();
-    removeUserLogin();
     dispatch({
       type: "set-role",
       payload: "",
