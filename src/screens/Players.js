@@ -5,8 +5,14 @@ import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getAccessToken } from "../utility/token";
 import { getBookingByPlayer } from "../store/actions/booking";
-import { View, Modal, StyleSheet, TouchableHighlight } from "react-native";
-import { Alert } from 'react-native'
+import {
+  View,
+  Modal,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
+import { Alert } from "react-native";
 import {
   Body,
   CardItem,
@@ -18,8 +24,10 @@ import {
   Card,
   Left,
   Button,
-  Icon,
+  Header,
 } from "native-base";
+import { Feather } from "@expo/vector-icons";
+import { removeToken } from "../utility/token";
 
 const Players = () => {
   const users = useSelector((state) => state.users);
@@ -54,15 +62,40 @@ const Players = () => {
     }
   });
   listPlayers = listPlayers.slice(1);
-  console.log(listPlayers, "setelah slice")
+  console.log(listPlayers, "setelah slice");
   listPlayers = listPlayers.filter((player) => player._id != userLogin._id);
 
-  console.log(listPlayers, "<<<< setelah filter")
+  console.log(listPlayers, "<<<< setelah filter");
+
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
 
   return (
     <Container>
+      <Header
+        style={{
+          flexDirection: "row",
+          padding: 15,
+          backgroundColor: "#EF7911",
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 20, marginLeft: "auto" }}>
+          Nearby Players
+        </Text>
+        <TouchableOpacity
+          style={{ marginLeft: "auto" }}
+          onPress={() => logout()}
+        >
+          <Feather name="log-out" size={25} color="white" />
+        </TouchableOpacity>
+      </Header>
       <Content>
-        <Text>Player Near Me</Text>
         {listPlayers.map((player) => {
           return (
             <Card key={player._id}>

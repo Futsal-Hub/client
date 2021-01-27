@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getReceivedRequest, updateRequest } from "../store/actions";
-
+import { TouchableOpacity } from "react-native";
 import {
   Body,
   CardItem,
@@ -14,7 +14,10 @@ import {
   Left,
   Button,
   Icon,
+  Header,
 } from "native-base";
+import { Feather } from "@expo/vector-icons";
+import { removeToken } from "../utility/token";
 
 const Request = () => {
   const dispatch = useDispatch();
@@ -25,10 +28,35 @@ const Request = () => {
     dispatch(getReceivedRequest());
   }, []);
 
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
+
   return (
     <Container>
+      <Header
+        style={{
+          flexDirection: "row",
+          padding: 15,
+          backgroundColor: "#EF7911",
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 20, marginLeft: "auto" }}>
+          Request Join
+        </Text>
+        <TouchableOpacity
+          style={{ marginLeft: "auto" }}
+          onPress={() => logout()}
+        >
+          <Feather name="log-out" size={25} color="white" />
+        </TouchableOpacity>
+      </Header>
       <Content>
-        <Text>List Request</Text>
         <Card>
           {receivedRequest.map((item) => {
             return (
@@ -58,7 +86,9 @@ const Request = () => {
                   </Button>
                   <Button
                     onPress={() =>
-                      dispatch(updateRequest(item._id, "Rejected", item.game._id))
+                      dispatch(
+                        updateRequest(item._id, "Rejected", item.game._id)
+                      )
                     }
                     transparent
                   >

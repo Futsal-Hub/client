@@ -55,8 +55,8 @@ const Router = () => {
           <>
             <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
-            <Stack.Screen name="OwnerApp" component={OwnerApp} options={{ headerShown: false }}/>
             <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }}/>
+            <Stack.Screen name="OwnerApp" component={OwnerApp} options={{ headerShown: false }}/>
           </>
         )
       }

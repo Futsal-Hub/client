@@ -39,9 +39,21 @@ const LandingPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Content>
-        <Header style={{ flexDirection: "row", padding: 15, marginLeft: 320 }}>
-          <TouchableOpacity onPress={() => logout()}>
-            <Feather name="log-out" size={20} color="white" />
+        <Header
+          style={{
+            flexDirection: "row",
+            padding: 15,
+            backgroundColor: "#EF7911",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 20, marginLeft: "auto" }}>
+            Home
+          </Text>
+          <TouchableOpacity
+            style={{ marginLeft: "auto" }}
+            onPress={() => logout()}
+          >
+            <Feather name="log-out" size={25} color="white" />
           </TouchableOpacity>
         </Header>
       </Content>
@@ -76,7 +88,6 @@ const LandingPage = ({ navigation }) => {
                       height: 220,
                       borderRadius: 10,
                     }}
-                    keyExtractor={item._id}
                   />
                 </TouchableOpacity>
                 <View style={styles.imageOverlay}></View>

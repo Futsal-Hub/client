@@ -30,6 +30,12 @@ const DetailField = ({ route, navigation }) => {
   const [duration, setDuration] = useState(null);
   const player = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  let price =
+    "Rp. " +
+    Number(court.price)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
+    ",00";
 
   const move = (page) => {
     navigation.navigate(page);
@@ -107,90 +113,91 @@ const DetailField = ({ route, navigation }) => {
               borderBottomRightRadius: 30,
             }}
           />
-          <Text style={styles.placename}>
-            <Feather name="map-pin" size={18} color="white" /> {""}
-            {court.name}
-          </Text>
-          <Text style={styles.tagline}>{'\uFE69'}{" "}{court.price}</Text>
+          <Text style={styles.placename}>{court.name}</Text>
           <Text style={styles.type}>{court.type}</Text>
-          <Text style={styles.openHours}>{court.schedule.open} to {court.schedule.close} WIB
+          <Text style={styles.tagline}>{price}</Text>
+          <Text style={styles.openHours}>
+            {court.schedule.open} to {court.schedule.close} WIB
           </Text>
-          <Text style={styles.address}>Location: {court.address}</Text>
+          <Text style={styles.address}>
+            <Feather name="map-pin" size={16} color="red" /> {""}
+            {court.address}
+          </Text>
         </View>
-      </Content>
 
-      <View style={styles.viewForm}>
-        <Form>
-          <View style={{ alignItems: "center" }}>
-            <Button
-              style={{ alignSelf: "center" }}
-              onPress={showDatePicker}
-              title="Show date picker!"
+        <View style={styles.viewForm}>
+          <Form>
+            <View style={{ alignItems: "center" }}>
+              <Button
+                style={styles.choosenDate}
+                onPress={showDatePicker}
+                title="Show date picker!"
+              >
+                <Text>Choose Date</Text>
+              </Button>
+            </View>
+            <Item style={{ bottom: 100 }}>
+              <Input
+                editable={false}
+                required
+                placeholder="Date"
+                value={date}
+                keyboardType={"number-pad"}
+                onChangeText={(value) => setDate(value)}
+              />
+              <Input
+                editable={false}
+                required
+                placeholder="Time"
+                value={time}
+                keyboardType={"number-pad"}
+                onChangeText={(value) => setTime(value)}
+              />
+              <Picker
+                mode="dropdown"
+                placeholder="Duration"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={duration}
+                onValueChange={(value) => setDuration(value)}
+              >
+                <Picker.Item label="Duration" value="" />
+                <Picker.Item label="1" value="1" />
+                <Picker.Item label="2" value="2" />
+                <Picker.Item label="3" value="3" />
+                <Picker.Item label="4" value="4" />
+                <Picker.Item label="5" value="5" />
+                <Picker.Item label="6" value="6" />
+                <Picker.Item label="7" value="7" />
+                <Picker.Item label="8" value="8" />
+                <Picker.Item label="9" value="9" />
+                <Picker.Item label="10" value="10" />
+                <Picker.Item label="11" value="11" />
+                <Picker.Item label="12" value="12" />
+              </Picker>
+            </Item>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignSelf: "center",
+              }}
             >
-              <Text>Choose Date</Text>
-            </Button>
-          </View>
-          <Item>
-            <Input
-              editable={false}
-              required
-              placeholder="Date"
-              value={date}
-              keyboardType={"number-pad"}
-              onChangeText={(value) => setDate(value)}
-            />
-            <Input
-              style={{ maxWidth: 100 }}
-              editable={false}
-              required
-              placeholder="Time"
-              value={time}
-              keyboardType={"number-pad"}
-              onChangeText={(value) => setTime(value)}
-            />
-            <Picker
-              mode="dropdown"
-              style={{ maxWidth: 150 }}
-              placeholder="Duration"
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              selectedValue={duration}
-              onValueChange={(value) => setDuration(value)}
-            >
-              <Picker.Item label="Duration" value="" />
-              <Picker.Item label="1" value="1" />
-              <Picker.Item label="2" value="2" />
-              <Picker.Item label="3" value="3" />
-              <Picker.Item label="4" value="4" />
-              <Picker.Item label="5" value="5" />
-              <Picker.Item label="6" value="6" />
-              <Picker.Item label="7" value="7" />
-              <Picker.Item label="8" value="8" />
-              <Picker.Item label="9" value="9" />
-              <Picker.Item label="10" value="10" />
-              <Picker.Item label="11" value="11" />
-              <Picker.Item label="12" value="12" />
-            </Picker>
-          </Item>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignSelf: "center",
-            }}
-          >
-            <Button onPress={() => sendBooking()} style={styles.buttonBook} >
-              <Text>Booking</Text>
-            </Button>
-            <Button
-              onPress={() => move("MainApp")}
-              style={{ bottom: 565, right: 210 }}
-              transparent
-            >
-              <Feather name="arrow-left" size={24} color="#EF7911" />
-            </Button>
-          </View>
-        </Form>
+              <Button onPress={() => sendBooking()} style={styles.buttonBook}>
+                <Text style={{ marginLeft: 20, marginRight: 20 }}>Booking</Text>
+              </Button>
+              <View>
+                <Button
+                  onPress={() => move("MainApp")}
+                  style={{ bottom: 590, right: 225 }}
+                  transparent
+                >
+                  <Feather name="arrow-left" size={24} color="#EF7911" />
+                </Button>
+              </View>
+            </View>
+          </Form>
+        </View>
         <View>
           <Button title="Show Date Picker" onPress={showDatePicker} />
           <DateTimePickerModal
@@ -200,7 +207,7 @@ const DetailField = ({ route, navigation }) => {
             onCancel={hideDatePicker}
           />
         </View>
-      </View>
+      </Content>
     </Container>
   );
 };
@@ -217,7 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     paddingHorizontal: 14,
-    top: -130,
+    top: -125,
   },
   tagline: {
     color: "white",
@@ -241,19 +248,25 @@ const styles = StyleSheet.create({
     top: -120,
   },
   address: {
-    color: "black",
+    color: "grey",
     fontSize: 16,
     paddingHorizontal: 14,
     marginBottom: 5,
     top: -100,
   },
   viewForm: {
-    top: -30,
+    top: 70,
   },
   buttonBook: {
-    bottom: 295,
-    left: 140,
+    bottom: 95,
+    left: 80,
     borderRadius: 30,
     backgroundColor: "#EF7911",
+  },
+  choosenDate: {
+    bottom: 0,
+    left: 40,
+    borderRadius: 30,
+    backgroundColor: "#007965",
   },
 });
