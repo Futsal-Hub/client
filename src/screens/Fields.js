@@ -93,7 +93,7 @@ const Fields = ({ navigation }) => {
             outputRange: [0, -50, 0],
           });
           return (
-            <View style={{ width: ITEM_SIZE, top: height - 1000 }}>
+            <View style={{ width: ITEM_SIZE, top: height - 550 }}>
               <Animated.View
                 style={{
                   marginHorizontal: SPACING,
