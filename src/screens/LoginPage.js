@@ -17,7 +17,7 @@ import {
   Left,
 } from "native-base";
 import { useDispatch } from "react-redux";
-import { Image, ImageBackground, Dimensions, KeyboardAvoidingView } from "react-native";
+import { Image, ImageBackground, Dimensions, KeyboardAvoidingView, Alert } from "react-native";
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -58,6 +58,7 @@ const LoginPage = ({ navigation }) => {
           lng: location.coords.longitude,
         },
       };
+      console.log(payload,'<<<');
       axios({
         method: "POST",
         url: "/login",
@@ -76,7 +77,12 @@ const LoginPage = ({ navigation }) => {
             ? move("MainApp")
             : console.log(role);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          Alert.alert(
+            "Error Login",
+            err.response.data.message,
+          )
+      });
     }
   };
 
