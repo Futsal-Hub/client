@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourt } from "../store/actions/court";
-import { getUserLogin } from "../utility/userLogin";
 import { getAccessToken } from "../utility/token";
 import { getDistance } from "geolib";
 
@@ -22,12 +21,14 @@ import {
 
 const Fields = ({ navigation }) => {
   const courts = useSelector((state) => state.courts);
-  const userLogin = useSelector((state) => state.user)
+  const userLogin = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAccessToken().then((res2) => { dispatch(getCourt(res2)) });
-}, [dispatch]);
+    getAccessToken().then((res2) => {
+      dispatch(getCourt(res2));
+    });
+  }, [dispatch]);
 
   const listCourts = courts.map((court) => {
     court.distance = getDistance(

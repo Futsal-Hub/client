@@ -3,8 +3,8 @@ import { getAccessToken } from "../../utility/token";
 
 export function getReceivedRequest() {
   return async (dispatch, getState) => {
-    const state = getState()
-    const userLoggedIn = state.user
+    const state = getState();
+    const userLoggedIn = state.user;
     try {
       const access_token = await getAccessToken();
       const response = await axios({
@@ -26,10 +26,33 @@ export function getReceivedRequest() {
   };
 }
 
-export function updateRequest(id, newStatus) {
+export function updateRequest(id, newStatus, bookingId) {
   return async (dispatch, getState) => {
     try {
       const access_token = await getAccessToken();
+      let booking;
+      if (newStatus === "accepted") {
+        booking = await axios({
+          method: "GET",
+          url: `/booking/${bookingId}`,
+          headers: {
+            access_token: access_token,
+          },
+        });
+      }
+      const state = getState();
+      const user = state.user;
+      const updated = await axios({
+        method: "PATCH",
+        url: `/booking/${bookingId}`,
+        headers: {
+          access_token: access_token,
+        },
+        data: {
+          players: booking.data.players.concat(user),
+        },
+      });
+      console.log(updated.data, "update players");
       const response = await axios({
         method: "PATCH",
         url: `/request/${id}`,
@@ -40,7 +63,7 @@ export function updateRequest(id, newStatus) {
           status: newStatus,
         },
       });
-      console.log(response, "<<< reponse update");
+      console.log(response.data, "<<< reponse update");
     } catch (error) {
       console.log(error);
     }
