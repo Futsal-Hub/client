@@ -77,7 +77,7 @@ const LandingPage = ({ navigation }) => {
           </TouchableOpacity>
         </Header>
         <Separator bordered>
-          <H3>Next Game:</H3>
+          <H3 style={{marginLeft: "auto", marginRight: "auto"}}>Upcoming Match</H3>
         </Separator>
         {
           (receivedRequest.length !== 0) ? 
@@ -88,7 +88,7 @@ const LandingPage = ({ navigation }) => {
                 <H3>
                   {receivedRequest[0].game.court.name}
                 </H3>
-                <Text>
+                <Text style={{color: '#474b4d'}}>
                 {receivedRequest[0].game.players.length} players joined
               </Text>
               </Body>
@@ -107,7 +107,7 @@ const LandingPage = ({ navigation }) => {
           </CardItem>
       </Card>
       : 
-      <Text>No Match</Text>
+      <H3 style={{marginLeft: "auto", color: '#474b4d', marginRight: "auto"}}>You Haven't Join Any Match Yet</H3>
       }
       <Button block style={{ backgroundColor:"#d18902" }}>
     </Button>
@@ -120,9 +120,9 @@ const LandingPage = ({ navigation }) => {
           marginHorizontal: 20,
         }}
       >
-        <Text style={{ fontSize: 22, fontWeight: "bold" }}>Top Fields</Text>
+        <Text style={{ fontSize: 22, color: '#474b4d'}}>Top Fields</Text>
         <TouchableOpacity>
-          <Text style={{ fontSize: 14, fontWeight: "bold", top: 10 }}>
+          <Text style={{ fontSize: 14, color: '#474b4d', top: 10 }} onPress={() => navigation.navigate("Fields")}>
             View All
           </Text>
         </TouchableOpacity>
@@ -141,7 +141,7 @@ const LandingPage = ({ navigation }) => {
                       width: 175,
                       marginRight: 10,
                       height: 220,
-                      borderRadius: 10,
+                      borderRadius: 10
                     }}
                   />
                 </TouchableOpacity>

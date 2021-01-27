@@ -21,10 +21,12 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
-const Matches = () => {
+const Matches = ({navigation}) => {
   const bookings = useSelector((state) => state.allBookings);
   const userLogin = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  console.log(userLogin.position, '<<<')
 
   useEffect(() => {
     getAccessToken().then((res1) => {
@@ -94,14 +96,14 @@ const Matches = () => {
       <Content>
         {activeMatches.map((listMatch) => {
           return (
-            <Card key={listMatch._id}>
+            <Card key={listMatch._id} style={{marginLeft: 10, marginRight: 10}}>
               <CardItem style={{ margin: 10 }}>
-                <Left>
                   <Thumbnail
                     // square
                     large
-                    source={require("../assets/images/matchesNearMe.png")}
+                    source={{uri: listMatch.court.photos}}
                   />
+                <Left>
                   <Body>
                     <Text>{listMatch.court.name}</Text>
                     <Text>{listMatch.court.address}</Text>
@@ -113,7 +115,6 @@ const Matches = () => {
                     transparent
                     onPress={() => handleJoin(listMatch.host, listMatch)}
                   >
-                    {/* <Icon active name="sign-in-alt" type="FontAwesome" /> */}
                     <Text>Join</Text>
                   </Button>
                 </Right>

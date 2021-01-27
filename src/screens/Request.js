@@ -20,7 +20,7 @@ import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 import { socket } from "../config/socket";
 
-const Request = () => {
+const Request = ({navigation}) => {
   const dispatch = useDispatch();
   const requests = useSelector((state) => state.receivedRequestPlayer);
   let receivedRequest = [...requests];

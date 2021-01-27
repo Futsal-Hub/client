@@ -29,7 +29,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
-const Players = () => {
+const Players = ({navigation}) => {
   const users = useSelector((state) => state.users);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -104,14 +104,14 @@ const Players = () => {
       <Content>
         {listPlayers.map((player) => {
           return (
-            <React.Fragment>
+            <React.Fragment key={player._id}>
               <Card key={player._id}>
                 <CardItem style={{ margin: 10 }}>
                   <Left>
                     <Thumbnail
                       // square
                       // large
-                      source={require("../assets/images/players.png")}
+                      source={{uri: `https://i.pravatar.cc/${Math.floor(Math.random() * (1000 - 50 + 1) + 50)}`}}
                     />
                     <Body>
                       <Text>{player.username}</Text>

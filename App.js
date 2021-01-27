@@ -11,8 +11,9 @@ import { getBookingByOwner, getBookingByPlayer } from "./src/store/actions";
 // import { Button, Container, Content, Text } from "native-base";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { View, TouchableOpacity, Text } from "react-native";
-import {LogBox} from 'react-native'
-LogBox.ignoreAllLogs(true)
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 export default function App() {
   const [isReady, setIsReady] = useState(true);
