@@ -129,8 +129,8 @@ const Fields = ({ navigation }) => {
                     source={{ uri: item.photos }}
                     style={styles.posterImage}
                   />
-                  <Text style={styles.paragraph}>{item.name}</Text>
-                  <Text style={styles.paragraph}>
+                  <Text style={styles.paragraph, {color: '#474b4d'}}>{item.name}</Text>
+                  <Text style={styles.paragraph, {color: '#474b4d'}}>
                     {item.distance / 1000} KM
                   </Text>
                   <TouchableOpacity

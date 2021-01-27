@@ -91,6 +91,7 @@ export function editCourt(jwt, id, payload, idOwner) {
         method: "PUT",
         headers: {
           access_token: jwt,
+          "Content-Type": "multipart/form-data",
         },
         data: payload,
       })
