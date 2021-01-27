@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Image, ImageBackground } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAccessToken } from "../utility/token";
 import {
@@ -19,6 +19,7 @@ import {
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import axios from "../config/axiosInstances";
+import { getBookingByPlayer } from "../store/actions/booking";
 
 const DetailField = ({ route, navigation }) => {
   const { court } = route.params.params;
@@ -27,6 +28,7 @@ const DetailField = ({ route, navigation }) => {
   const [time, setTime] = useState(null);
   const [duration, setDuration] = useState(null);
   const player = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const move = (page) => {
     navigation.navigate(page);
@@ -56,7 +58,8 @@ const DetailField = ({ route, navigation }) => {
   };
 
   const sendBooking = () => {
-    console.log("masuk");
+    console.log("masuk sendbooking");
+    let access_token;
     const payload = {
       schedule: court.schedule,
       host: player,
@@ -71,6 +74,7 @@ const DetailField = ({ route, navigation }) => {
     };
     getAccessToken()
       .then((res) => {
+        access_token = res;
         axios({
           url: "/booking",
           method: "POST",
@@ -80,6 +84,7 @@ const DetailField = ({ route, navigation }) => {
           data: payload,
         })
           .then((res) => {
+            dispatch(getBookingByPlayer(player._id, access_token));
             console.log(res.data);
           })
           .catch((err) => console.log(err));
@@ -102,11 +107,7 @@ const DetailField = ({ route, navigation }) => {
             }}
           />
           <Text style={styles.placename}>
-            <Feather
-              name="map-pin"
-              size={18}
-              color="white"
-            /> {""}
+            <Feather name="map-pin" size={18} color="white" /> {""}
             {court.name}
           </Text>
           <Text style={styles.tagline}>Price: Rp {court.price}</Text>
@@ -248,5 +249,5 @@ const styles = StyleSheet.create({
   },
   viewForm: {
     top: -30,
-  }
+  },
 });

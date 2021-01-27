@@ -25,7 +25,9 @@ const Players = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
-  const myBookings = useSelector((state) => state.bookings);
+  const myBookingsRaw = useSelector((state) => state.myBooking);
+  let myBookings = [...myBookingsRaw];
+  myBookings = myBookings.filter((item) => item.status === "accepted");
 
   useEffect(() => {
     getAccessToken().then((res) => {
