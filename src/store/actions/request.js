@@ -41,20 +41,20 @@ export function updateRequest(id, newStatus, bookingId) {
             access_token: access_token,
           },
         });
+        const state = getState();
+        const user = state.user;
+        const updated = await axios({
+          method: "PATCH",
+          url: `/booking/${bookingId}`,
+          headers: {
+            access_token: access_token,
+          },
+          data: {
+            players: booking.data.players.concat(user),
+          },
+        });
+        console.log(updated.data, "update players");
       }
-      const state = getState();
-      const user = state.user;
-      const updated = await axios({
-        method: "PATCH",
-        url: `/booking/${bookingId}`,
-        headers: {
-          access_token: access_token,
-        },
-        data: {
-          players: booking.data.players.concat(user),
-        },
-      });
-      console.log(updated.data, "update players");
       const response = await axios({
         method: "PATCH",
         url: `/request/${id}`,

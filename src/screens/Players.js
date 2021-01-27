@@ -6,6 +6,7 @@ import { invitePlayer } from "../store/actions";
 import { getAccessToken } from "../utility/token";
 import { getBookingByPlayer } from "../store/actions/booking";
 import { View, Modal, StyleSheet, TouchableHighlight } from "react-native";
+import { Alert } from 'react-native'
 import {
   Body,
   CardItem,
@@ -53,7 +54,10 @@ const Players = () => {
     }
   });
   listPlayers = listPlayers.slice(1);
+  console.log(listPlayers, "setelah slice")
   listPlayers = listPlayers.filter((player) => player._id != userLogin._id);
+
+  console.log(listPlayers, "<<<< setelah filter")
 
   return (
     <Container>
@@ -82,7 +86,7 @@ const Players = () => {
                         <Text style={styles.modalText}>Hello World!</Text>
                         {myBookings.map((booking) => {
                           return (
-                            <View style={styles.modalView}>
+                            <View style={styles.modalView} key={booking._id}>
                               <Text>{booking.court.address}</Text>
                               <Button
                                 style={{

@@ -58,7 +58,7 @@ const Request = () => {
                   </Button>
                   <Button
                     onPress={() =>
-                      dispatch(updateRequest(item._id, "Rejected"))
+                      dispatch(updateRequest(item._id, "Rejected", item.game._id))
                     }
                     transparent
                   >

@@ -47,7 +47,7 @@ const Fields = ({ navigation }) => {
 
   const listCourts = courts.map((court) => {
     court.distance = getDistance(
-      { latitude: 100, longitude: 100 },
+      { latitude: userLogin.position.lat , longitude: userLogin.position.lng },
       { latitude: court.position.lat, longitude: court.position.lng }
     );
     return court;
