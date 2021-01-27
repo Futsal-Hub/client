@@ -29,7 +29,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
-const Players = () => {
+const Players = ({navigation}) => {
   const users = useSelector((state) => state.users);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();

@@ -21,7 +21,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
-const Matches = () => {
+const Matches = ({navigation}) => {
   const bookings = useSelector((state) => state.allBookings);
   const userLogin = useSelector((state) => state.user);
   const dispatch = useDispatch();
