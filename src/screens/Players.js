@@ -11,6 +11,11 @@ import {
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
+  ImageBackground,
+  FlatList,
+  Image,
+  StatusBar,
+  Animated,
 } from "react-native";
 import { Alert } from "react-native";
 import {
@@ -29,7 +34,11 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
-const Players = ({navigation}) => {
+
+const SPACING = 20;
+const AVATAR_SIZE = 70;
+
+const Players = ({ navigation }) => {
   const users = useSelector((state) => state.users);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -66,7 +75,7 @@ const Players = ({navigation}) => {
       listPlayers.push(player);
     }
   });
-  
+
   // listPlayers = listPlayers.slice(1);
   // console.log(listPlayers, "setelah slice");
   listPlayers = listPlayers.filter((player) => player._id != userLogin._id);
@@ -101,35 +110,65 @@ const Players = ({navigation}) => {
           <Feather name="log-out" size={25} color="white" />
         </TouchableOpacity>
       </Header>
-      <Content>
-        {listPlayers.map((player) => {
-          return (
-            <React.Fragment key={player._id}>
-              <Card key={player._id}>
-                <CardItem style={{ margin: 10 }}>
-                  <Left>
-                    <Thumbnail
-                      // square
-                      // large
-                      source={{uri: `https://i.pravatar.cc/${Math.floor(Math.random() * (1000 - 50 + 1) + 50)}`}}
-                    />
-                    <Body>
-                      <Text>{player.username}</Text>
-                      <Text>{player.distance / 1000} KM</Text>
-                    </Body>
-                  </Left>
-                  <Right>
-                    <Button onPress={() => openModal(player)} transparent>
-                      {/* <Icon active name="sign-in-alt" /> */}
-                      <Text>Invite</Text>
-                    </Button>
-                  </Right>
-                </CardItem>
-              </Card>
-            </React.Fragment>
-          );
-        })}
-
+      <Content style={{ flex: 1, backgroundColor: "#fff" }}>
+        <FlatList
+          data={listPlayers}
+          keyExtractor={(item) => item._id}
+          contentContainerStyle={{
+            padding: SPACING,
+            paddingTop: StatusBar.currentHeight || 42,
+          }}
+          renderItem={({ item, index }) => {
+            return (
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: SPACING,
+                  marginBottom: SPACING,
+                  backgroundColor: "rgba(255,255,255,0.8)",
+                  borderRadius: 12,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.6,
+                  shadowRadius: 20,
+                }}
+              >
+                <Image
+                  source={{
+                    uri: `https://i.pravatar.cc/${Math.floor(
+                      Math.random() * (1000 - 50 + 1) + 50
+                    )}`,
+                  }}
+                  style={{
+                    width: AVATAR_SIZE,
+                    height: AVATAR_SIZE,
+                    borderRadius: AVATAR_SIZE,
+                    marginRight: SPACING / 2,
+                  }}
+                />
+                <View>
+                  <Text style={{ fontSize: 22, fontWeight: "700", color: '#555555' }}>
+                    {item.username}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 18, opacity: 0.8, color: "#0099cc" }}
+                  >
+                    {item.email}
+                  </Text>
+                  <Text style={{ fontSize: 14, opacity: 0.7 }}>
+                    {item.distance / 1000} KM
+                  </Text>
+                </View>
+                <Button onPress={() => openModal(item)} transparent>
+                  <Text>Invite</Text>
+                </Button>
+              </View>
+            );
+          }}
+        />
         <Modal
           animationType="slide"
           transparent={true}
@@ -144,7 +183,8 @@ const Players = ({navigation}) => {
               {myBookings.map((booking) => {
                 return (
                   <View style={styles.modalView} key={booking._id}>
-                    <Text>{booking.court.address}</Text>
+                    <Text>{booking.court.name}</Text>
+                    <Text>{booking.host.username}</Text>
                     <Button
                       style={{
                         ...styles.openButton,
@@ -182,10 +222,11 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    margin: 20,
+    flex: 1,
+    margin: 0,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 45,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -200,15 +241,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#F194FF",
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    elevation: 3,
+    alignSelf: 'center'
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
-  modalText: {
-    marginBottom: 15,
+  modalText:{
     textAlign: "center",
   },
 });
