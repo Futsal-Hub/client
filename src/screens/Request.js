@@ -44,7 +44,9 @@ const Request = () => {
                 <Right>
                   <Button
                     onPress={() =>
-                      dispatch(updateRequest(item._id, "accepted"))
+                      dispatch(
+                        updateRequest(item._id, "accepted", item.game._id)
+                      )
                     }
                     transparent
                     style={{ flexDirection: "row" }}
