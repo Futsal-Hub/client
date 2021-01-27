@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
+import { getReceivedRequest } from "../store/actions";
+
 import {
   Button,
   Header,
@@ -7,6 +9,11 @@ import {
   Card,
   CardItem,
   Container,
+  Body,
+  Left,
+  Right,
+  H3,
+  Separator
 } from "native-base";
 import { removeToken } from "../utility/token";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +25,15 @@ import { Feather } from "@expo/vector-icons";
 const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
   const courts = useSelector((state) => state.courts);
+  const requests = useSelector((state) => state.receivedRequestPlayer);
+  let receivedRequest = [...requests];
+  receivedRequest = receivedRequest.filter((req) => req.status === "accepted");
+  receivedRequest = receivedRequest.filter((req) => new Date(req.game.date.date) >= new Date());
+  if (receivedRequest.length > 1) {
+    receivedRequest.sort( (a, b) => {
+      return new Date(a.game.date.date) - new Date(b.game.date.date);
+    });    
+  }
 
   useEffect(() => {
     getAccessToken()
@@ -26,6 +42,10 @@ const LandingPage = ({ navigation }) => {
       })
       .catch((err) => console.log(err));
   }, [dispatch, courts]);
+  useEffect(() => {
+      dispatch(getReceivedRequest())
+  }, []);
+
 
   const logout = () => {
     removeToken();
@@ -44,6 +64,41 @@ const LandingPage = ({ navigation }) => {
             <Feather name="log-out" size={20} color="white" />
           </TouchableOpacity>
         </Header>
+        <Separator bordered>
+          <H3>Next Game:</H3>
+        </Separator>
+        {
+          (receivedRequest.length !== 0) ? 
+        <Card>
+          <CardItem>
+            <Left>
+              <Body>
+                <H3>
+                  {receivedRequest[0].game.court.name}
+                </H3>
+                <Text>
+                {receivedRequest[0].game.players.length} players joined
+              </Text>
+              </Body>
+            </Left>
+            <Right>
+              <Text>
+                  {receivedRequest[0].game.date.date}
+              </Text>
+              <Text>
+                  {receivedRequest[0].game.date.time}
+              </Text>
+              <Text>
+                  {receivedRequest[0].game.date.duration} hours
+              </Text>
+            </Right>
+          </CardItem>
+      </Card>
+      : 
+      <Text>No Match</Text>
+      }
+      <Button block style={{ backgroundColor:"#d18902" }}>
+    </Button>
       </Content>
       <View
         style={{
