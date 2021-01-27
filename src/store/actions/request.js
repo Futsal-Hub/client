@@ -65,6 +65,7 @@ export function updateRequest(id, newStatus, bookingId) {
           status: newStatus,
         },
       });
+      dispatch(getReceivedRequest());
       console.log(response.data, "<<< reponse update");
     } catch (error) {
       console.log(error);

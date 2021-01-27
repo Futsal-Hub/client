@@ -53,6 +53,7 @@ const Players = () => {
     }
   });
   listPlayers = listPlayers.slice(1);
+  listPlayers = listPlayers.filter((player) => player._id != userLogin._id);
 
   return (
     <Container>
