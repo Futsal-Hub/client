@@ -3,8 +3,8 @@ LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 import React, { useState, useEffect, useRef } from "react";
-import { View, KeyboardAvoidingView, Image } from "react-native";
-import { useSelector } from "react-redux";
+import { StyleSheet, Image, TouchableOpacity, View, Alert } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   Container,
@@ -17,16 +17,14 @@ import {
   Picker,
 } from "native-base";
 import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
-import { socket } from "../../config/socket";
-import axios from "../../config/axiosInstances";
 import { getAccessToken } from "../../utility/token";
+import { addCourt } from "../../store/actions/court"
+import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 const AddField = ({ navigation }) => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [modalVisibility, setModalVisibility] = useState(false);
   const owner = useSelector((state) => state.user);
+  const dispatch = useDispatch()
 
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
@@ -50,11 +48,6 @@ const AddField = ({ navigation }) => {
         }
       }
     })();
-    //buat camera
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
   }, []);
 
   const onSubmit = () => {
@@ -62,10 +55,12 @@ const AddField = ({ navigation }) => {
       open: schedule1,
       close: schedule2,
     };
+
     const position = {
-      lat: 0,
-      lng: 0,
+      lat: owner.position.lat,
+      lng: owner.position.lng,
     };
+
     let formData = new FormData();
     formData.append("name", name);
     formData.append("price", price);
@@ -79,96 +74,24 @@ const AddField = ({ navigation }) => {
       name: image.split("/").pop(),
       type: "image/jpg",
     });
-    // formData.append('photos', image)
 
-    console.log(formData);
-
-    // getAccessToken().then((res) => {
-    //   axios({
-    //     url: "/court",
-    //     method: "POST",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "multipart/form-data",
-    //       "access_token": res
-    //     },
-    //     data: formData,
-    //   })
-    //     .then((res) => {
-    //       console.log(res.data, "hasil addfield");
-    //     })
-    //     .catch((err) => console.log(err));
-    // });
-
-    //====================================================
-    // const payload = {
-    //   name,
-    //   price,
-    //   type: tipe,
-    //   position: {
-    //     lat: 6.4025,
-    //     lng: 106.7942,
-    //   },
-    //   schedule: {
-    //     open: schedule1,
-    //     close: schedule2,
-    //     booked: []
-    //   },
-    //   address,
-    //   owner: owner,
-    //   photos: image,
-    // };
-
-    getAccessToken().then((res) => {
-      axios({
-        url: "/court",
-        method: "POST",
-        headers: {
-          access_token: res,
-          "Content-Type": "multipart/form-data",
-        },
-        data: formData,
-      })
-        .then((res) => {
-          console.log(res.data, "hasil addfield");
-          navigation.goBack();
-        })
-        .catch((err) => console.log(err));
+    getAccessToken()
+      .then((res) => {
+        dispatch(addCourt(res, formData, owner._id))
+        setImage(null);
+        setName("");
+        setPrice(0);
+        setTipe("");
+        setSchedule1(null);
+        setSchedule2(null);
+        setAddress("");
+        navigation.goBack();
+    })
+    .catch(err => {
+      console.log(err)
     });
-    // setImage(null);
-    // setName("");
-    // setPrice(0);
-    // setTipe("");
-    // setSchedule1(null);
-    // setSchedule2(null);
-    // setAddress("");
   };
 
-  //buat camera
-  // const takePicture = async () => {
-  //   if (cam.current) {
-  //     const option = { quality: 1, base64: true, skipProcessing: false };
-  //     let photo = await cam.current.takePictureAsync(options);
-
-  //     console.log(cam.current.getSupportedRatiosAsync());
-  //     const source = photo.uri;
-
-  //     if (source) {
-  //       cam.current.resumePreview();
-  //       console.log("picture source", source);
-  //     }
-  //   }
-  // };
-
-  // if (hasPermission === null) {
-  //   return <View />;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No access to camera</Text>;
-  // }
-  // sampe sini
-
-  //buat ngambil file
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -186,17 +109,28 @@ const AddField = ({ navigation }) => {
   };
   // ampe sini
 
-  const showModal = () => {
-    setModalVisibility(true);
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
   };
 
   return (
     <Container>
       <Content>
-        <Header style={{ backgroundColor: "whitesmoke" }}>
-          <Text>Ini Pala</Text>
+        <Header style={{ flexDirection: "row", padding: 15, backgroundColor: '#EF7911'}}>
+          <Text style={{color: 'white', fontSize: 20, marginLeft: "auto" }}>Add Field</Text>
+            <TouchableOpacity style={{marginLeft: "auto" }} onPress={() => logout()}>
+              <Feather
+                name="log-out"
+                size={25}
+                color="white"
+              />
+            </TouchableOpacity>
         </Header>
-
         <Text>Ini Add Field</Text>
         <Form>
           <Item>
@@ -280,15 +214,6 @@ const AddField = ({ navigation }) => {
             <Text>Add Field</Text>
           </Button>
         </Form>
-        {/* <Camera ref={cam} style={{ flex: 1}} type={type}>
-        <View style={{ flex: 1, backgroundColor: "transparent", flexDirection: "row"}}>
-          <View style={{flexDirection: 'row'}}>
-            <Button style={{flex: 0.1, alignSelf: "flex-end", alignItems: "center"}}
-              onPress={() => takePicture}>  
-            <Text>Flip</Text></Button>
-          </View>
-        </View>
-      </Camera> */}
       </Content>
     </Container>
   );

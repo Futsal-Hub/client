@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Image, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useLayoutEffect } from "react";
+import { StyleSheet, Image, TouchableOpacity, View, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Body,
@@ -34,11 +34,27 @@ const LandingPage = ({ navigation }) => {
   }, [dispatch]);
 
   const delOnPress = (id) => {
-    getAccessToken()
-      .then((res) => {
-        dispatch(deleteCourt(id, res));
-      })
-      .catch((err) => console.log(err));
+    Alert.alert(
+      "Notification",
+      "Are you sure want to delete this court?",
+      [
+        {
+          text: "Ok",
+          onPress: () => {
+            getAccessToken()
+              .then((res) => {
+                dispatch(deleteCourt(id, res, user._id));
+              })
+              .catch((err) => console.log(err));
+          }
+        },
+        {
+          text: "Cancel",
+          onPress: () => navigation.navigate("OwnerApp")
+        }
+      ]
+    )
+    
   };
 
   const logout = () => {
@@ -58,17 +74,18 @@ const LandingPage = ({ navigation }) => {
   return (
     <Container>
       <Content>
-      <Header style={{ flexDirection: "row", padding: 15}}>
-          <Text style={{color: 'white', fontSize: 20}}>Home</Text>
-          <TouchableOpacity style={{marginLeft: 250 }} onPress={() => logout()}>
-          <Feather
-                  name="log-out"
-                  size={25}
-                  color="white"
-                />
-          </TouchableOpacity>
+        <Header style={{ flexDirection: "row", padding: 15, backgroundColor: '#EF7911'}}>
+          <Text style={{color: 'white', fontSize: 20, marginLeft: "auto" }}>Home</Text>
+            <TouchableOpacity style={{marginLeft: "auto" }} onPress={() => logout()}>
+              <Feather
+                name="log-out"
+                size={25}
+                color="white"
+              />
+            </TouchableOpacity>
         </Header>
         {courts.map((item) => {
+          let price = "Rp. " + Number(item.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ",00"
           return (
             <Card key={item._id} style={{marginLeft: 20, marginRight: 20, marginTop: 10}}>
               <CardItem header bordered style={styles.noPadding}>
@@ -78,29 +95,26 @@ const LandingPage = ({ navigation }) => {
                 />
               </CardItem>
               <CardItem style={{paddingBottom: 0}}>
-                <Text style={{fontWeight: 'bold', fontSize: 25}}>{item.name}</Text>
-                <AntDesign style={{marginLeft: 'auto'}} name="edit" size={24} color="black" onPress={() =>
+                <Text style={{fontSize: 25, color: '#474b4d'}}>{item.name}</Text>
+                <AntDesign style={{marginLeft: 'auto'}} name="edit" size={24} color="#EF7911" onPress={() =>
                     move("EditField", {
                       screens: "OwnerApp",
                       params: { id: item._id },
                     })
                   } />
-                <AntDesign style={{marginLeft: 30}} onPress={() => delOnPress(item._id)} name="delete" size={24} color="black" />
+                <AntDesign style={{marginLeft: 30}} onPress={() => delOnPress(item._id)} name="delete" size={24} color="#EF7911" />
               </CardItem>
               <CardItem style={{paddingBottom: 0}}>
-                  <Entypo name="address" size={24} color="black" />
-                  <Text style={{marginLeft: 10}}>{item.address}</Text>
+                  <Entypo name="address" size={20} color="#EF7911" />
+                  <Text style={{marginLeft: 10, color: '#474b4d', fontSize: 14}}>{item.address}</Text>
               </CardItem>
               <CardItem style={{paddingBottom: 0}}>
-                  <MaterialIcons name="monetization-on" size={24} color="black" />
-                  <Text style={{marginLeft: 10}}>{item.price.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR"
-                  })}</Text>
+                <MaterialCommunityIcons name="soccer-field" size={20} color="#EF7911" />
+                  <Text style={{marginLeft: 10, color: '#474b4d', fontSize: 14}}>{item.type}</Text>
               </CardItem>
               <CardItem>
-                <MaterialCommunityIcons name="soccer-field" size={24} color="black" />
-                  <Text style={{marginLeft: 10}}>{item.type}</Text>
+                  <MaterialIcons name="monetization-on" size={20} color="#EF7911" />
+                  <Text style={{marginLeft: 10, color: '#474b4d', color: "#EF7911"}}>{price}</Text><Text style={{color: '#474b4d', fontSize: 14}}> / Hour</Text>
               </CardItem>
             </Card>
           );
