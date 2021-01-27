@@ -69,7 +69,11 @@ const Request = ({navigation}) => {
                   <Thumbnail
                     // square
                     large
-                    source={require("../assets/images/matchesNearMe.png")}
+                    source={{
+                      uri: `https://i.pravatar.cc/${Math.floor(
+                        Math.random() * (1000 - 50 + 1) + 50
+                      )}`,
+                    }}
                   />
                   <Body>
                     <Text>{item.origin.username}</Text>

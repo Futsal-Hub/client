@@ -4,7 +4,7 @@ import { getAccessToken } from "../utility/token";
 import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getBooking } from "../store/actions";
-import { Alert, TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity, FlatList, View, Image } from "react-native";
 import {
   Body,
   CardItem,
@@ -21,12 +21,15 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
-const Matches = ({navigation}) => {
+const SPACING = 20;
+const AVATAR_SIZE = 70;
+
+const Matches = ({ navigation }) => {
   const bookings = useSelector((state) => state.allBookings);
   const userLogin = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  console.log(userLogin.position, '<<<')
+  console.log(userLogin.position, "<<<");
 
   useEffect(() => {
     getAccessToken().then((res1) => {
@@ -93,8 +96,68 @@ const Matches = ({navigation}) => {
           <Feather name="log-out" size={25} color="white" />
         </TouchableOpacity>
       </Header>
-      <Content>
-        {activeMatches.map((listMatch) => {
+      <Content style={{ flex: 1, backgroundColor: "#fff" }}>
+        <FlatList
+          data={activeMatches}
+          keyExtractor={(item) => item._id}
+          contentContainerStyle={{
+            padding: SPACING,
+            paddingTop: 42,
+          }}
+          renderItem={({ item, index }) => {
+            return (
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: SPACING,
+                  marginBottom: SPACING,
+                  backgroundColor: "rgba(255,255,255,0.8)",
+                  borderRadius: 12,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.6,
+                  shadowRadius: 20,
+                }}
+              >
+                <Image
+                  source={{ uri: item.court.photos }}
+                  style={{
+                    width: AVATAR_SIZE,
+                    height: AVATAR_SIZE,
+                    borderRadius: AVATAR_SIZE,
+                    marginRight: SPACING / 2,
+                  }}
+                />
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontWeight: "700",
+                      color: "#555555",
+                    }}
+                  >
+                    {item.court.name}
+                  </Text>
+                  {/* <Text
+                    style={{ fontSize: 18, opacity: 0.8, color: "#0099cc" }}
+                  >
+                    {item.email}
+                  </Text> */}
+                  <Text style={{ fontSize: 14, opacity: 0.7 }}>
+                    {item.court.distance / 1000} KM
+                  </Text>
+                </View>
+                <Button transparent onPress={() => handleJoin(item.host, item)}>
+                  <Text>Join</Text>
+                </Button>
+              </View>
+            );
+          }}
+        />
+        {/* {activeMatches.map((listMatch) => {
           return (
             <Card key={listMatch._id} style={{marginLeft: 10, marginRight: 10}}>
               <CardItem style={{ margin: 10 }}>
@@ -106,7 +169,6 @@ const Matches = ({navigation}) => {
                 <Left>
                   <Body>
                     <Text>{listMatch.court.name}</Text>
-                    <Text>{listMatch.court.address}</Text>
                     <Text>{listMatch.court.distance / 1000} KM</Text>
                   </Body>
                 </Left>
@@ -121,7 +183,7 @@ const Matches = ({navigation}) => {
               </CardItem>
             </Card>
           );
-        })}
+        })} */}
       </Content>
     </Container>
   );
