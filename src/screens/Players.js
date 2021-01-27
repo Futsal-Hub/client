@@ -26,6 +26,7 @@ const Players = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
   const myBookings = useSelector((state) => state.bookings);
+  console.log(myBookings, "<<<");
 
   useEffect(() => {
     getAccessToken().then((res) => {
@@ -78,6 +79,7 @@ const Players = () => {
                       <View style={styles.modalView}>
                         <Text style={styles.modalText}>Hello World!</Text>
                         {myBookings.map((booking) => {
+                          console.log(booking, "..........");
                           return (
                             <View style={styles.modalView}>
                               <Text>{booking.court.address}</Text>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Image, ImageBackground } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAccessToken } from "../utility/token";
 import {
@@ -16,17 +16,20 @@ import {
   Right,
   Left,
   Row,
+  Icon,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import axios from "../config/axiosInstances";
+import { getBookingByPlayer } from "../store/actions/booking";
 
 const DetailField = ({ route, navigation }) => {
-  const { court } = route.params.params;
+  const { item: court } = route.params.params;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
   const [duration, setDuration] = useState(null);
   const player = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const move = (page) => {
     navigation.navigate(page);
@@ -56,7 +59,8 @@ const DetailField = ({ route, navigation }) => {
   };
 
   const sendBooking = () => {
-    console.log("masuk");
+    console.log("masuk sendbooking");
+    let access_token;
     const payload = {
       schedule: court.schedule,
       host: player,
@@ -71,6 +75,7 @@ const DetailField = ({ route, navigation }) => {
     };
     getAccessToken()
       .then((res) => {
+        access_token = res;
         axios({
           url: "/booking",
           method: "POST",
@@ -80,6 +85,7 @@ const DetailField = ({ route, navigation }) => {
           data: payload,
         })
           .then((res) => {
+            dispatch(getBookingByPlayer(player._id, access_token));
             console.log(res.data);
           })
           .catch((err) => console.log(err));
@@ -102,17 +108,12 @@ const DetailField = ({ route, navigation }) => {
             }}
           />
           <Text style={styles.placename}>
-            <Feather
-              name="map-pin"
-              size={18}
-              color="white"
-            /> {""}
+            <Feather name="map-pin" size={18} color="white" /> {""}
             {court.name}
           </Text>
-          <Text style={styles.tagline}>Price: Rp {court.price}</Text>
-          <Text style={styles.type}>Type: {court.type}</Text>
-          <Text style={styles.openHours}>
-            Open: {court.schedule.open} to {court.schedule.close} WIB
+          <Text style={styles.tagline}>{'\uFE69'}{" "}{court.price}</Text>
+          <Text style={styles.type}>{court.type}</Text>
+          <Text style={styles.openHours}>{court.schedule.open} to {court.schedule.close} WIB
           </Text>
           <Text style={styles.address}>Location: {court.address}</Text>
         </View>
@@ -121,7 +122,6 @@ const DetailField = ({ route, navigation }) => {
       <View style={styles.viewForm}>
         <Form>
           <View style={{ alignItems: "center" }}>
-            <Text style={{ fontSize: 24, fontWeight: "bold" }}>Book Now</Text>
             <Button
               style={{ alignSelf: "center" }}
               onPress={showDatePicker}
@@ -150,7 +150,7 @@ const DetailField = ({ route, navigation }) => {
             />
             <Picker
               mode="dropdown"
-              style={{ maxWidth: 100 }}
+              style={{ maxWidth: 150 }}
               placeholder="Duration"
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
@@ -179,11 +179,15 @@ const DetailField = ({ route, navigation }) => {
               alignSelf: "center",
             }}
           >
-            <Button onPress={() => sendBooking()} style={{ margin: 10 }}>
+            <Button onPress={() => sendBooking()} style={styles.buttonBook} >
               <Text>Booking</Text>
             </Button>
-            <Button onPress={() => move("MainApp")} style={{ margin: 10 }}>
-              <Text>Cancel</Text>
+            <Button
+              onPress={() => move("MainApp")}
+              style={{ bottom: 565, right: 210 }}
+              transparent
+            >
+              <Feather name="arrow-left" size={24} color="#EF7911" />
             </Button>
           </View>
         </Form>
@@ -218,7 +222,6 @@ const styles = StyleSheet.create({
   tagline: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
     paddingHorizontal: 14,
     marginBottom: 5,
     top: -120,
@@ -226,7 +229,6 @@ const styles = StyleSheet.create({
   type: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
     paddingHorizontal: 14,
     marginBottom: 5,
     top: -120,
@@ -234,7 +236,6 @@ const styles = StyleSheet.create({
   openHours: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
     paddingHorizontal: 14,
     marginBottom: 5,
     top: -120,
@@ -248,5 +249,11 @@ const styles = StyleSheet.create({
   },
   viewForm: {
     top: -30,
-  }
+  },
+  buttonBook: {
+    bottom: 295,
+    left: 140,
+    borderRadius: 30,
+    backgroundColor: "#EF7911",
+  },
 });

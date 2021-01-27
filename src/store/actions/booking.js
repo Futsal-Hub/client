@@ -37,6 +37,7 @@ export function getBookingByOwner(jwt, ownerId) {
 }
 
 export function getBookingByPlayer(playerId, jwt) {
+  console.log(jwt, "sdsdsdsd");
   return async (dispatch, getState) => {
     try {
       const response = await axios({
