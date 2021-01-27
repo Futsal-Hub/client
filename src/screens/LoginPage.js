@@ -20,7 +20,7 @@ import { useDispatch } from "react-redux";
 import { Image, Dimensions, KeyboardAvoidingView } from "react-native";
 
 const LoginPage = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setValid] = useState("");
   const dispatch = useDispatch();
@@ -29,12 +29,12 @@ const LoginPage = ({ navigation }) => {
 
   const move = (page) => {
     navigation.navigate(page);
-    setUsername("");
+    setEmail("");
     setPassword("");
   };
 
   const validate = async () => {
-    if (!username || !password) {
+    if (!email || !password) {
       setValid("Please Fill All Form !");
       setTimeout(() => {
         setValid("");
@@ -51,7 +51,7 @@ const LoginPage = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
       const payload = {
-        email: username,
+        email: email,
         password,
         position: {
           lat: location.coords.latitude,
@@ -97,14 +97,16 @@ const LoginPage = ({ navigation }) => {
       )}
       <Content>
         <Form style={styles.form}>
-          <Item style={styles.item}>
+          <Item style={styles.item} floatingLabel>
+            <Label>Email</Label>
             <Input
               placeholder="Email"
-              value={username}
-              onChangeText={(value) => setUsername(value)}
+              value={email}
+              onChangeText={(value) => setEmail(value)}
             />
           </Item>
-          <Item style={styles.item}>
+          <Item style={styles.item} floatingLabel>
+            <Label>Password</Label>
             <Input
               placeholder="Password"
               value={password}

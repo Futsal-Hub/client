@@ -58,7 +58,8 @@ const SignUp = ({ navigation }) => {
       )}
       <Content>
         <Form style={styles.form}>
-          <Item style={styles.item}>
+          <Item style={styles.item} floatingLabel>
+            <Label>Username</Label>
             <Input
               placeholder="Username"
               value={username}
@@ -66,7 +67,8 @@ const SignUp = ({ navigation }) => {
               required
             />
           </Item>
-          <Item style={styles.item}>
+          <Item style={styles.item} floatingLabel>
+            <Label>Password</Label>
             <Input
               placeholder="Password"
               value={password}
@@ -75,7 +77,8 @@ const SignUp = ({ navigation }) => {
               required
             />
           </Item>
-          <Item style={styles.item}>
+          <Item style={styles.item} floatingLabel>
+            <Label>Email</Label>
             <Input
               placeholder="Email"
               value={email}
