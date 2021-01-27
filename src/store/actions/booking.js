@@ -9,7 +9,8 @@ export function createBooking(payload) {
         url: "/booking",
         data: payload,
       });
-      socket.emit("finish addBooking");
+      console.log("finsih booking");
+      socket.emit("doneFetching");
     } catch (error) {
       console.log(error);
     }

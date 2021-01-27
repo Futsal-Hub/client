@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, KeyboardAvoidingView, Image } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, View, Alert } from "react-native";
 import {
   Button,
   Container,
@@ -12,20 +12,16 @@ import {
   Picker,
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
-import { getCourtId } from "../../store/actions/court";
-import { getAccessToken } from "../../utility/token";
+import { getCourtId, editCourt } from "../../store/actions/court";
+import { getAccessToken, removeToken } from "../../utility/token";
 import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
-import axios from "../../config/axiosInstances";
+import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const EditField = ({ route, navigation }) => {
   const { id } = route.params.params;
   const dispatch = useDispatch();
   const court = useSelector((state) => state.court);
-
-  // const [hasPermission, setHasPermission] = useState(null);
-  // const [type, setType] = useState(Camera.Constants.Type.back);
-  // const [modalVisibility, setModalVisibility] = useState(false);
+  const owner = useSelector(state => state.user)
 
   const [image, setImage] = useState(null);
   const [name, setName] = useState(null);
@@ -34,6 +30,7 @@ const EditField = ({ route, navigation }) => {
   const [schedule1, setSchedule1] = useState(null);
   const [schedule2, setSchedule2] = useState(null);
   const [address, setAddress] = useState(null);
+  const [isValid, setIsValid] = useState(true)
 
   useEffect(() => {
     getAccessToken()
@@ -55,8 +52,6 @@ const EditField = ({ route, navigation }) => {
     }
   }, [court]);
 
-  // const cam = useRef().current;
-
   useEffect(() => {
     //buat ngambil file
     (async () => {
@@ -69,70 +64,56 @@ const EditField = ({ route, navigation }) => {
         }
       }
     })();
-    //buat camera
-    // (async () => {
-    //   const { status } = await Camera.requestPermissionsAsync();
-    //   setHasPermission(status === "granted");
-    // })();
   }, []);
 
   const onSubmit = () => {
-    const payload = {
-      name,
-      price,
-      type: tipe,
-      position: {
-        lat: 6.4025,
-        lng: 106.7942,
-      },
-      schedule: {
-        open: schedule1,
-        close: schedule2,
-      },
-      address,
-      owner: "Arif",
-      photos: image,
-    };
-    getAccessToken().then((res) => {
-      axios({
-        url: "/court/" + id,
-        method: "PUT",
-        headers: {
-          access_token: res,
+    Alert.alert(
+      "Notification",
+      "Are you sure want to edit the court data?",
+      [
+        {
+          text: "Ok",
+          onPress: () => goUpdate()
         },
-        data: payload,
-      })
-        .then((res) => {
-          // console.log(res.data);
-          navigation.navigate("OwnerApp");
-        })
-        .catch((err) => console.log(err));
-    });
+        {
+          text: "Cancel",
+          onPress: () => navigation.navigate("OwnerApp")
+        }
+      ]
+    )
   };
 
-  //buat camera
-  // const takePicture = async () => {
-  //   if (cam.current) {
-  //     const option = { quality: 1, base64: true, skipProcessing: false };
-  //     let photo = await cam.current.takePictureAsync(options);
-
-  //     console.log(cam.current.getSupportedRatiosAsync());
-  //     const source = photo.uri;
-
-  //     if (source) {
-  //       cam.current.resumePreview();
-  //       console.log("picture source", source);
-  //     }
-  //   }
-  // };
-
-  // if (hasPermission === null) {
-  //   return <View />;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No access to camera</Text>;
-  // }
-  // sampe sini
+  const goUpdate = () => {
+    if (!name || !price || !tipe || !schedule1 || !schedule2 || !image || !address) {
+      setIsValid(false)
+      setTimeout(() => {
+        setIsValid(true)
+      }, 2500);
+    } else {
+      const payload = {
+        name,
+        price,
+        type: tipe,
+        position: {
+          lat: owner.position.lat,
+          lng: owner.position.lng,
+        },
+        schedule: {
+          open: schedule1,
+          close: schedule2,
+        },
+        address,
+        owner,
+        photos: image,
+      };
+      getAccessToken()
+        .then((res) => {
+          dispatch(editCourt(res, id, payload, owner._id))
+          navigation.navigate("OwnerApp")
+        })
+        .catch((err) => console.log(err));
+    }
+  }
 
   //buat ngambil file
   const pickImage = async () => {
@@ -152,20 +133,33 @@ const EditField = ({ route, navigation }) => {
   };
   // ampe sini
 
-  const showModal = () => {
-    setModalVisibility(true);
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
   };
 
   return (
     <Container>
       <Content>
-        <Header style={{ backgroundColor: "whitesmoke" }}>
-          <Text>Ini Pala</Text>
-        </Header>
-
-        <Text>Ini Edit Field</Text>
+      <Header style={{ flexDirection: "row", padding: 15, backgroundColor: '#EF7911'}}>
+        <Text style={{color: 'white', fontSize: 20, marginLeft: "auto" }}>Edit Field</Text>
+          <TouchableOpacity style={{marginLeft: "auto" }} onPress={() => logout()}>
+            <Feather
+              name="log-out"
+              size={25}
+              color="white"
+            />
+          </TouchableOpacity>
+      </Header>
+        {
+          !isValid ? <Text style={{color: 'red'}}>Please Fill All Field !</Text>: <Text></Text>
+        }
         <Form>
-          <Item>
+          <Item style={{marginRight: 20}}>
             <Input
               required
               placeholder="name"
@@ -173,20 +167,20 @@ const EditField = ({ route, navigation }) => {
               value={name}
             />
           </Item>
-          <Item>
-            <Button onPress={pickImage}>
-              <Text>Pick an image from camera roll</Text>
-            </Button>
-          </Item>
-          <Item>
+          <Item style={{marginRight: 20}}>
             {image && (
               <Image
                 source={{ uri: image }}
-                style={{ width: 200, height: 200 }}
+                style={{ width: 250, height: 150 }}
               />
             )}
+            <Button style={{marginLeft: "auto", marginTop: "auto"}} onPress={pickImage}>
+              <Text>IMG</Text>
+            </Button>
           </Item>
-          <Item>
+          <Item style={{marginRight: 20}}>
+          </Item>
+          <Item style={{marginRight: 20}}>
             <Input
               required
               placeholder="price"
@@ -195,7 +189,7 @@ const EditField = ({ route, navigation }) => {
               value={price}
             />
           </Item>
-          <Item style={styles.item} picker>
+          <Item style={styles.item} picker style={{marginLeft: 20, marginRight: 20}}>
             <Picker
               mode="dropdown"
               placeholder="Type"
@@ -214,7 +208,7 @@ const EditField = ({ route, navigation }) => {
               <Picker.Item label="Cement" value="Cement" />
             </Picker>
           </Item>
-          <Item>
+          <Item style={{marginRight: 20}}>
             <Input
               required
               placeholder="Open Hour"
@@ -230,7 +224,7 @@ const EditField = ({ route, navigation }) => {
               value={schedule2}
             />
           </Item>
-          <Item>
+          <Item style={{marginRight: 20}}>
             <Input
               required
               placeholder="address"
@@ -238,24 +232,25 @@ const EditField = ({ route, navigation }) => {
               value={address}
             />
           </Item>
-          <Button
-            bordered
-            dark
-            style={styles.button}
-            onPress={() => onSubmit()}
-          >
-            <Text>Edit Field</Text>
-          </Button>
-        </Form>
-        {/* <Camera ref={cam} style={{ flex: 1}} type={type}>
-        <View style={{ flex: 1, backgroundColor: "transparent", flexDirection: "row"}}>
-          <View style={{flexDirection: 'row'}}>
-            <Button style={{flex: 0.1, alignSelf: "flex-end", alignItems: "center"}}
-              onPress={() => takePicture}>  
-            <Text>Flip</Text></Button>
+          <View style={{marginBottom: 20, flex: 1, flexDirection: "row"}}>
+            <Button
+              bordered
+              dark
+              style={styles.button}
+              onPress={() => onSubmit()}
+            >
+              <Text>Edit Field</Text>
+            </Button>
+            <Button 
+              bordered
+              dark
+              style={styles.button}
+              onPress={() => navigation.goBack()}
+            > 
+              <Text>Cancel</Text>
+            </Button>
           </View>
-        </View>
-      </Camera> */}
+        </Form>
       </Content>
     </Container>
   );
@@ -277,8 +272,6 @@ const styles = {
     paddingRight: 20,
   },
   item: {
-    marginTop: 5,
-    marginLeft: 10,
   },
   itemBtn: {
     borderBottomWidth: 0,
@@ -287,8 +280,8 @@ const styles = {
   },
   button: {
     marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
     borderRadius: 30,
     backgroundColor: "#ff9900",
   },

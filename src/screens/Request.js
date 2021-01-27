@@ -18,6 +18,7 @@ import {
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
+import { socket } from "../config/socket";
 
 const Request = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,9 @@ const Request = () => {
   React.useEffect(() => {
     dispatch(getReceivedRequest());
   }, []);
+  socket.on("fetch request", () => {
+    dispatch(getReceivedRequest());
+  });
 
   const logout = () => {
     removeToken();

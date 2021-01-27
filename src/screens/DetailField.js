@@ -21,6 +21,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import axios from "../config/axiosInstances";
 import { getBookingByPlayer } from "../store/actions/booking";
+import { socket } from "../config/socket";
 
 const DetailField = ({ route, navigation }) => {
   const { item: court } = route.params.params;
@@ -93,6 +94,7 @@ const DetailField = ({ route, navigation }) => {
           .then((res) => {
             dispatch(getBookingByPlayer(player._id, access_token));
             console.log(res.data);
+            socket.emit("doneFetching");
           })
           .catch((err) => console.log(err));
       })
