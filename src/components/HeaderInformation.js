@@ -1,56 +1,37 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { IconDefaultUser } from "../assets/icons";
+import { TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { Feather } from "@expo/vector-icons";
+import { removeToken } from "../utility/token"
+import {
+  Text,
+  Header
+} from "native-base";
 
-const HeaderInformation = () => {
+const HeaderInformation = ({navigation, page}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigation()
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigate("LoginPage");
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.userInfo}>
-        <IconDefaultUser />
-        <View style={styles.textWrapper}>
-          <Text style={styles.hello}>Hello Bro, </Text>
-          <Text style={styles.username}>username</Text>
-        </View>
-      </View>
-    </View>
-  );
+    <Header style={{ flexDirection: "row", padding: 15, backgroundColor: '#EF7911'}}>
+      <Text style={{color: 'white', fontSize: 20, marginLeft: "auto" }}>{page}</Text>
+      <TouchableOpacity style={{marginLeft: "auto" }} onPress={() => logout()}>
+        <Feather
+          name="log-out"
+          size={25}
+          color="white"
+        />
+      </TouchableOpacity>
+    </Header>
+  )
 };
 
 export default HeaderInformation;
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  userInfo: {
-    flexDirection: "row",
-  },
-  textWrapper: {
-    marginLeft: 9,
-    top: 15
-  },
-  hello: {
-    fontSize: 13,
-  },
-  username: {
-    fontSize: 13,
-  },
-  jam: {
-    textAlign: "right",
-    fontSize: 11,
-  },
-  tanggal: {
-    textAlign: "right",
-    fontSize: 11,
-  },
-  jadwalInfo: {
-    flexDirection: "row",
-  },
-  iconJadwal: {
-    alignItems: "center",
-  },
-  labelNext: {
-    fontSize: 11,
-  },
-});

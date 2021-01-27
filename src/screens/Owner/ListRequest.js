@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
+import { StyleSheet, Image, TouchableOpacity, View, Alert } from "react-native";
 import { useSelector, useDispatch } from 'react-redux'
 import { getBookingByOwner, updateBookingFromOwner } from '../../store/actions/booking'
 import { getAccessToken } from "../../utility/token";
+import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Body,
   CardItem,
@@ -14,8 +16,10 @@ import {
   Left,
   Button,
   Icon,
+  Header
 } from "native-base";
-const ListRequest = () => {
+
+const ListRequest = ({navigation}) => {
   const user = useSelector((state) => state.user);
   const bookings = useSelector((state) => state.bookings) 
   const dispatch = useDispatch()
@@ -47,13 +51,31 @@ const ListRequest = () => {
       .catch(err => console.log(err))
   }
 
+  const logout = () => {
+    removeToken();
+    dispatch({
+      type: "set-role",
+      payload: "",
+    });
+    navigation.navigate("LoginPage");
+  };
+
   let listBooking = []
   listBooking = bookings.filter((booking) => booking.status === 'pending')
 
   return (
     <Container>
       <Content>
-        <Text>List Request</Text>
+        <Header style={{ flexDirection: "row", padding: 15, backgroundColor: '#EF7911'}}>
+          <Text style={{color: 'white', fontSize: 20, marginLeft: "auto" }}>List Request</Text>
+            <TouchableOpacity style={{marginLeft: "auto" }} onPress={() => logout()}>
+              <Feather
+                name="log-out"
+                size={25}
+                color="white"
+              />
+            </TouchableOpacity>
+        </Header>
         <Card>
           {
             listBooking.map(booking => {
