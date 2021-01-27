@@ -4,6 +4,7 @@ import { getAccessToken } from "../../utility/token";
 export default function invitePlayer(destination, game) {
   console.log("masuk invite");
   return async (dispatch, getState) => {
+    console.log(destination.username, "<<<< destination");
     const state = getState();
     const userLoggedIn = state.user;
     const payload = {

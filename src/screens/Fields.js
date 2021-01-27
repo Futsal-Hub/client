@@ -47,7 +47,7 @@ const Fields = ({ navigation }) => {
 
   const listCourts = courts.map((court) => {
     court.distance = getDistance(
-      { latitude: userLogin.position.lat , longitude: userLogin.position.lng },
+      { latitude: userLogin.position.lat, longitude: userLogin.position.lng },
       { latitude: court.position.lat, longitude: court.position.lng }
     );
     return court;
@@ -93,7 +93,7 @@ const Fields = ({ navigation }) => {
             outputRange: [0, -50, 0],
           });
           return (
-            <View style={{ width: ITEM_SIZE, top: height - 550 }}>
+            <View style={{ width: ITEM_SIZE, top: height - 1000 }}>
               <Animated.View
                 style={{
                   marginHorizontal: SPACING,
