@@ -18,7 +18,9 @@ import {
 
 const Request = () => {
   const dispatch = useDispatch();
-  const receivedRequest = useSelector((state) => state.receivedRequestPlayer);
+  const requests = useSelector((state) => state.receivedRequestPlayer);
+  let receivedRequest = [...requests];
+  receivedRequest = receivedRequest.filter((req) => req.status === "pending");
   React.useEffect(() => {
     dispatch(getReceivedRequest());
   }, []);
@@ -27,9 +29,6 @@ const Request = () => {
     <Container>
       <Content>
         <Text>List Request</Text>
-        <Button onPress={() => dispatch(getReceivedRequest())}>
-          <Text>GET reqest</Text>
-        </Button>
         <Card>
           {receivedRequest.map((item) => {
             return (
