@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { setAccessToken } from "../utility/token";
 import * as Location from "expo-location";
 import axios from "../config/axiosInstances";
-
+import { AntDesign } from '@expo/vector-icons'; 
 import {
   Container,
   Header,
@@ -17,7 +17,7 @@ import {
   Left,
 } from "native-base";
 import { useDispatch } from "react-redux";
-import { Image, Dimensions, KeyboardAvoidingView } from "react-native";
+import { Image, ImageBackground, Dimensions, KeyboardAvoidingView } from "react-native";
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -100,7 +100,6 @@ const LoginPage = ({ navigation }) => {
           <Item style={styles.item} floatingLabel>
             <Label>Email</Label>
             <Input
-              placeholder="Email"
               value={email}
               onChangeText={(value) => setEmail(value)}
             />
@@ -108,7 +107,6 @@ const LoginPage = ({ navigation }) => {
           <Item style={styles.item} floatingLabel>
             <Label>Password</Label>
             <Input
-              placeholder="Password"
               value={password}
               secureTextEntry={true}
               onChangeText={(value) => setPassword(value)}
