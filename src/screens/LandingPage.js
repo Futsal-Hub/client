@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
 import {
   Button,
   Header,
@@ -7,7 +7,6 @@ import {
   Card,
   CardItem,
   Container,
-  View,
 } from "native-base";
 import { removeToken } from "../utility/token";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,11 +37,11 @@ const LandingPage = ({ navigation }) => {
   };
 
   return (
-    <Container>
+    <View style={styles.container}>
       <Content>
         <Header style={{ flexDirection: "row", padding: 15, marginLeft: 320 }}>
           <TouchableOpacity onPress={() => logout()}>
-            <Feather name="log-out" size={16} color="white" />
+            <Feather name="log-out" size={20} color="white" />
           </TouchableOpacity>
         </Header>
       </Content>
@@ -93,16 +92,13 @@ const LandingPage = ({ navigation }) => {
           }}
         />
       </Content>
-    </Container>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
   },
   imageOverlay: {
     width: 175,

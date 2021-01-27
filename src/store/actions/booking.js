@@ -70,7 +70,7 @@ export function updateBookingFromOwner(id, jwt, payload, ownerId) {
         data: payload,
       });
       console.log(response.data, "ini dari actions booking.js update");
-      // dispatch(getBookingByOwner(jwt, ownerId));
+      dispatch(getBookingByOwner(jwt, ownerId));
     } catch (err) {
       console.log(err);
     }

@@ -47,13 +47,16 @@ const ListRequest = () => {
       .catch(err => console.log(err))
   }
 
+  let listBooking = []
+  listBooking = bookings.filter((booking) => booking.status === 'pending')
+
   return (
     <Container>
       <Content>
         <Text>List Request</Text>
         <Card>
           {
-            bookings.map(booking => {
+            listBooking.map(booking => {
               return (
                 <CardItem key={booking._id} style={{ margin: 10 }}>
                   <Left>

@@ -4,6 +4,7 @@ import { getAccessToken } from "../utility/token";
 import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getBooking } from "../store/actions";
+import { Alert } from 'react-native'
 import {
   Body,
   CardItem,
@@ -28,6 +29,22 @@ const Matches = () => {
       dispatch(getBooking(res1))
     });
   }, []);
+
+  const handleJoin = (player, booking) => {
+    Alert.alert(
+      "Confirmation",
+      "Are you sure want to join this game?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => dispatch(invitePlayer(player, booking)) }
+      ],
+      { cancelable: false }
+    );
+  }
 
   const listMatches = bookings.map(match => {
       match.court.distance = getDistance(
@@ -61,7 +78,7 @@ const Matches = () => {
                   </Body>
                 </Left>
                 <Right>
-                  <Button  transparent onPress={() => dispatch(invitePlayer(listMatch.host))}>
+                  <Button  transparent onPress={() => handleJoin(listMatch.host, listMatch)}>
                     {/* <Icon active name="sign-in-alt" type="FontAwesome" /> */}
                     <Text>Join</Text>
                   </Button>
