@@ -150,9 +150,11 @@ const Matches = ({ navigation }) => {
                     {item.court.distance / 1000} KM
                   </Text>
                 </View>
-                <Button transparent onPress={() => handleJoin(item.host, item)}>
-                  <Text>Join</Text>
-                </Button>
+                <View style={{marginLeft: 'auto'}}>
+                  <Button transparent onPress={() => handleJoin(item.host, item)}>
+                    <Text>Join</Text>
+                  </Button>
+                </View>
               </View>
             );
           }}

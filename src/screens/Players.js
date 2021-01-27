@@ -190,7 +190,19 @@ const Players = ({ navigation }) => {
                         ...styles.openButton,
                         backgroundColor: "green",
                       }}
-                      onPress={() => dispatch(invitePlayer(target, booking))}
+                      onPress={() => {
+                        dispatch(invitePlayer(target, booking))
+                        Alert.alert(
+                          "Notification",
+                          "Successfully Send Invite!",
+                          [
+                            {
+                              text: "Ok",
+                              onPress: () => setModalVisible(false)
+                            }
+                          ]
+                        )
+                      }}
                     >
                       <Text>Invite</Text>
                     </Button>
@@ -202,10 +214,11 @@ const Players = ({ navigation }) => {
                 style={{
                   ...styles.openButton,
                   backgroundColor: "#2196F3",
+                  marginTop: 20
                 }}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Cancel</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -219,11 +232,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 30,
+    marginBottom: 20
   },
   modalView: {
     flex: 1,
-    margin: 0,
+    marginTop: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 45,

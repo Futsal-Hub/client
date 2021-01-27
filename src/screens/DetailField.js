@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, Alert, ImageBackground } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAccessToken } from "../utility/token";
@@ -22,6 +22,7 @@ import { Feather } from "@expo/vector-icons";
 import axios from "../config/axiosInstances";
 import { getBookingByPlayer } from "../store/actions/booking";
 import { socket } from "../config/socket";
+import { FontAwesome } from '@expo/vector-icons'; 
 
 const DetailField = ({ route, navigation }) => {
   const { item: court } = route.params.params;
@@ -66,41 +67,58 @@ const DetailField = ({ route, navigation }) => {
   };
 
   const sendBooking = () => {
-    console.log("masuk sendbooking");
-    let access_token;
-    const payload = {
-      schedule: court.schedule,
-      host: player,
-      players: [player],
-      court: court,
-      date: {
-        date,
-        time,
-        duration,
-      },
-      status: "pending",
-    };
-    getAccessToken()
-      .then((res) => {
-        access_token = res;
-        axios({
-          url: "/booking",
-          method: "POST",
-          headers: {
-            access_token: res,
-          },
-          data: payload,
-        })
-          .then((res) => {
-            dispatch(getBookingByPlayer(player._id, access_token));
-            console.log(res.data);
-            socket.emit("doneFetching");
+    if (!date || !time || !duration) {
+      Alert.alert(
+        "Notification",
+        "Please fill all form"
+      )
+    } else {
+      console.log("masuk sendbooking");
+      let access_token;
+      const payload = {
+        schedule: court.schedule,
+        host: player,
+        players: [player],
+        court: court,
+        date: {
+          date,
+          time,
+          duration,
+        },
+        status: "pending",
+      };
+      getAccessToken()
+        .then((res) => {
+          access_token = res;
+          axios({
+            url: "/booking",
+            method: "POST",
+            headers: {
+              access_token: res,
+            },
+            data: payload,
           })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+            .then((res) => {
+              dispatch(getBookingByPlayer(player._id, access_token));
+              console.log(res.data);
+              socket.emit("doneFetching");
+              Alert.alert(
+                "Notification",
+                "You Have Successfully Send Request To Book This Court!",
+                [
+                  {
+                    text: "Ok",
+                    onPress: () => navigation.navigate("MainApp")
+                  }
+                ]
+              )
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -129,18 +147,11 @@ const DetailField = ({ route, navigation }) => {
 
         <View style={styles.viewForm}>
           <Form>
-            <View style={{ alignItems: "center" }}>
-              <Button
-                style={styles.choosenDate}
-                onPress={showDatePicker}
-                title="Show date picker!"
-              >
-                <Text>Choose Date</Text>
-              </Button>
-            </View>
-            <Item style={{ bottom: 100 }}>
+            <Item style={{ bottom: 150, marginRight: 20 }}>
               <Input
                 editable={false}
+                onPress={showDatePicker}
+                style={{marginLeft: 10}}
                 required
                 placeholder="Date"
                 value={date}
@@ -149,12 +160,24 @@ const DetailField = ({ route, navigation }) => {
               />
               <Input
                 editable={false}
+                style={{marginLeft: 0}}
                 required
+                onPress={showDatePicker}
                 placeholder="Time"
                 value={time}
                 keyboardType={"number-pad"}
                 onChangeText={(value) => setTime(value)}
               />
+              <FontAwesome style={{width: 50}} name="calendar" size={30} color="#EF7911" onPress={showDatePicker} />
+              {/* <Button
+                style={styles.choosenDate}
+                onPress={showDatePicker}
+                title="Show date picker!"
+              >
+                <Text>Choose Date</Text>
+              </Button> */}
+            </Item>
+            <Item style={{ bottom: 150, marginLeft: 20, marginRight: 20 }}>
               <Picker
                 mode="dropdown"
                 placeholder="Duration"
@@ -185,6 +208,9 @@ const DetailField = ({ route, navigation }) => {
                 alignSelf: "center",
               }}
             >
+              <Button style={styles.buttonBack} onPress={() => navigation.navigate("Fields")}>
+                <Text style={{ marginLeft: 20, marginRight: 20 }}>Back</Text>
+              </Button>
               <Button onPress={() => sendBooking()} style={styles.buttonBook}>
                 <Text style={{ marginLeft: 20, marginRight: 20 }}>Booking</Text>
               </Button>
@@ -260,9 +286,17 @@ const styles = StyleSheet.create({
     top: 70,
   },
   buttonBook: {
-    bottom: 95,
-    left: 80,
+    bottom: 100,
     borderRadius: 30,
+    marginLeft: 10,
+    marginRight: 10,
+    backgroundColor: "#EF7911",
+  },
+  buttonBack: {
+    bottom: 100,
+    borderRadius: 30,
+    marginLeft: 40,
+    marginRight: 10,
     backgroundColor: "#EF7911",
   },
   choosenDate: {

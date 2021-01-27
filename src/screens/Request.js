@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getReceivedRequest, updateRequest } from "../store/actions";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   Body,
   CardItem,
@@ -61,10 +61,10 @@ const Request = ({navigation}) => {
         </TouchableOpacity>
       </Header>
       <Content>
-        <Card>
+        <View style={{marginLeft: 10, marginRight: 10}}>
           {receivedRequest.map((item) => {
             return (
-              <CardItem key={item._id} style={{ margin: 10 }}>
+              <CardItem bordered key={item._id} style={{ margin: 10 }}>
                 <Left>
                   <Thumbnail
                     // square
@@ -107,7 +107,7 @@ const Request = ({navigation}) => {
               </CardItem>
             );
           })}
-        </Card>
+        </View>
       </Content>
     </Container>
   );
