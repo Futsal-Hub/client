@@ -16,8 +16,7 @@ import {
   Header
 } from "native-base";
 import { deleteCourt, getCourtByOwner } from "../../store/actions/court";
-import { getAccessToken } from "../../utility/token";
-import { removeToken } from "../../utility/token";
+import { getAccessToken, removeToken } from "../../utility/token";
 import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const LandingPage = ({ navigation }) => {

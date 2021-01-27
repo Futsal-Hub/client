@@ -13,7 +13,7 @@ import {
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourtId, editCourt } from "../../store/actions/court";
-import { getAccessToken } from "../../utility/token";
+import { getAccessToken, removeToken } from "../../utility/token";
 import * as ImagePicker from "expo-image-picker";
 import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 

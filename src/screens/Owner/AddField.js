@@ -17,7 +17,7 @@ import {
   Picker,
 } from "native-base";
 import * as ImagePicker from "expo-image-picker";
-import { getAccessToken } from "../../utility/token";
+import { getAccessToken, removeToken } from "../../utility/token";
 import { addCourt } from "../../store/actions/court"
 import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 

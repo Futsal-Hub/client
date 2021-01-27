@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { StyleSheet, Image, TouchableOpacity, View, Alert } from "react-native";
 import { useSelector, useDispatch } from 'react-redux'
 import { getBookingByOwner, updateBookingFromOwner } from '../../store/actions/booking'
-import { getAccessToken } from "../../utility/token";
+import { getAccessToken, removeToken } from "../../utility/token";
 import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Body,
