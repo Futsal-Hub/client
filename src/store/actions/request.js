@@ -14,6 +14,8 @@ export function getReceivedRequest() {
           access_token: access_token,
         },
       });
+
+      console.log(response.data, "<<< request");
       dispatch({
         type: "set-receivedRequestPlayer",
         payload: response.data,

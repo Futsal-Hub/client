@@ -30,7 +30,6 @@ const LandingPage = ({ navigation }) => {
 
   const logout = () => {
     removeToken();
-    removeUserLogin();
     dispatch({
       type: "set-role",
       payload: "",
@@ -43,11 +42,7 @@ const LandingPage = ({ navigation }) => {
       <Content>
         <Header style={{ flexDirection: "row", padding: 15, marginLeft: 320 }}>
           <TouchableOpacity onPress={() => logout()}>
-          <Feather
-                  name="log-out"
-                  size={16}
-                  color="white"
-                />
+            <Feather name="log-out" size={16} color="white" />
           </TouchableOpacity>
         </Header>
       </Content>
@@ -59,9 +54,11 @@ const LandingPage = ({ navigation }) => {
           marginHorizontal: 20,
         }}
       >
-        <Text style={{fontSize: 22, fontWeight: "bold"}}>Top Fields</Text>
+        <Text style={{ fontSize: 22, fontWeight: "bold" }}>Top Fields</Text>
         <TouchableOpacity>
-          <Text style={{fontSize: 14, fontWeight: "bold", top: 10}} >View All</Text>
+          <Text style={{ fontSize: 14, fontWeight: "bold", top: 10 }}>
+            View All
+          </Text>
         </TouchableOpacity>
       </View>
       <Content>

@@ -48,7 +48,7 @@ export function getBookingByPlayer(playerId, jwt) {
       });
       console.log(response.data, "<<< data my booking");
       dispatch({
-        type: "set-booking",
+        type: "set-myBooking",
         payload: response.data,
       });
     } catch (error) {
@@ -58,6 +58,7 @@ export function getBookingByPlayer(playerId, jwt) {
 }
 
 export function updateBookingFromOwner(id, jwt, payload, ownerId) {
+  console.log(payload, "<<< pyaload");
   return async (dispatch, getState) => {
     try {
       const response = await axios({
@@ -68,8 +69,8 @@ export function updateBookingFromOwner(id, jwt, payload, ownerId) {
         },
         data: payload,
       });
-      console.log(response, "ini dari actions booking.js update");
-      dispatch(getBookingByOwner(jwt, ownerId));
+      console.log(response.data, "ini dari actions booking.js update");
+      // dispatch(getBookingByOwner(jwt, ownerId));
     } catch (err) {
       console.log(err);
     }
