@@ -29,9 +29,6 @@ const Request = () => {
     <Container>
       <Content>
         <Text>List Request</Text>
-        <Button onPress={() => dispatch(getReceivedRequest())}>
-          <Text>GET reqest</Text>
-        </Button>
         <Card>
           {receivedRequest.map((item) => {
             return (
