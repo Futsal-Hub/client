@@ -10,6 +10,7 @@ export const fetchUser = (jwt) => {
       },
     })
       .then((response) => {
+        console.log(response.data, "<<<< users");
         dispatch({
           type: "set-users",
           payload: response.data,

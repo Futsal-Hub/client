@@ -12,6 +12,7 @@ const initialState = {
   receivedRequestPlayer: [],
   allBookings: [],
   myBooking: [],
+  setModalVisible: false,
 };
 
 function reducer(state = initialState, action) {
@@ -36,6 +37,8 @@ function reducer(state = initialState, action) {
       return { ...state, receivedRequestPlayer: action.payload };
     case "set-myBooking":
       return { ...state, myBooking: action.payload };
+    case "set-modalVisible":
+      return { ...state, modalVisible: action.payload };
     default:
       return state;
   }
