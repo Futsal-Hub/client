@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Image, TouchableOpacity, View, Alert } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, View, Alert, TextInput } from "react-native";
 import {
   Button,
   Container,
   Content,
+  Card,
+  CardItem,
   Header,
   Form,
   Item,
   Input,
   Text,
   Picker,
+  Label
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourtId, editCourt } from "../../store/actions/court";
@@ -66,6 +69,33 @@ const EditField = ({ route, navigation }) => {
     })();
   }, []);
 
+  const onCheckLimit = (value) => {
+    const parsedQty = Number.parseInt(value)
+    if (Number.isNaN(parsedQty)) {
+      setSchedule1(0) //setter for state
+    } else if (parsedQty > 24) {
+      setSchedule1(24)
+      console.log(schedule1)
+    } else if (parsedQty < 0) {
+      setSchedule1(0)
+    } else {
+      setSchedule1(parsedQty)
+    }
+  }
+
+  const onCheckLimit2 = (value) => {
+    const parsedQty = Number.parseInt(value)
+    if (Number.isNaN(parsedQty)) {
+      setSchedule2(0) //setter for state
+    } else if (parsedQty > 24) {
+      setSchedule2(24)
+    } else if (parsedQty < 0) {
+      setSchedule2(0)
+    } else {
+      setSchedule2(parsedQty)
+    }
+  }
+
   const onSubmit = () => {
     Alert.alert(
       "Notification",
@@ -90,25 +120,32 @@ const EditField = ({ route, navigation }) => {
         setIsValid(true)
       }, 2500);
     } else {
-      const payload = {
-        name,
-        price,
-        type: tipe,
-        position: {
-          lat: owner.position.lat,
-          lng: owner.position.lng,
-        },
-        schedule: {
-          open: schedule1,
-          close: schedule2,
-        },
-        address,
-        owner,
-        photos: image,
+      const tanggal = {
+        open: schedule1,
+        close: schedule2,
       };
+
+      const position = {
+        lat: owner.position.lat,
+        lng: owner.position.lng,
+      };
+
+      let formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("type", tipe);
+      formData.append("position", JSON.stringify(position));
+      formData.append("schedule", JSON.stringify(tanggal));
+      formData.append("address", address);
+      formData.append("owner", JSON.stringify(owner));
+      formData.append("photos", {
+        uri: image,
+        name: image.split("/").pop(),
+        type: "image/jpg",
+      });
       getAccessToken()
         .then((res) => {
-          dispatch(editCourt(res, id, payload, owner._id))
+          dispatch(editCourt(res, id, formData, owner._id))
           navigation.navigate("OwnerApp")
         })
         .catch((err) => console.log(err));
@@ -155,11 +192,13 @@ const EditField = ({ route, navigation }) => {
             />
           </TouchableOpacity>
       </Header>
+        <Card style={{marginLeft: 10, marginRight: 10, marginTop: 10}}>
         {
           !isValid ? <Text style={{color: 'red'}}>Please Fill All Field !</Text>: <Text></Text>
         }
-        <Form>
-          <Item style={{marginRight: 20}}>
+        <Form style={{marginTop: 0}}>
+          <Item style={{marginRight: 20, marginTop: 0}} floatingLabel>
+            <Label>Name</Label>
             <Input
               required
               placeholder="name"
@@ -167,20 +206,20 @@ const EditField = ({ route, navigation }) => {
               value={name}
             />
           </Item>
-          <Item style={{marginRight: 20}}>
+          <Text style={{marginLeft: 15, marginBottom: 10, marginTop: 10, color: 'grey'}}>Image Preview:</Text>
+          <Item style={{marginRight: 20, borderBottomWidth: 0}}>
             {image && (
               <Image
                 source={{ uri: image }}
                 style={{ width: 250, height: 150 }}
               />
             )}
-            <Button style={{marginLeft: "auto", marginTop: "auto"}} onPress={pickImage}>
-              <Text>IMG</Text>
+            <Button transparent style={{marginLeft: "auto", marginTop: "auto"}} onPress={pickImage}>
+              <Entypo name="image" size={50} color="black" />
             </Button>
           </Item>
-          <Item style={{marginRight: 20}}>
-          </Item>
-          <Item style={{marginRight: 20}}>
+          <Item style={{marginRight: 20}} floatingLabel>
+            <Label>Price</Label>
             <Input
               required
               placeholder="price"
@@ -189,7 +228,8 @@ const EditField = ({ route, navigation }) => {
               value={price}
             />
           </Item>
-          <Item style={styles.item} picker style={{marginLeft: 20, marginRight: 20}}>
+          <Text style={{marginLeft: 15, marginTop: 10, color: 'grey'}}>Type: </Text>
+          <Item style={styles.item} picker style={{marginLeft: 15, marginRight: 20}}>
             <Picker
               mode="dropdown"
               placeholder="Type"
@@ -208,23 +248,30 @@ const EditField = ({ route, navigation }) => {
               <Picker.Item label="Cement" value="Cement" />
             </Picker>
           </Item>
-          <Item style={{marginRight: 20}}>
-            <Input
-              required
-              placeholder="Open Hour"
-              onChangeText={(value) => setSchedule1(value)}
-              keyboardType={"number-pad"}
-              value={schedule1}
-            />
-            <Input
-              required
-              placeholder="Close Hour"
-              onChangeText={(value) => setSchedule2(value)}
-              keyboardType={"number-pad"}
-              value={schedule2}
-            />
-          </Item>
-          <Item style={{marginRight: 20}}>
+          <View style={{flex: 1, flexDirection: "row"}}>
+            <Item style={{marginRight: 20, width: 150, height: 50, borderBottomWidth: 0}} floatingLabel>
+              <Label>Open Hour</Label>
+              <Input
+                required
+                keyboardType='numeric'
+                onChangeText={(text)=> onCheckLimit(text)}
+                value={schedule1}
+                maxLength={2}
+              />
+            </Item>
+            <Item style={{marginRight: 20, width: 150, height: 50, borderBottomWidth: 0}} floatingLabel>
+              <Label>Close Hour</Label>
+              <Input
+                required
+                maxLength={2}
+                onChangeText={(value) => onCheckLimit2(value)}
+                keyboardType='numeric'
+                value={schedule2}
+              />
+            </Item>
+          </View>
+          <Item style={{marginRight: 20}} floatingLabel>
+            <Label>Address</Label>
             <Input
               required
               placeholder="address"
@@ -251,6 +298,7 @@ const EditField = ({ route, navigation }) => {
             </Button>
           </View>
         </Form>
+        </Card>
       </Content>
     </Container>
   );
