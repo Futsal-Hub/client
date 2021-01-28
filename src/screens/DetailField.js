@@ -53,6 +53,7 @@ const DetailField = ({ route, navigation }) => {
     const newTime = splitted[3];
     setDate(newDate);
     setTime(newTime);
+    setDatePickerVisibility(false);
   };
 
   const sendBooking = () => {
