@@ -16,6 +16,7 @@ LogBox.ignoreAllLogs(); //Ignore all log notifications
 const DetailField = ({ route, navigation }) => {
   const { item: court } = route.params.params;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -37,24 +38,46 @@ const DetailField = ({ route, navigation }) => {
     setDatePickerVisibility(true);
   };
 
+  const showTimePicker = () => {
+    setTimePickerVisibility(true)
+  }
+
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
   const handleConfirmDate = (choosenDate) => {
+    hideDatePicker()
     console.log(
-      choosenDate.toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+      choosenDate.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }), '<<<'
     );
 
     const splitted = choosenDate
       .toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
       .split(" ");
     const newDate = `${splitted[0]} ${splitted[2]} ${splitted[1]} ${splitted[4]}`;
-    const newTime = splitted[3];
     setDate(newDate);
-    setTime(newTime);
-    setDatePickerVisibility(false);
+    console.log(newDate, 'newdate')
+    // const newTime = splitted[3];
+    // setTime(newTime);
   };
+
+  const handleConfirmTime = (choosenTime) => {
+    hideTimePicker()
+    console.log(
+      choosenTime.toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+    );
+    const splitted = choosenTime
+      .toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+      .split(" ");
+    const newTime = splitted[3];
+    setTime(newTime)
+    console.log(newTime, 'newtime')
+  }
 
   const sendBooking = () => {
     if (!date || !time || !duration) {
@@ -138,7 +161,7 @@ const DetailField = ({ route, navigation }) => {
         <View style={styles.viewForm}>
           <Form>
             <Item style={{ bottom: 150, marginRight: 20 }}>
-              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} activeOpacity={1} onPress={showDatePicker}>
+              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} onPress={showDatePicker}>
                 <Input
                   editable={false}
                   required
@@ -148,7 +171,7 @@ const DetailField = ({ route, navigation }) => {
                   onChangeText={(value) => setDate(value)}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} activeOpacity={1} onPress={showDatePicker}>
+              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} onPress={showTimePicker}>
                 <Input
                   editable={false}
                   required
@@ -158,7 +181,7 @@ const DetailField = ({ route, navigation }) => {
                   onChangeText={(value) => setTime(value)}
                 />
               </TouchableOpacity>
-              <FontAwesome style={{width: 50, marginLeft: 'auto', marginRight: 'auto'}} name="calendar" size={30} color="#EF7911" onPress={showDatePicker} />
+              {/* <FontAwesome style={{width: 50, marginLeft: 'auto', marginRight: 'auto'}} name="calendar" size={30} color="#EF7911" onPress={showDatePicker} /> */}
             </Item>
             <Item style={{ bottom: 150, marginLeft: 20, marginRight: 20 }}>
               <Picker
@@ -212,9 +235,15 @@ const DetailField = ({ route, navigation }) => {
         <View>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
-            mode="datetime"
+            mode="date"
             onConfirm={handleConfirmDate}
             onCancel={hideDatePicker}
+          />
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            onConfirm={handleConfirmTime}
+            onCancel={hideTimePicker}
           />
         </View>
       </Content>
