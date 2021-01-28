@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import axios from "../config/axiosInstances";
-import { StyleSheet, View, Alert, ImageBackground } from "react-native";
+import { StyleSheet, View, Alert, ImageBackground, TouchableOpacity, Touchable } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getAccessToken } from "../utility/token";
 import { Button, Container, Content, Form, Item, Input, Text, Picker } from "native-base";
@@ -138,27 +138,27 @@ const DetailField = ({ route, navigation }) => {
         <View style={styles.viewForm}>
           <Form>
             <Item style={{ bottom: 150, marginRight: 20 }}>
-              <Input
-                editable={false}
-                onPress={showDatePicker}
-                style={{marginLeft: 10}}
-                required
-                placeholder="Date"
-                value={date}
-                keyboardType={"number-pad"}
-                onChangeText={(value) => setDate(value)}
-              />
-              <Input
-                editable={false}
-                style={{marginLeft: 0}}
-                required
-                onPress={showDatePicker}
-                placeholder="Time"
-                value={time}
-                keyboardType={"number-pad"}
-                onChangeText={(value) => setTime(value)}
-              />
-              <FontAwesome style={{width: 50}} name="calendar" size={30} color="#EF7911" onPress={showDatePicker} />
+              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} activeOpacity={1} onPress={showDatePicker}>
+                <Input
+                  editable={false}
+                  required
+                  placeholder="Date"
+                  value={date}
+                  keyboardType={"number-pad"}
+                  onChangeText={(value) => setDate(value)}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} activeOpacity={1} onPress={showDatePicker}>
+                <Input
+                  editable={false}
+                  required
+                  placeholder="Time"
+                  value={time}
+                  keyboardType={"number-pad"}
+                  onChangeText={(value) => setTime(value)}
+                />
+              </TouchableOpacity>
+              <FontAwesome style={{width: 50, marginLeft: 'auto', marginRight: 'auto'}} name="calendar" size={30} color="#EF7911" onPress={showDatePicker} />
             </Item>
             <Item style={{ bottom: 150, marginLeft: 20, marginRight: 20 }}>
               <Picker
@@ -210,7 +210,6 @@ const DetailField = ({ route, navigation }) => {
           </Form>
         </View>
         <View>
-          <Button title="Show Date Picker" onPress={showDatePicker} />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="datetime"
