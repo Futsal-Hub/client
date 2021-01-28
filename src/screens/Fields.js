@@ -1,34 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   View,
   Image,
   StyleSheet,
   Animated,
-  StatusBar,
   TouchableOpacity,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourt } from "../store/actions/court";
 import { getAccessToken } from "../utility/token";
 import { getDistance } from "geolib";
-import {
-  Header,
-  Body,
-  CardItem,
-  Container,
-  Content,
-  Right,
-  Text,
-  Thumbnail,
-  Card,
-  Left,
-  Button,
-  Icon,
-} from "native-base";
-import { FlatList } from "react-native-gesture-handler";
+import { Header, Container, Content, Text } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const { width, height } = Dimensions.get("window");
 const SPACING = 10;
@@ -87,6 +75,7 @@ const Fields = ({ navigation }) => {
             <Feather name="log-out" size={25} color="white" />
           </TouchableOpacity>
         </Header>
+      </Content>
         <Animated.FlatList
           showsHorizontalScrollIndicator={false}
           data={listCourts}
@@ -114,7 +103,7 @@ const Fields = ({ navigation }) => {
               outputRange: [0, -50, 0],
             });
             return (
-              <View style={{ width: ITEM_SIZE, top: height - 550 }}>
+              <View style={{ width: ITEM_SIZE, top: "auto", bottom: "auto" }}>
                 <Animated.View
                   style={{
                     marginHorizontal: SPACING,
@@ -129,8 +118,10 @@ const Fields = ({ navigation }) => {
                     source={{ uri: item.photos }}
                     style={styles.posterImage}
                   />
-                  <Text style={styles.paragraph, {color: '#474b4d'}}>{item.name}</Text>
-                  <Text style={styles.paragraph, {color: '#474b4d'}}>
+                  <Text style={(styles.paragraph, { color: "#474b4d" })}>
+                    {item.name}
+                  </Text>
+                  <Text style={(styles.paragraph, { color: "#474b4d" })}>
                     {item.distance / 1000} KM
                   </Text>
                   <TouchableOpacity
@@ -149,14 +140,13 @@ const Fields = ({ navigation }) => {
             );
           }}
         />
-      </Content>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
   },
   paragraph: {
     fontSize: 18,

@@ -5,35 +5,15 @@ import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getAccessToken } from "../utility/token";
 import { getBookingByPlayer } from "../store/actions/booking";
-import {
-  View,
-  Modal,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  ImageBackground,
-  FlatList,
-  Image,
-  StatusBar,
-  Animated,
-} from "react-native";
+import { View, Modal, StyleSheet, TouchableHighlight, TouchableOpacity, FlatList, Image, StatusBar } from "react-native";
 import { Alert } from "react-native";
-import {
-  Body,
-  CardItem,
-  Container,
-  Content,
-  Right,
-  Text,
-  Thumbnail,
-  Card,
-  Left,
-  Button,
-  Header,
-} from "native-base";
+import { CardItem, Container, Content, Text, Card, Header } from "native-base";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
+import { LogBox } from "react-native";
 
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const SPACING = 20;
 const AVATAR_SIZE = 70;
