@@ -18,7 +18,7 @@ import {
   Button,
   Header,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
 const SPACING = 20;
@@ -96,13 +96,13 @@ const Matches = ({ navigation }) => {
           <Feather name="log-out" size={25} color="white" />
         </TouchableOpacity>
       </Header>
-      <Content style={{ flex: 1, backgroundColor: "#fff" }}>
+      <Content style={{ flex: 1, backgroundColor: "#fff"}}>
         <FlatList
           data={activeMatches}
           keyExtractor={(item) => item._id}
           contentContainerStyle={{
             padding: SPACING,
-            paddingTop: 42,
+            paddingTop: 20,
           }}
           renderItem={({ item, index }) => {
             return (
@@ -111,7 +111,7 @@ const Matches = ({ navigation }) => {
                   flexDirection: "row",
                   padding: SPACING,
                   marginBottom: SPACING,
-                  backgroundColor: "rgba(255,255,255,0.8)",
+                  backgroundColor: "whitesmoke",
                   borderRadius: 12,
                   shadowColor: "#000",
                   shadowOffset: {
@@ -127,7 +127,7 @@ const Matches = ({ navigation }) => {
                   style={{
                     width: AVATAR_SIZE,
                     height: AVATAR_SIZE,
-                    borderRadius: AVATAR_SIZE,
+                    borderRadius: 10,
                     marginRight: SPACING / 2,
                   }}
                 />
@@ -141,51 +141,17 @@ const Matches = ({ navigation }) => {
                   >
                     {item.court.name}
                   </Text>
-                  {/* <Text
-                    style={{ fontSize: 18, opacity: 0.8, color: "#0099cc" }}
-                  >
-                    {item.email}
-                  </Text> */}
                   <Text style={{ fontSize: 14, opacity: 0.7 }}>
                     {item.court.distance / 1000} KM
                   </Text>
                 </View>
                 <View style={{marginLeft: 'auto'}}>
-                  <Button transparent onPress={() => handleJoin(item.host, item)}>
-                    <Text>Join</Text>
-                  </Button>
+                  <AntDesign name="login" size={30} color="#EF7911" onPress={() => handleJoin(item.host, item)} style={{marginTop: 'auto', marginBottom: 'auto', marginLeft: 'auto'}}/>
                 </View>
               </View>
             );
           }}
         />
-        {/* {activeMatches.map((listMatch) => {
-          return (
-            <Card key={listMatch._id} style={{marginLeft: 10, marginRight: 10}}>
-              <CardItem style={{ margin: 10 }}>
-                  <Thumbnail
-                    // square
-                    large
-                    source={{uri: listMatch.court.photos}}
-                  />
-                <Left>
-                  <Body>
-                    <Text>{listMatch.court.name}</Text>
-                    <Text>{listMatch.court.distance / 1000} KM</Text>
-                  </Body>
-                </Left>
-                <Right>
-                  <Button
-                    transparent
-                    onPress={() => handleJoin(listMatch.host, listMatch)}
-                  >
-                    <Text>Join</Text>
-                  </Button>
-                </Right>
-              </CardItem>
-            </Card>
-          );
-        })} */}
       </Content>
     </Container>
   );

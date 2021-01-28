@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getReceivedRequest, updateRequest } from "../store/actions";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, FlatList, Image } from "react-native";
 import {
   Body,
   CardItem,
@@ -19,6 +19,10 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 import { socket } from "../config/socket";
+import { AntDesign } from '@expo/vector-icons'; 
+
+const SPACING = 20;
+const AVATAR_SIZE = 70;
 
 const Request = ({navigation}) => {
   const dispatch = useDispatch();
@@ -60,54 +64,66 @@ const Request = ({navigation}) => {
           <Feather name="log-out" size={25} color="white" />
         </TouchableOpacity>
       </Header>
-      <Content>
-        <View style={{marginLeft: 10, marginRight: 10}}>
-          {receivedRequest.map((item) => {
+      <Content style={{flex: 1}}>
+      <FlatList
+          data={receivedRequest}
+          keyExtractor={(item) => item._id}
+          contentContainerStyle={{
+            padding: SPACING,
+            paddingTop: 20,
+          }}
+          renderItem={({ item, index }) => {
             return (
-              <CardItem bordered key={item._id} style={{ margin: 10 }}>
-                <Left>
-                  <Thumbnail
-                    // square
-                    large
-                    source={{
-                      uri: `https://i.pravatar.cc/${Math.floor(
-                        Math.random() * (1000 - 50 + 1) + 50
-                      )}`,
-                    }}
-                  />
-                  <Body>
-                    <Text>{item.origin.username}</Text>
-                  </Body>
-                </Left>
-                <Right>
-                  <Button
-                    onPress={() =>
-                      dispatch(
-                        updateRequest(item._id, "accepted", item.game._id)
-                      )
-                    }
-                    transparent
-                    style={{ flexDirection: "row" }}
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: SPACING,
+                  marginBottom: SPACING,
+                  backgroundColor: "whitesmoke",
+                  borderRadius: 12,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.6,
+                  shadowRadius: 20,
+                }}
+              >
+                <Image
+                  source={{
+                    uri: `https://i.pravatar.cc/${Math.floor(
+                      Math.random() * (1000 - 50 + 1) + 50
+                    )}`,
+                  }}
+                  style={{
+                    width: AVATAR_SIZE,
+                    height: AVATAR_SIZE,
+                    borderRadius: AVATAR_SIZE,
+                    marginRight: SPACING / 2,
+                  }}
+                />
+                <View>
+                  <Text style={{ fontSize: 22, fontWeight: "700", color: '#555555' }}>
+                    {item.origin.username}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 18, opacity: 0.8, color: "#0099cc" }}
                   >
-                    <Text>Accept</Text>
-                    <Icon active name="check-square" type="FontAwesome" />
-                  </Button>
-                  <Button
-                    onPress={() =>
-                      dispatch(
-                        updateRequest(item._id, "Rejected", item.game._id)
-                      )
-                    }
-                    transparent
-                  >
-                    <Text>Deny</Text>
-                    <Icon active name="window-close" type="FontAwesome" />
-                  </Button>
-                </Right>
-              </CardItem>
+                    {item.origin.email}
+                  </Text>
+                  <Text style={{ fontSize: 14, opacity: 0.7 }}>
+                    {item.origin.distance / 1000} KM
+                  </Text>
+                </View>
+                <View style={{marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto'}}>
+                  <AntDesign style={{marginBottom: 5}} name="checksquareo" size={24} color="blue" onPress={() => dispatch(updateRequest(item._id, "accepted", item.game._id))} />
+                  <AntDesign style={{marginTop: 5}} name="closesquareo" size={24} color="red" onPress={() => dispatch(updateRequest(item._id, "Rejected", item.game._id))} />
+                </View>
+              </View>
             );
-          })}
-        </View>
+          }}
+        />
       </Content>
     </Container>
   );

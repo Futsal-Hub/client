@@ -31,7 +31,7 @@ import {
   Button,
   Header,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 
 
@@ -59,6 +59,7 @@ const Players = ({ navigation }) => {
     setTarget(player);
     setModalVisible(true);
   };
+
   const players = users.map((player) => {
     if (player.role === "player") {
       player.distance = getDistance(
@@ -125,7 +126,7 @@ const Players = ({ navigation }) => {
                   flexDirection: "row",
                   padding: SPACING,
                   marginBottom: SPACING,
-                  backgroundColor: "rgba(255,255,255,0.8)",
+                  backgroundColor: "whitesmoke",
                   borderRadius: 12,
                   shadowColor: "#000",
                   shadowOffset: {
@@ -162,9 +163,7 @@ const Players = ({ navigation }) => {
                     {item.distance / 1000} KM
                   </Text>
                 </View>
-                <Button onPress={() => openModal(item)} transparent>
-                  <Text>Invite</Text>
-                </Button>
+                <AntDesign name="adduser" size={30} color="#EF7911" onPress={() => openModal(item)} style={{marginTop: 'auto', marginBottom: 'auto', marginLeft: 'auto'}}/>
               </View>
             );
           }}
@@ -177,50 +176,48 @@ const Players = ({ navigation }) => {
             Alert.alert("Modal has been closed.");
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Choose your game!</Text>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Choose your available game</Text>
+            <Content>
               {myBookings.map((booking) => {
                 return (
-                  <View style={styles.modalView} key={booking._id}>
-                    <Text>{booking.court.name}</Text>
-                    <Text>{booking.host.username}</Text>
-                    <Button
-                      style={{
-                        ...styles.openButton,
-                        backgroundColor: "green",
-                      }}
-                      onPress={() => {
-                        dispatch(invitePlayer(target, booking))
-                        Alert.alert(
-                          "Notification",
-                          "Successfully Send Invite!",
-                          [
-                            {
-                              text: "Ok",
-                              onPress: () => setModalVisible(false)
-                            }
-                          ]
-                        )
-                      }}
-                    >
-                      <Text>Invite</Text>
-                    </Button>
-                  </View>
+                  <Card style={styles.modalView} key={booking._id}>
+                    <CardItem style={{width: 250}}>
+                      <View style={{marginRight: 'auto'}}>
+                        <Text style={{fontSize: 20, color: 'grey', fontWeight: 'bold'}}>{booking.court.name}</Text>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                          <AntDesign name="user" size={15} color="black" />
+                          <Text style={{color: 'darkgrey', marginLeft: 5, fontSize: 14, marginBottom: 5}}>{booking.host.username}</Text>
+                        </View>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                          <AntDesign name="calendar" size={15} color="black" />
+                          <Text style={{color: 'darkgrey', fontSize: 12, marginLeft: 5}}>{booking.date.date}</Text>
+                        </View>
+                      </View>
+                      <View style={{marginTop: 'auto', marginBottom: 'auto', marginLeft: 'auto'}}>
+                        <AntDesign name="adduser" size={30} color="#EF7911" onPress={() => {
+                          dispatch(invitePlayer(target, booking))
+                          Alert.alert(
+                            "Notification",
+                            "Successfully Send Invite!",
+                            [
+                              {
+                                text: "Ok",
+                                onPress: () => setModalVisible(false)
+                              }
+                            ]
+                          )
+                        }} />
+                      </View>
+                    </CardItem>
+                  </Card>
                 );
               })}
-
-              <TouchableHighlight
-                style={{
-                  ...styles.openButton,
-                  backgroundColor: "#2196F3",
-                  marginTop: 20
-                }}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </TouchableHighlight>
-            </View>
+            </Content>
+            <TouchableHighlight
+              style={{ ...styles.openButton, backgroundColor: "#2196F3", marginTop: 20 }} onPress={() => setModalVisible(false)}>
+              <Text style={styles.textStyle}>Cancel</Text>
+            </TouchableHighlight>
           </View>
         </Modal>
       </Content>
@@ -238,9 +235,9 @@ const styles = StyleSheet.create({
   modalView: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: "white",
+    backgroundColor: "whitesmoke",
     borderRadius: 20,
-    padding: 45,
+    padding: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
