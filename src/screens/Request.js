@@ -104,7 +104,7 @@ const Request = ({navigation}) => {
                     {item.origin.email}
                   </Text>
                   <Text style={{ fontSize: 14, opacity: 0.7 }}>
-                    {item.origin.distance / 1000} KM
+                    {item.destination.distance / 1000} KM
                   </Text>
                 </View>
                 <View style={{marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto'}}>

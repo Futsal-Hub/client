@@ -133,6 +133,7 @@ const Matches = ({ navigation }) => {
                   >
                     {item.court.name}
                   </Text>
+                  <Text>{item.host.username}</Text>
                   <Text style={{ fontSize: 14, opacity: 0.7 }}>
                     {item.court.distance / 1000} KM
                   </Text>
