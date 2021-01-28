@@ -161,7 +161,7 @@ const DetailField = ({ route, navigation }) => {
         <View style={styles.viewForm}>
           <Form>
             <Item style={{ bottom: 150, marginRight: 20 }}>
-              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto', backgroundColor: 'red'}} onPress={showDatePicker}>
+              <TouchableOpacity style={{marginLeft: 'auto', marginRight: 'auto'}} onPress={showDatePicker}>
                 <Input
                   editable={false}
                   required

@@ -33,11 +33,9 @@ const AddField = ({ navigation }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [tipe, setTipe] = useState("");
-  const [schedule1, setSchedule1] = useState(null);
-  const [schedule2, setSchedule2] = useState(null);
+  const [schedule1, setSchedule1] = useState("");
+  const [schedule2, setSchedule2] = useState("");
   const [address, setAddress] = useState(null);
-
-  const cam = useRef().current;
 
   useEffect(() => {
     //buat ngambil file
@@ -56,27 +54,26 @@ const AddField = ({ navigation }) => {
   const onCheckLimit = (value) => {
     const parsedQty = Number.parseInt(value)
     if (Number.isNaN(parsedQty)) {
-      setSchedule1(0) //setter for state
+      setSchedule1("0") //setter for state
     } else if (parsedQty > 24) {
-      setSchedule1(24)
-      console.log(schedule1)
+      setSchedule1("24")
     } else if (parsedQty < 0) {
-      setSchedule1(0)
+      setSchedule1("0")
     } else {
-      setSchedule1(parsedQty)
+      setSchedule1(parsedQty.toString())
     }
   }
 
   const onCheckLimit2 = (value) => {
     const parsedQty = Number.parseInt(value)
     if (Number.isNaN(parsedQty)) {
-      setSchedule2(0) //setter for state
+      setSchedule2("0") //setter for state
     } else if (parsedQty > 24) {
-      setSchedule2(24)
+      setSchedule2("24")
     } else if (parsedQty < 0) {
-      setSchedule2(0)
+      setSchedule2("0")
     } else {
-      setSchedule2(parsedQty)
+      setSchedule2(parsedQty.toString())
     }
   }
 
@@ -118,8 +115,8 @@ const AddField = ({ navigation }) => {
           setName("");
           setPrice(0);
           setTipe("");
-          setSchedule1(null);
-          setSchedule2(null);
+          setSchedule1("");
+          setSchedule2("");
           setAddress("");
           navigation.goBack();
       })
@@ -231,7 +228,7 @@ const AddField = ({ navigation }) => {
                   required
                   keyboardType='numeric'
                   onChangeText={(text)=> onCheckLimit(text)}
-                  value={schedule1}
+                  value={schedule1.toString()}
                   maxLength={2}
                 />
               </Item>
@@ -242,7 +239,7 @@ const AddField = ({ navigation }) => {
                   maxLength={2}
                   onChangeText={(value) => onCheckLimit2(value)}
                   keyboardType='numeric'
-                  value={schedule2}
+                  value={schedule2.toString()}
                 />
               </Item>
             </View>

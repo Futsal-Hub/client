@@ -86,27 +86,27 @@ const EditField = ({ route, navigation }) => {
   const onCheckLimit = (value) => {
     const parsedQty = Number.parseInt(value);
     if (Number.isNaN(parsedQty)) {
-      setSchedule1(0); //setter for state
+      setSchedule1('0'); //setter for state
     } else if (parsedQty > 24) {
-      setSchedule1(24);
+      setSchedule1('24');
       console.log(schedule1);
     } else if (parsedQty < 0) {
-      setSchedule1(0);
+      setSchedule1('0');
     } else {
-      setSchedule1(parsedQty);
+      setSchedule1(parsedQty.toString());
     }
   };
 
   const onCheckLimit2 = (value) => {
     const parsedQty = Number.parseInt(value);
     if (Number.isNaN(parsedQty)) {
-      setSchedule2(0); //setter for state
+      setSchedule2('0'); //setter for state
     } else if (parsedQty > 24) {
-      setSchedule2(24);
+      setSchedule2('24');
     } else if (parsedQty < 0) {
-      setSchedule2(0);
+      setSchedule2('0');
     } else {
-      setSchedule2(parsedQty);
+      setSchedule2(parsedQty.toString());
     }
   };
 
