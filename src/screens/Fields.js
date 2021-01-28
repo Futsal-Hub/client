@@ -128,7 +128,6 @@ const Fields = ({ navigation }) => {
                     style={styles.buttonDetail}
                     onPress={() =>
                       move("DetailField", {
-                        screens: "MainApp",
                         params: { item },
                       })
                     }
