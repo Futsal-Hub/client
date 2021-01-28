@@ -4,22 +4,14 @@ import { getAccessToken } from "../utility/token";
 import { getDistance } from "geolib";
 import { invitePlayer } from "../store/actions";
 import { getBooking } from "../store/actions";
-import { Alert, TouchableOpacity, FlatList, View, Image } from "react-native";
-import {
-  Body,
-  CardItem,
-  Container,
-  Content,
-  Right,
-  Text,
-  Thumbnail,
-  Card,
-  Left,
-  Button,
-  Header,
-} from "native-base";
+import { Alert, TouchableOpacity, FlatList, View, Image, StatusBar } from "react-native";
+import { Container, Content, Text, Header } from "native-base";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const SPACING = 20;
 const AVATAR_SIZE = 70;
@@ -96,13 +88,13 @@ const Matches = ({ navigation }) => {
           <Feather name="log-out" size={25} color="white" />
         </TouchableOpacity>
       </Header>
-      <Content style={{ flex: 1, backgroundColor: "#fff"}}>
+      <Content style={{ flex: 1, backgroundColor: "#fff" }}>
         <FlatList
           data={activeMatches}
           keyExtractor={(item) => item._id}
           contentContainerStyle={{
             padding: SPACING,
-            paddingTop: 20,
+            paddingTop: StatusBar.currentHeight || 20,
           }}
           renderItem={({ item, index }) => {
             return (
@@ -145,8 +137,18 @@ const Matches = ({ navigation }) => {
                     {item.court.distance / 1000} KM
                   </Text>
                 </View>
-                <View style={{marginLeft: 'auto'}}>
-                  <AntDesign name="login" size={30} color="#EF7911" onPress={() => handleJoin(item.host, item)} style={{marginTop: 'auto', marginBottom: 'auto', marginLeft: 'auto'}}/>
+                <View style={{ marginLeft: "auto" }}>
+                  <AntDesign
+                    name="login"
+                    size={30}
+                    color="#EF7911"
+                    onPress={() => handleJoin(item.host, item)}
+                    style={{
+                      marginTop: "auto",
+                      marginBottom: "auto",
+                      marginLeft: "auto",
+                    }}
+                  />
                 </View>
               </View>
             );

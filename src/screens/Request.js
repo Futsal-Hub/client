@@ -1,25 +1,16 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getReceivedRequest, updateRequest } from "../store/actions";
-import { TouchableOpacity, View, FlatList, Image } from "react-native";
-import {
-  Body,
-  CardItem,
-  Container,
-  Content,
-  Right,
-  Text,
-  Thumbnail,
-  Card,
-  Left,
-  Button,
-  Icon,
-  Header,
-} from "native-base";
+import { TouchableOpacity, View, FlatList, Image, StatusBar } from "react-native";
+import {  Container, Content, Text, Header } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { removeToken } from "../utility/token";
 import { socket } from "../config/socket";
 import { AntDesign } from '@expo/vector-icons'; 
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const SPACING = 20;
 const AVATAR_SIZE = 70;
@@ -70,7 +61,7 @@ const Request = ({navigation}) => {
           keyExtractor={(item) => item._id}
           contentContainerStyle={{
             padding: SPACING,
-            paddingTop: 20,
+            paddingTop: StatusBar.currentHeight || 20,
           }}
           renderItem={({ item, index }) => {
             return (

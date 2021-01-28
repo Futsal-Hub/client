@@ -1,25 +1,16 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
 import { getReceivedRequest } from "../store/actions";
-import {
-  Button,
-  Header,
-  Content,
-  Card,
-  CardItem,
-  Container,
-  Body,
-  Left,
-  Right,
-  H3,
-  Separator
-} from "native-base";
+import { Header, Content, Card, CardItem, Body, Left, Right, H3 } from "native-base";
 import { removeToken } from "../utility/token";
 import { useDispatch, useSelector } from "react-redux";
 import { FlatList } from "react-native-gesture-handler";
 import { getCourt } from "../store/actions/court";
 import { getAccessToken } from "../utility/token";
 import { Feather, Ionicons, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const LandingPage = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -154,7 +145,6 @@ const LandingPage = ({ navigation }) => {
                     }}
                   />
                 </TouchableOpacity>
-                <View style={styles.imageOverlay}></View>
                 <Feather
                   name="map-pin"
                   size={16}

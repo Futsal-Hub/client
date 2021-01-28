@@ -1,28 +1,17 @@
 import React, { useState } from "react";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import axios from "../config/axiosInstances";
 import { StyleSheet, View, Alert, ImageBackground } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAccessToken } from "../utility/token";
-import {
-  Button,
-  Container,
-  Content,
-  Header,
-  Form,
-  Item,
-  Input,
-  Text,
-  Picker,
-  Right,
-  Left,
-  Row,
-  Icon,
-} from "native-base";
+import { Button, Container, Content, Form, Item, Input, Text, Picker } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import axios from "../config/axiosInstances";
 import { getBookingByPlayer } from "../store/actions/booking";
 import { socket } from "../config/socket";
 import { FontAwesome } from '@expo/vector-icons'; 
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const DetailField = ({ route, navigation }) => {
   const { item: court } = route.params.params;
@@ -169,13 +158,6 @@ const DetailField = ({ route, navigation }) => {
                 onChangeText={(value) => setTime(value)}
               />
               <FontAwesome style={{width: 50}} name="calendar" size={30} color="#EF7911" onPress={showDatePicker} />
-              {/* <Button
-                style={styles.choosenDate}
-                onPress={showDatePicker}
-                title="Show date picker!"
-              >
-                <Text>Choose Date</Text>
-              </Button> */}
             </Item>
             <Item style={{ bottom: 150, marginLeft: 20, marginRight: 20 }}>
               <Picker
