@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Image, TouchableOpacity, View, Alert, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  View,
+  Alert,
+  TextInput,
+} from "react-native";
 import {
   Button,
   Container,
@@ -12,28 +19,35 @@ import {
   Input,
   Text,
   Picker,
-  Label
+  Label,
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourtId, editCourt } from "../../store/actions/court";
 import { getAccessToken, removeToken } from "../../utility/token";
 import * as ImagePicker from "expo-image-picker";
-import { Feather, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  AntDesign,
+  Entypo,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 const EditField = ({ route, navigation }) => {
   const { id } = route.params.params;
   const dispatch = useDispatch();
   const court = useSelector((state) => state.court);
-  const owner = useSelector(state => state.user)
+  const owner = useSelector((state) => state.user);
+  console.log(court);
 
   const [image, setImage] = useState(null);
   const [name, setName] = useState(null);
   const [price, setPrice] = useState(null);
   const [tipe, setTipe] = useState(null);
-  const [schedule1, setSchedule1] = useState(null);
-  const [schedule2, setSchedule2] = useState(null);
+  const [schedule1, setSchedule1] = useState("");
+  const [schedule2, setSchedule2] = useState("");
   const [address, setAddress] = useState(null);
-  const [isValid, setIsValid] = useState(true)
+  const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
     getAccessToken()
@@ -70,54 +84,58 @@ const EditField = ({ route, navigation }) => {
   }, []);
 
   const onCheckLimit = (value) => {
-    const parsedQty = Number.parseInt(value)
+    const parsedQty = Number.parseInt(value);
     if (Number.isNaN(parsedQty)) {
-      setSchedule1(0) //setter for state
+      setSchedule1(0); //setter for state
     } else if (parsedQty > 24) {
-      setSchedule1(24)
-      console.log(schedule1)
+      setSchedule1(24);
+      console.log(schedule1);
     } else if (parsedQty < 0) {
-      setSchedule1(0)
+      setSchedule1(0);
     } else {
-      setSchedule1(parsedQty)
+      setSchedule1(parsedQty);
     }
-  }
+  };
 
   const onCheckLimit2 = (value) => {
-    const parsedQty = Number.parseInt(value)
+    const parsedQty = Number.parseInt(value);
     if (Number.isNaN(parsedQty)) {
-      setSchedule2(0) //setter for state
+      setSchedule2(0); //setter for state
     } else if (parsedQty > 24) {
-      setSchedule2(24)
+      setSchedule2(24);
     } else if (parsedQty < 0) {
-      setSchedule2(0)
+      setSchedule2(0);
     } else {
-      setSchedule2(parsedQty)
+      setSchedule2(parsedQty);
     }
-  }
+  };
 
   const onSubmit = () => {
-    Alert.alert(
-      "Notification",
-      "Are you sure want to edit the court data?",
-      [
-        {
-          text: "Ok",
-          onPress: () => goUpdate()
-        },
-        {
-          text: "Cancel",
-          onPress: () => navigation.navigate("OwnerApp")
-        }
-      ]
-    )
+    Alert.alert("Notification", "Are you sure want to edit the court data?", [
+      {
+        text: "Ok",
+        onPress: () => goUpdate(),
+      },
+      {
+        text: "Cancel",
+        onPress: () => navigation.navigate("OwnerApp"),
+      },
+    ]);
   };
 
   const goUpdate = () => {
-    if (!name || !price || !tipe || !schedule1 || !schedule2 || !image || !address) {
-      setIsValid(false)
+    if (
+      !name ||
+      !price ||
+      !tipe ||
+      !schedule1 ||
+      !schedule2 ||
+      !image ||
+      !address
+    ) {
+      setIsValid(false);
       setTimeout(() => {
-        setIsValid(true)
+        setIsValid(true);
       }, 2500);
     } else {
       const tanggal = {
@@ -145,12 +163,12 @@ const EditField = ({ route, navigation }) => {
       });
       getAccessToken()
         .then((res) => {
-          dispatch(editCourt(res, id, formData, owner._id))
-          navigation.navigate("OwnerApp")
+          dispatch(editCourt(res, id, formData, owner._id));
+          navigation.navigate("OwnerApp");
         })
         .catch((err) => console.log(err));
     }
-  }
+  };
 
   //buat ngambil file
   const pickImage = async () => {
@@ -182,122 +200,166 @@ const EditField = ({ route, navigation }) => {
   return (
     <Container>
       <Content>
-      <Header style={{ flexDirection: "row", padding: 15, backgroundColor: '#EF7911'}}>
-        <Text style={{color: 'white', fontSize: 20, marginLeft: "auto" }}>Edit Field</Text>
-          <TouchableOpacity style={{marginLeft: "auto" }} onPress={() => logout()}>
-            <Feather
-              name="log-out"
-              size={25}
-              color="white"
-            />
+        <Header
+          style={{
+            flexDirection: "row",
+            padding: 15,
+            backgroundColor: "#EF7911",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 20, marginLeft: "auto" }}>
+            Edit Field
+          </Text>
+          <TouchableOpacity
+            style={{ marginLeft: "auto" }}
+            onPress={() => logout()}
+          >
+            <Feather name="log-out" size={25} color="white" />
           </TouchableOpacity>
-      </Header>
-        <Card style={{marginLeft: 10, marginRight: 10, marginTop: 10}}>
-        {
-          !isValid ? <Text style={{color: 'red'}}>Please Fill All Field !</Text>: <Text></Text>
-        }
-        <Form style={{marginTop: 0}}>
-          <Item style={{marginRight: 20, marginTop: 0}} floatingLabel>
-            <Label>Name</Label>
-            <Input
-              required
-              placeholder="name"
-              onChangeText={(value) => setName(value)}
-              value={name}
-            />
-          </Item>
-          <Text style={{marginLeft: 15, marginBottom: 10, marginTop: 10, color: 'grey'}}>Image Preview:</Text>
-          <Item style={{marginRight: 20, borderBottomWidth: 0}}>
-            {image && (
-              <Image
-                source={{ uri: image }}
-                style={{ width: 250, height: 150 }}
-              />
-            )}
-            <Button transparent style={{marginLeft: "auto", marginTop: "auto"}} onPress={pickImage}>
-              <Entypo name="image" size={50} color="black" />
-            </Button>
-          </Item>
-          <Item style={{marginRight: 20}} floatingLabel>
-            <Label>Price</Label>
-            <Input
-              required
-              placeholder="price"
-              keyboardType={"number-pad"}
-              onChangeText={(value) => setPrice(value)}
-              value={price}
-            />
-          </Item>
-          <Text style={{marginLeft: 15, marginTop: 10, color: 'grey'}}>Type: </Text>
-          <Item style={styles.item} picker style={{marginLeft: 15, marginRight: 20}}>
-            <Picker
-              mode="dropdown"
-              placeholder="Type"
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              selectedValue={tipe}
-              onValueChange={(value) => setTipe(value)}
-              value={tipe}
-            >
-              <Picker.Item label="Select Type" value="" />
-              <Picker.Item label="Vinyl" value="Vinyl" />
-              <Picker.Item label="Parquette" value="Parquette" />
-              <Picker.Item label="Taraflex" value="Taraflex" />
-              <Picker.Item label="Polyethyle" value="Polyethyle" />
-              <Picker.Item label="Synthetic" value="Synthetic" />
-              <Picker.Item label="Cement" value="Cement" />
-            </Picker>
-          </Item>
-          <View style={{flex: 1, flexDirection: "row"}}>
-            <Item style={{marginRight: 20, width: 150, height: 50, borderBottomWidth: 0}} floatingLabel>
-              <Label>Open Hour</Label>
+        </Header>
+        <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+          {!isValid ? (
+            <Text style={{ color: "red" }}>Please Fill All Field !</Text>
+          ) : (
+            <Text></Text>
+          )}
+          <Form style={{ marginTop: 0 }}>
+            <Item style={{ marginRight: 20, marginTop: 0 }} floatingLabel>
+              <Label>Name</Label>
               <Input
                 required
-                keyboardType='numeric'
-                onChangeText={(text)=> onCheckLimit(text)}
-                value={schedule1}
-                maxLength={2}
+                placeholder="name"
+                onChangeText={(value) => setName(value)}
+                value={name}
               />
             </Item>
-            <Item style={{marginRight: 20, width: 150, height: 50, borderBottomWidth: 0}} floatingLabel>
-              <Label>Close Hour</Label>
+            <Text
+              style={{
+                marginLeft: 15,
+                marginBottom: 10,
+                marginTop: 10,
+                color: "grey",
+              }}
+            >
+              Image Preview:
+            </Text>
+            <Item style={{ marginRight: 20, borderBottomWidth: 0 }}>
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 250, height: 150 }}
+                />
+              )}
+              <Button
+                transparent
+                style={{ marginLeft: "auto", marginTop: "auto" }}
+                onPress={pickImage}
+              >
+                <Entypo name="image" size={50} color="black" />
+              </Button>
+            </Item>
+            <Item style={{ marginRight: 20 }} floatingLabel>
+              <Label>Price</Label>
               <Input
                 required
-                maxLength={2}
-                onChangeText={(value) => onCheckLimit2(value)}
-                keyboardType='numeric'
-                value={schedule2}
+                placeholder="price"
+                keyboardType={"number-pad"}
+                onChangeText={(value) => setPrice(value)}
+                value={price}
               />
             </Item>
-          </View>
-          <Item style={{marginRight: 20}} floatingLabel>
-            <Label>Address</Label>
-            <Input
-              required
-              placeholder="address"
-              onChangeText={(value) => setAddress(value)}
-              value={address}
-            />
-          </Item>
-          <View style={{marginBottom: 20, flex: 1, flexDirection: "row"}}>
-            <Button
-              bordered
-              dark
-              style={styles.button}
-              onPress={() => onSubmit()}
+            <Text style={{ marginLeft: 15, marginTop: 10, color: "grey" }}>
+              Type:{" "}
+            </Text>
+            <Item
+              style={styles.item}
+              picker
+              style={{ marginLeft: 15, marginRight: 20 }}
             >
-              <Text>Edit Field</Text>
-            </Button>
-            <Button 
-              bordered
-              dark
-              style={styles.button}
-              onPress={() => navigation.goBack()}
-            > 
-              <Text>Cancel</Text>
-            </Button>
-          </View>
-        </Form>
+              <Picker
+                mode="dropdown"
+                placeholder="Type"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={tipe}
+                onValueChange={(value) => setTipe(value)}
+                value={tipe}
+              >
+                <Picker.Item label="Select Type" value="" />
+                <Picker.Item label="Vinyl" value="Vinyl" />
+                <Picker.Item label="Parquette" value="Parquette" />
+                <Picker.Item label="Taraflex" value="Taraflex" />
+                <Picker.Item label="Polyethyle" value="Polyethyle" />
+                <Picker.Item label="Synthetic" value="Synthetic" />
+                <Picker.Item label="Cement" value="Cement" />
+              </Picker>
+            </Item>
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <Item
+                style={{
+                  marginRight: 20,
+                  width: 150,
+                  height: 50,
+                  borderBottomWidth: 0,
+                }}
+                floatingLabel
+              >
+                <Label>Open Hour</Label>
+                <Input
+                  required
+                  keyboardType="numeric"
+                  onChangeText={(text) => onCheckLimit(text)}
+                  value={schedule1.toString()}
+                  maxLength={2}
+                />
+              </Item>
+              <Item
+                style={{
+                  marginRight: 20,
+                  width: 150,
+                  height: 50,
+                  borderBottomWidth: 0,
+                }}
+                floatingLabel
+              >
+                <Label>Close Hour</Label>
+                <Input
+                  required
+                  maxLength={2}
+                  onChangeText={(value) => onCheckLimit2(value)}
+                  keyboardType="numeric"
+                  value={schedule2.toString()}
+                />
+              </Item>
+            </View>
+            <Item style={{ marginRight: 20 }} floatingLabel>
+              <Label>Address</Label>
+              <Input
+                required
+                placeholder="address"
+                onChangeText={(value) => setAddress(value)}
+                value={address}
+              />
+            </Item>
+            <View style={{ marginBottom: 20, flex: 1, flexDirection: "row" }}>
+              <Button
+                bordered
+                dark
+                style={styles.button}
+                onPress={() => onSubmit()}
+              >
+                <Text>Edit Field</Text>
+              </Button>
+              <Button
+                bordered
+                dark
+                style={styles.button}
+                onPress={() => navigation.goBack()}
+              >
+                <Text>Cancel</Text>
+              </Button>
+            </View>
+          </Form>
         </Card>
       </Content>
     </Container>
@@ -319,8 +381,7 @@ const styles = {
     paddingLeft: 20,
     paddingRight: 20,
   },
-  item: {
-  },
+  item: {},
   itemBtn: {
     borderBottomWidth: 0,
     marginLeft: "auto",

@@ -94,7 +94,6 @@ const LandingPage = ({ navigation }) => {
                 />
               </CardItem>
               <CardItem style={{paddingBottom: 0}}>
-                <Text style={{fontSize: 25, color: '#474b4d'}}>{item.name}</Text>
                 <AntDesign style={{marginLeft: 'auto'}} name="edit" size={24} color="#EF7911" onPress={() =>
                     move("EditField", {
                       screens: "OwnerApp",
@@ -103,6 +102,7 @@ const LandingPage = ({ navigation }) => {
                   } />
                 <AntDesign style={{marginLeft: 30}} onPress={() => delOnPress(item._id)} name="delete" size={24} color="#EF7911" />
               </CardItem>
+                <Text style={{fontSize: 20, color: '#474b4d', fontWeight: 'bold', marginLeft: 20}}>{item.name}</Text>
               <CardItem style={{paddingBottom: 0}}>
                   <Entypo name="address" size={20} color="#EF7911" />
                   <Text style={{marginLeft: 10, color: '#474b4d', fontSize: 14}}>{item.address}</Text>
